@@ -6,9 +6,11 @@ const {
   COLLECTION_DESCRIPTION_MESSAGE,
   COLLECTION_DESCRIPTION_VAR,
   COLLECTION_NAME_MESSAGE,
-  COLLECTION_NAME_SAMPLE,
   COLLECTION_NAME_VAR,
-  COLLECTION_SLUG_VAR
+  COLLECTION_SLUG_VAR,
+  FRAGMENT_COLLECTION_SLUG_VAR,
+  FRAGMENT_DESCRIPTION_VAR,
+  FRAGMENT_NAME_VAR
 } = require('../../utils/constants');
 
 module.exports = class extends CustomGenerator {
@@ -18,17 +20,16 @@ module.exports = class extends CustomGenerator {
         type: 'input',
         name: COLLECTION_NAME_VAR,
         message: COLLECTION_NAME_MESSAGE,
-        when: !this.getValue(COLLECTION_NAME_VAR)
+        when: !this.hasValue(COLLECTION_NAME_VAR)
       },
       {
         type: 'input',
         name: COLLECTION_DESCRIPTION_VAR,
         message: COLLECTION_DESCRIPTION_MESSAGE,
-        when: this.getValue(COLLECTION_NAME_VAR) !== COLLECTION_NAME_SAMPLE
+        when: !this.hasValue(COLLECTION_DESCRIPTION_VAR)
       }
     ]);
 
-    this.setValue(COLLECTION_NAME_VAR, COLLECTION_NAME_SAMPLE);
     this.setValue(COLLECTION_DESCRIPTION_VAR, COLLECTION_DESCRIPTION_DEFAULT);
 
     this.setValue(
@@ -41,5 +42,17 @@ module.exports = class extends CustomGenerator {
     this.copyTemplates(`src/${this.getValue(COLLECTION_SLUG_VAR)}`, [
       'collection.json'
     ]);
+  }
+
+  end() {
+    const fragmentName = this.getValue(FRAGMENT_NAME_VAR);
+
+    if (fragmentName) {
+      this.composeWith(require.resolve('../fragment'), {
+        [FRAGMENT_NAME_VAR]: fragmentName,
+        [FRAGMENT_DESCRIPTION_VAR]: this.getValue(FRAGMENT_DESCRIPTION_VAR),
+        [FRAGMENT_COLLECTION_SLUG_VAR]: this.getValue(COLLECTION_SLUG_VAR)
+      });
+    }
   }
 };

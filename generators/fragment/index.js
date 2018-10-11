@@ -5,44 +5,45 @@ const path = require('path');
 const voca = require('voca');
 
 const {
-  COLLECTION_NAME_VAR,
-  COLLECTION_SLUG_VAR,
   FRAGMENT_COLLECTION_SLUG_MESSAGE,
   FRAGMENT_COLLECTION_SLUG_VAR,
+  FRAGMENT_DESCRIPTION_DEFAULT,
   FRAGMENT_DESCRIPTION_MESSAGE,
   FRAGMENT_DESCRIPTION_VAR,
   FRAGMENT_NAME_MESSAGE,
-  FRAGMENT_NAME_SAMPLE,
   FRAGMENT_NAME_VAR,
   FRAGMENT_SLUG_VAR,
   NEW_COLLECTION_MESSAGE,
   NEW_COLLECTION_SHORT,
-  NEW_COLLECTION_VALUE,
-  SAMPLE_FRAGMENT_NAME
+  NEW_COLLECTION_VALUE
 } = require('../../utils/constants');
 
 module.exports = class extends CustomGenerator {
   async prompting() {
-    if (this.getValue(FRAGMENT_NAME_VAR) !== FRAGMENT_NAME_SAMPLE) {
-      await this._askCollection();
-    }
-
     await this._askFragmentData();
+    await this._askCollection();
   }
 
   writing() {
-    const basePath = path.join(
-      'src',
-      this.getValue(FRAGMENT_COLLECTION_SLUG_VAR),
-      this.getValue(FRAGMENT_SLUG_VAR)
-    );
+    if (this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
+      this.composeWith(require.resolve('../collection'), {
+        [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
+        [FRAGMENT_DESCRIPTION_VAR]: this.getValue(FRAGMENT_DESCRIPTION_VAR)
+      });
+    } else {
+      const basePath = path.join(
+        'src',
+        this.getValue(FRAGMENT_COLLECTION_SLUG_VAR),
+        this.getValue(FRAGMENT_SLUG_VAR)
+      );
 
-    this.copyTemplates(basePath, [
-      'index.html',
-      'main.js',
-      'styles.css',
-      'fragment.json'
-    ]);
+      this.copyTemplates(basePath, [
+        'index.html',
+        'main.js',
+        'styles.css',
+        'fragment.json'
+      ]);
+    }
   }
 
   async _askCollection() {
@@ -50,7 +51,8 @@ module.exports = class extends CustomGenerator {
       type: 'list',
       name: FRAGMENT_COLLECTION_SLUG_VAR,
       message: FRAGMENT_COLLECTION_SLUG_MESSAGE,
-      choices: this._getCollectionChoices()
+      choices: this._getCollectionChoices(),
+      when: !this.hasValue(FRAGMENT_COLLECTION_SLUG_VAR)
     });
   }
 
@@ -60,20 +62,17 @@ module.exports = class extends CustomGenerator {
         type: 'input',
         name: FRAGMENT_NAME_VAR,
         message: FRAGMENT_NAME_MESSAGE,
-        when: !this.getValue(FRAGMENT_NAME_VAR)
+        when: !this.hasValue(FRAGMENT_NAME_VAR)
       },
       {
         type: 'input',
         name: FRAGMENT_DESCRIPTION_VAR,
         message: FRAGMENT_DESCRIPTION_MESSAGE,
-        when: this.getValue(FRAGMENT_DESCRIPTION_VAR) !== SAMPLE_FRAGMENT_NAME
+        when: !this.hasValue(FRAGMENT_DESCRIPTION_VAR)
       }
     ]);
 
-    this.setValue(
-      COLLECTION_SLUG_VAR,
-      voca.slugify(this.getValue(COLLECTION_NAME_VAR))
-    );
+    this.setValue(FRAGMENT_DESCRIPTION_VAR, FRAGMENT_DESCRIPTION_DEFAULT);
 
     this.setValue(
       FRAGMENT_SLUG_VAR,

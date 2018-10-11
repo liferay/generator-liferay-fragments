@@ -35,6 +35,12 @@ class CustomGenerator extends Generator {
     return this.answers[key] || this.options[key] || this.defaultValues[key];
   }
 
+  hasValue(key) {
+    return (
+      key in this.answers || key in this.options || key in this.defaultValues
+    );
+  }
+
   setValue(key, value) {
     this.defaultValues[key] = value;
   }
