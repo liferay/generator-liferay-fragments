@@ -18,7 +18,7 @@ class CustomGenerator extends Generator {
     this.fs.copyTpl(
       this.templatePath(templatePath),
       this.destinationPath(destinationPath),
-      this.data
+      Object.assign({}, this.defaultValues, this.options, this.answers)
     );
   }
 

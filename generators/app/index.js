@@ -8,7 +8,7 @@ const {
   COLLECTION_NAME_SAMPLE,
   COLLECTION_NAME_VAR,
   COLLECTION_SLUG_SAMPLE,
-  COLLECTION_SLUG_VAR,
+  FRAGMENT_COLLECTION_SLUG_VAR,
   FRAGMENT_NAME_SAMPLE,
   FRAGMENT_NAME_VAR,
   REPOSITORY_NAME_DEFAULT,
@@ -39,7 +39,9 @@ class AppGenerator extends CustomGenerator {
       voca.slugify(this.getValue(REPOSITORY_NAME_VAR))
     );
 
-    this.destinationRoot(this.destinationPath(this.data.repositorySlug));
+    this.destinationRoot(
+      this.destinationPath(this.getValue(REPOSITORY_SLUG_VAR))
+    );
   }
 
   writing() {
@@ -60,7 +62,7 @@ class AppGenerator extends CustomGenerator {
       });
 
       this.composeWith(require.resolve('../fragment'), {
-        [COLLECTION_SLUG_VAR]: COLLECTION_SLUG_SAMPLE,
+        [FRAGMENT_COLLECTION_SLUG_VAR]: COLLECTION_SLUG_SAMPLE,
         [FRAGMENT_NAME_VAR]: FRAGMENT_NAME_SAMPLE
       });
     }
