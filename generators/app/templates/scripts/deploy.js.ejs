@@ -1,0 +1,209 @@
+const fs = require('fs');
+const { logNewLine} = require('./log');
+const readline = require('readline');
+const request = require('request');
+
+if (!fs.existsSync('fragments.zip')) {
+	logNewLine('Fragments ZIP file does not exist, run npm build first.');
+
+	process.exit();
+}
+
+const reader = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+let host = 'http://localhost:8080', username = 'test@liferay.com', password = 'test', companyId = 20099, site = '/guest', authToken;
+
+_askHost = () => {
+	reader.question(
+		`Liferay host & port? [${host}] `,
+		(answer) => {
+			host = answer !== '' ? answer : host;
+
+			_askUsername();
+		}
+	);
+};
+
+_askUsername = () => {
+	reader.question(
+		`Liferay administrator username? [${username}] `,
+		(answer) => {
+			username = answer !== '' ?  answer : username;
+
+			_askPassword();
+		}
+	);
+};
+
+_askPassword = () => {
+	reader.question(
+		`Liferay administrator password? [${password}] `,
+		(answer) => {
+			password = answer !== '' ?  answer : password;
+
+			_requestCompanies();
+		}
+	);
+};
+
+_requestCompanies = () => {
+	request.get(
+		`${host}/api/jsonws/company/get-companies`,
+		{
+			auth: {
+				user: username,
+				pass: password
+			},
+            jar: true
+		},
+		(error, response, body) => {
+			if (error || (response && response.statusCode != 200)) {
+				logNewLine(`Error getting companies list from ${host}: ${error}, ${response}`);
+
+				process.exit();
+			}
+
+			const companies = JSON.parse(body);
+
+			companies.forEach(
+				(company) => logNewLine(`${company.companyId} - ${company.webId}`)
+			);
+
+			reader.question(
+				`Company ID? [${companyId}] `,
+				(answer) => {
+					companyId = answer !== '' ? answer : companyId;
+
+					_requestGroups();
+				}
+			);
+		}
+	);
+};
+
+_requestGroups = () => {
+	request.get(
+		`${host}/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`,
+		{
+			auth: {
+				user: username,
+				pass: password
+			},
+			jar: true
+		},
+		(error, response, body) => {
+			if (error || (response && response.statusCode != 200)) {
+				logNewLine(`Error getting groups list from ${host}: ${error}, ${response}`);
+
+				process.exit();
+			}
+
+			const groups = JSON.parse(body);
+
+			groups.forEach(
+				(group) => logNewLine(`${group.friendlyURL}`)
+			);
+
+			reader.question(
+				`Site URL? [${site}] `,
+				(answer) => {
+					site = answer !== '' ? answer : site;
+
+					_authenticate();
+				}
+			);
+
+		}
+	);
+};
+
+_authenticate = () => {
+	request.get(
+		`${host}/c/portal/login`,
+		{
+			followAllRedirects: true,
+			jar: true
+		},
+		(err, resp, content) => {
+			const regexp = new RegExp(/form action=\"([^\"]+)\" class=\"form sign-in-form/gi);
+
+			const array = regexp.exec(content);
+
+			const actionUrl = array[1].replace(/amp;/gi, '').replace(/%2f/gi, '/');
+
+			request.post(
+				{
+					url: actionUrl,
+					followAllRedirects: true,
+					form: {
+						_com_liferay_login_web_portlet_LoginPortlet_formDate: '1540837806840',
+						_com_liferay_login_web_portlet_LoginPortlet_saveLastPath: 'false',
+						_com_liferay_login_web_portlet_LoginPortlet_redirect: '',
+						_com_liferay_login_web_portlet_LoginPortlet_doActionAfterLogin: 'false',
+						_com_liferay_login_web_portlet_LoginPortlet_login: username,
+						_com_liferay_login_web_portlet_LoginPortlet_password: password,
+						_com_liferay_login_web_portlet_LoginPortlet_checkboxNames: 'rememberMe'
+					},
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+						'Origin': host,
+						'Referer': `${host}/web${site}/home?p_p_id=com_liferay_login_web_portlet_LoginPortlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&saveLastPath=false&_com_liferay_login_web_portlet_LoginPortlet_mvcRenderCommandName=%2Flogin%2Flogin`,
+						'Upgrade-Insecure-Requests': '1',
+						'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
+					},
+					jar: true
+				},
+				(error, response, body) => {
+					const tokenRegexp = new RegExp(/authToken = \'([^\']+)\'/gi);
+
+					const tokenArray = tokenRegexp.exec(body);
+
+					if (!tokenArray || tokenArray.length < 1) {
+						logNewLine(`Unable to authenticate on ${host}: ${error}, ${response}`);
+
+						process.exit();
+					}
+
+					authToken = tokenArray[1];
+
+					_deploy();
+				}
+			);
+		}
+	);
+
+};
+
+_deploy = () => {
+	logNewLine(`Importing fragments to ${site}...`);
+
+	request.post(
+		{
+			url: `${host}/group${site}/~/control_panel/manage?p_p_id=com_liferay_fragment_web_portlet_FragmentPortlet&p_p_lifecycle=1&p_p_mode=view&_com_liferay_fragment_web_portlet_FragmentPortlet_javax.portlet.action=%2Ffragment%2Fimport&p_auth=${authToken}`,
+			followAllRedirects: true,
+			formData: {
+				_com_liferay_fragment_web_portlet_FragmentPortlet_overwrite: 'on',
+				_com_liferay_fragment_web_portlet_FragmentPortlet_file: fs.createReadStream('fragments.zip')
+			},
+			headers: {
+				'Origin': host,
+				'Referer': `${host}/web${site}/home?p_p_id=com_liferay_login_web_portlet_LoginPortlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&saveLastPath=false&_com_liferay_login_web_portlet_LoginPortlet_mvcRenderCommandName=%2Flogin%2Flogin`,
+				'Upgrade-Insecure-Requests': '1',
+				'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
+			},
+			jar: true
+		},
+		(error, response, body) => {
+			if (error || (response && response.statusCode != 200)) {
+				logNewLine(`Unable to import fragments to ${host}: ${error}, ${response}`);
+			}
+
+			process.exit();
+		}
+	);
+};
+
+_askHost();
