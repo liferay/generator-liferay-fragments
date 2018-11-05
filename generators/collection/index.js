@@ -40,12 +40,7 @@ module.exports = class extends CustomGenerator {
       voca.slugify(this.getValue(COLLECTION_NAME_VAR))
     );
 
-    if (
-      !this.getValue(COLLECTION_NAME_VAR) ||
-      !this.getValue(COLLECTION_NAME_VAR).trim()
-    ) {
-      this.env.error(`${COLLECTION_NAME_VAR} is required`);
-    }
+    this.isRequired(COLLECTION_SLUG_VAR);
   }
 
   /**

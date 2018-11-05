@@ -87,6 +87,17 @@ class CustomGenerator extends Generator {
   }
 
   /**
+   * Checks if the given variable is available and stops generator
+   * execution if not.
+   * @param {string} variable Variable name
+   */
+  isRequired(variable) {
+    if (!this.getValue(variable) || !this.getValue(variable).trim()) {
+      this.env.error(`${variable} is required`);
+    }
+  }
+
+  /**
    * Stores the given value inside the given key inside defaultOptions
    * @param {string} key Value key
    * @param {*} value Value
