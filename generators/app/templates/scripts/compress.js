@@ -17,7 +17,7 @@ const compress = (basePath) => new Promise((resolve) => {
       const rest = collectionDirectory.replace(collectionName, '');
 
       zip.file(
-        path.join(collectionName, 'collection.json'),
+        path.normalize(path.join(collectionName, 'collection.json')),
         fs.readFileSync(path.resolve(collectionDirectory, 'collection.json'), 'utf-8')
       );
 
@@ -38,7 +38,7 @@ const compress = (basePath) => new Promise((resolve) => {
               fragmentFileLocalPath: fragmentFilePath.replace(rest, '')
             }))
             .forEach(({ fragmentFileContent, fragmentFileLocalPath }) => {
-              zip.file(fragmentFileLocalPath, fragmentFileContent);
+              zip.file(path.normalize(fragmentFileLocalPath), fragmentFileContent);
             });
         });
     });
