@@ -73,7 +73,7 @@
     ]
   },
   "scripts": {
-    "precommit": "npm run test && lint-staged",
+    "precommit": "npm run test -- --o && lint-staged",
     "test": "jest"
   },
   "repository": "p2kmgcl/generator-liferay-fragments",
