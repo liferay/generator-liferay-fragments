@@ -34,6 +34,31 @@ class CustomGenerator extends Generator {
   }
 
   /**
+   * Copies the given file to the given destination, using
+   * this.templatePath and this.destinationPath internally.
+   * @param {*} filePath File path
+   * @param {*} destinationPath Destination path
+   */
+  copyFile(filePath, destinationPath) {
+    this.fs.copy(
+      this.templatePath(filePath),
+      this.destinationPath(destinationPath)
+    );
+  }
+
+  /**
+   * Copy a set of files to a basePath.
+   * `[filePath]` -> `[basePath]/[filePath]`
+   * @param {string} basePath Basepath where templates will be copied
+   * @param {string[]} filePaths List of templates to be copied
+   */
+  copyFiles(basePath, filePaths) {
+    filePaths.forEach(filePath =>
+      this.copyFile(filePath, path.join(basePath, filePath))
+    );
+  }
+
+  /**
    * Copies the given template to the given destination, using
    * this.templatePath and this.destinationPath internally.
    * All templates receive the data collected from this generator.

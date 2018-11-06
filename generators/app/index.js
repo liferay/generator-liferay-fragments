@@ -62,15 +62,18 @@ class AppGenerator extends CustomGenerator {
   writing() {
     logNewLine('Creating directory');
 
+    this.copyFiles(this.destinationRoot(), [
+      'scripts/compress.js',
+      'scripts/log.js'
+    ]);
+
     this.copyTemplates(this.destinationRoot(), [
       '.editorconfig',
       '.eslintrc',
       '.gitignore',
       '.yo-rc.json',
       'package.json',
-      'README.md',
-      'scripts/compress.js',
-      'scripts/log.js'
+      'README.md'
     ]);
   }
 
