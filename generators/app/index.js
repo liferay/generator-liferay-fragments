@@ -49,6 +49,8 @@ class AppGenerator extends CustomGenerator {
       voca.slugify(this.getValue(REPOSITORY_NAME_VAR))
     );
 
+    this.isRequired(REPOSITORY_SLUG_VAR);
+
     this.destinationRoot(
       this.destinationPath(this.getValue(REPOSITORY_SLUG_VAR))
     );
