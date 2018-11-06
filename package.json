@@ -40,7 +40,10 @@
     "yeoman-generator": "^2.0.1"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.spec.js?(x)"
+    ]
   },
   "lint-staged": {
     "*.js": [

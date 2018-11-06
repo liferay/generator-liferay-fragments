@@ -5,7 +5,7 @@ const { log, logNewLine, logIndent, logSecondary} = require('./log');
 const JSZip = require('jszip');
 const path = require('path');
 
-function compress(basePath) {
+const compress = (basePath) => new Promise((resolve) => {
   const zip = new JSZip();
 
   logNewLine('Generating zip file');
@@ -50,8 +50,9 @@ function compress(basePath) {
     logNewLine('fragments.zip file created ');
     log('Import them to your liferay-portal to start using them:');
     logSecondary('https://dev.liferay.com/discover/portal/-/knowledge_base/7-1/exporting-and-importing-fragments#importing-collections');
+    resolve();
   });
-};
+});
 
 if (process.env.NODE_ENV !== 'test') {
   compress(path.join(__dirname, '..'));
