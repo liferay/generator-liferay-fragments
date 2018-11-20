@@ -73,7 +73,10 @@ class AppGenerator extends CustomGenerator {
       '.gitignore',
       '.yo-rc.json',
       'package.json',
-      'README.md'
+      'README.md',
+      'scripts/compress.js',
+      'scripts/deploy.js',
+      'scripts/log.js'
     ]);
   }
 
@@ -83,7 +86,7 @@ class AppGenerator extends CustomGenerator {
   install() {
     logNewLine('Installing dependencies');
 
-    this.npmInstall(['chalk', 'glob', 'jszip'], {
+    this.npmInstall(['chalk', 'glob', 'jszip', 'readline', 'request'], {
       loglevel: 'silent',
       progress: false,
       saveDev: true
