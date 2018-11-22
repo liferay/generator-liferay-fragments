@@ -64,7 +64,7 @@ class AppGenerator extends CustomGenerator {
 
     this.copyFiles(this.destinationRoot(), [
       'scripts/compress.js',
-      'scripts/deploy.js',
+      'scripts/import.js',
       'scripts/log.js'
     ]);
 
