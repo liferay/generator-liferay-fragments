@@ -32,11 +32,11 @@ const NEW_COLLECTION_MESSAGE = '+ New collection';
 const NEW_COLLECTION_SHORT = '(new)';
 const NEW_COLLECTION_VALUE = '__NEW_COLLECTION_VALUE__';
 
-const REPOSITORY_NAME_DEFAULT = 'Sample Liferay Fragments';
-const REPOSITORY_NAME_MESSAGE = 'Repository name';
-const REPOSITORY_NAME_VAR = 'repositoryName';
+const PROJECT_NAME_DEFAULT = 'Sample Liferay Fragments';
+const PROJECT_NAME_MESSAGE = 'Project name';
+const PROJECT_NAME_VAR = 'projectName';
 
-const REPOSITORY_SLUG_VAR = 'repositorySlug';
+const PROJECT_SLUG_VAR = 'projectSlug';
 
 module.exports = {
   ADD_SAMPLE_CONTENT_DEFAULT,
@@ -64,8 +64,8 @@ module.exports = {
   NEW_COLLECTION_MESSAGE,
   NEW_COLLECTION_SHORT,
   NEW_COLLECTION_VALUE,
-  REPOSITORY_NAME_DEFAULT,
-  REPOSITORY_NAME_MESSAGE,
-  REPOSITORY_NAME_VAR,
-  REPOSITORY_SLUG_VAR
+  PROJECT_NAME_DEFAULT,
+  PROJECT_NAME_MESSAGE,
+  PROJECT_NAME_VAR,
+  PROJECT_SLUG_VAR
 };
