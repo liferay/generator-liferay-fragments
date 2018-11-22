@@ -16,10 +16,10 @@ const {
   FRAGMENT_DESCRIPTION_VAR,
   FRAGMENT_NAME_SAMPLE,
   FRAGMENT_NAME_VAR,
-  REPOSITORY_NAME_DEFAULT,
-  REPOSITORY_NAME_MESSAGE,
-  REPOSITORY_NAME_VAR,
-  REPOSITORY_SLUG_VAR
+  PROJECT_NAME_DEFAULT,
+  PROJECT_NAME_MESSAGE,
+  PROJECT_NAME_VAR,
+  PROJECT_SLUG_VAR
 } = require('../../utils/constants');
 
 class AppGenerator extends CustomGenerator {
@@ -32,9 +32,9 @@ class AppGenerator extends CustomGenerator {
     await this.ask([
       {
         type: 'input',
-        name: REPOSITORY_NAME_VAR,
-        message: REPOSITORY_NAME_MESSAGE,
-        default: REPOSITORY_NAME_DEFAULT
+        name: PROJECT_NAME_VAR,
+        message: PROJECT_NAME_MESSAGE,
+        default: PROJECT_NAME_DEFAULT
       },
       {
         type: 'confirm',
@@ -45,15 +45,13 @@ class AppGenerator extends CustomGenerator {
     ]);
 
     this.setValue(
-      REPOSITORY_SLUG_VAR,
-      voca.slugify(this.getValue(REPOSITORY_NAME_VAR))
+      PROJECT_SLUG_VAR,
+      voca.slugify(this.getValue(PROJECT_NAME_VAR))
     );
 
-    this.isRequired(REPOSITORY_SLUG_VAR);
+    this.isRequired(PROJECT_SLUG_VAR);
 
-    this.destinationRoot(
-      this.destinationPath(this.getValue(REPOSITORY_SLUG_VAR))
-    );
+    this.destinationRoot(this.destinationPath(this.getValue(PROJECT_SLUG_VAR)));
   }
 
   /**
