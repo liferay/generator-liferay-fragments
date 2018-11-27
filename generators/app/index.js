@@ -63,7 +63,8 @@ class AppGenerator extends CustomGenerator {
     this.copyFiles(this.destinationRoot(), [
       'scripts/compress.js',
       'scripts/import.js',
-      'scripts/log.js'
+      'scripts/log.js',
+      'scripts/portal.js'
     ]);
 
     this.copyTemplates(this.destinationRoot(), [
@@ -82,7 +83,7 @@ class AppGenerator extends CustomGenerator {
   install() {
     logNewLine('Installing dependencies');
 
-    this.npmInstall(['chalk', 'glob', 'jszip', 'readline', 'request'], {
+    this.npmInstall(['chalk', 'glob', 'jszip', 'readline-sync', 'request'], {
       loglevel: 'silent',
       progress: false,
       saveDev: true
