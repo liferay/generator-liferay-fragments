@@ -17,19 +17,23 @@ describe('app-generator > compress', () => {
       const readable = file.nodeStream();
       let fileContent = '';
 
-      promises.push(new Promise((resolve) => {
-        readable.on('data', (chunk) => { fileContent += chunk; });
+      promises.push(
+        new Promise(resolve => {
+          readable.on('data', chunk => {
+            fileContent += chunk;
+          });
 
-        readable.on('end', () => {
-          expect({
-            relativePath,
-            fileContent,
-            dir: file.dir
-          }).toMatchSnapshot();
+          readable.on('end', () => {
+            expect({
+              relativePath,
+              fileContent,
+              dir: file.dir
+            }).toMatchSnapshot();
 
-          resolve();
-        });
-      }));
+            resolve();
+          });
+        })
+      );
     });
 
     await Promise.all(promises);
@@ -65,7 +69,9 @@ describe('app-generator > compress', () => {
   it('appends existing fragments', async () => {
     fs.mkdirSync(path.join(tmpDirName, 'src'));
     fs.mkdirSync(path.join(tmpDirName, 'src', 'sample-collection'));
-    fs.mkdirSync(path.join(tmpDirName, 'src', 'sample-collection', 'sample-fragment'));
+    fs.mkdirSync(
+      path.join(tmpDirName, 'src', 'sample-collection', 'sample-fragment')
+    );
 
     fs.copyFileSync(
       path.join(__dirname, 'assets', 'collection.json'),
@@ -74,22 +80,46 @@ describe('app-generator > compress', () => {
 
     fs.copyFileSync(
       path.join(__dirname, 'assets', 'fragment.json'),
-      path.join(tmpDirName, 'src', 'sample-collection', 'sample-fragment', 'fragment.json')
+      path.join(
+        tmpDirName,
+        'src',
+        'sample-collection',
+        'sample-fragment',
+        'fragment.json'
+      )
     );
 
     fs.copyFileSync(
       path.join(__dirname, 'assets', 'index.html'),
-      path.join(tmpDirName, 'src', 'sample-collection', 'sample-fragment', 'index.html')
+      path.join(
+        tmpDirName,
+        'src',
+        'sample-collection',
+        'sample-fragment',
+        'index.html'
+      )
     );
 
     fs.copyFileSync(
       path.join(__dirname, 'assets', 'main.js'),
-      path.join(tmpDirName, 'src', 'sample-collection', 'sample-fragment', 'main.js')
+      path.join(
+        tmpDirName,
+        'src',
+        'sample-collection',
+        'sample-fragment',
+        'main.js'
+      )
     );
 
     fs.copyFileSync(
       path.join(__dirname, 'assets', 'styles.css'),
-      path.join(tmpDirName, 'src', 'sample-collection', 'sample-fragment', 'styles.css')
+      path.join(
+        tmpDirName,
+        'src',
+        'sample-collection',
+        'sample-fragment',
+        'styles.css'
+      )
     );
 
     await compress(tmpDirName);

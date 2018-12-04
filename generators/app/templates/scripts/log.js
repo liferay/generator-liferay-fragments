@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const chalk = require('chalk');
 
 function log(message) {
@@ -7,10 +9,10 @@ function log(message) {
 }
 
 function logError(message) {
-	if (process.env.NODE_ENV !== 'test') {
-		console.log('');
-		console.log(chalk.red(message));
-	}
+  if (process.env.NODE_ENV !== 'test') {
+    console.log('');
+    console.log(chalk.red(message));
+  }
 }
 
 function logIndent(message) {
