@@ -58,6 +58,7 @@
   },
   "eslintConfig": {
     "extends": [
+      "eslint:recommended",
       "xo",
       "prettier"
     ],
@@ -66,6 +67,7 @@
       "node": true
     },
     "rules": {
+      "no-var": ["error"],
       "prettier/prettier": [
         "error",
         {
@@ -80,6 +82,7 @@
   },
   "scripts": {
     "precommit": "npm run test -- --o && lint-staged",
+    "lint": "eslint ./generators/ ./utils/",
     "test": "jest"
   },
   "repository": "p2kmgcl/generator-liferay-fragments",
