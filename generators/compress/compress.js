@@ -1,9 +1,9 @@
 const chalk = require('chalk');
 const fs = require('fs');
 const glob = require('glob');
-const { log, logNewLine, logIndent, logSecondary } = require('./log');
 const JSZip = require('jszip');
 const path = require('path');
+const { log, logNewLine, logIndent, logSecondary } = require('../../utils/log');
 
 const compress = basePath =>
   new Promise(resolve => {
@@ -61,11 +61,22 @@ const compress = basePath =>
           });
       });
 
+    try {
+      fs.mkdirSync(path.join(basePath, 'build'));
+    } catch (error) {}
+
     zip
-      .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
-      .pipe(fs.createWriteStream(path.join(basePath, 'fragments.zip')))
+      .generateNodeStream({
+        type: 'nodebuffer',
+        streamFiles: true
+      })
+      .pipe(
+        fs.createWriteStream(
+          path.join(basePath, 'build', 'liferay-fragments.zip')
+        )
+      )
       .on('finish', () => {
-        logNewLine('fragments.zip file created ');
+        logNewLine('build/liferay-fragments.zip file created ');
         log('Import them to your liferay-portal to start using them:');
         logSecondary(
           'https://dev.liferay.com/discover/portal/-/knowledge_base/7-1/exporting-and-importing-fragments#importing-collections'
@@ -73,9 +84,5 @@ const compress = basePath =>
         resolve();
       });
   });
-
-if (process.env.NODE_ENV !== 'test') {
-  compress(path.join(__dirname, '..'));
-}
 
 module.exports = compress;

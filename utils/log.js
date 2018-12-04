@@ -13,6 +13,17 @@ function log(message) {
 }
 
 /**
+ * Logs an error message to the console
+ * @param {string} message Message content
+ */
+function logError(message) {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log('');
+    console.log(chalk.red(message));
+  }
+}
+
+/**
  * Logs an indented message to the console
  * @param {string} message Message content
  */
@@ -43,6 +54,7 @@ function logSecondary(message) {
 
 module.exports = {
   log,
+  logError,
   logIndent,
   logNewLine,
   logSecondary

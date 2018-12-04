@@ -60,13 +60,6 @@ class AppGenerator extends CustomGenerator {
   writing() {
     logNewLine('Creating directory');
 
-    this.copyFiles(this.destinationRoot(), [
-      'scripts/compress.js',
-      'scripts/import.js',
-      'scripts/log.js',
-      'scripts/portal.js'
-    ]);
-
     this.copyTemplates(this.destinationRoot(), [
       '.editorconfig',
       '.eslintrc',
@@ -83,7 +76,7 @@ class AppGenerator extends CustomGenerator {
   install() {
     logNewLine('Installing dependencies');
 
-    this.npmInstall(['chalk', 'glob', 'jszip', 'readline-sync', 'request'], {
+    this.npmInstall([], {
       loglevel: 'silent',
       progress: false,
       saveDev: true

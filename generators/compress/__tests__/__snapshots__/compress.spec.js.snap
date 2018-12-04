@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`app-generator > compress appends existing collections 1`] = `
+exports[`compress-generator/compress appends existing collections 1`] = `
 Object {
   "dir": true,
   "fileContent": "",
@@ -8,7 +8,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing collections 2`] = `
+exports[`compress-generator/compress appends existing collections 2`] = `
 Object {
   "dir": false,
   "fileContent": "{
@@ -20,7 +20,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing fragments 1`] = `
+exports[`compress-generator/compress appends existing fragments 1`] = `
 Object {
   "dir": true,
   "fileContent": "",
@@ -28,7 +28,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing fragments 2`] = `
+exports[`compress-generator/compress appends existing fragments 2`] = `
 Object {
   "dir": true,
   "fileContent": "",
@@ -36,7 +36,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing fragments 3`] = `
+exports[`compress-generator/compress appends existing fragments 3`] = `
 Object {
   "dir": false,
   "fileContent": "{
@@ -48,7 +48,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing fragments 4`] = `
+exports[`compress-generator/compress appends existing fragments 4`] = `
 Object {
   "dir": false,
   "fileContent": "{
@@ -62,7 +62,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing fragments 5`] = `
+exports[`compress-generator/compress appends existing fragments 5`] = `
 Object {
   "dir": false,
   "fileContent": "<div class=\\"sample-fragment\\">
@@ -73,7 +73,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing fragments 6`] = `
+exports[`compress-generator/compress appends existing fragments 6`] = `
 Object {
   "dir": false,
   "fileContent": "const content = fragmentElement.querySelector('.sample-fragment');
@@ -82,7 +82,7 @@ Object {
 }
 `;
 
-exports[`app-generator > compress appends existing fragments 7`] = `
+exports[`compress-generator/compress appends existing fragments 7`] = `
 Object {
   "dir": false,
   "fileContent": ".sample-fragment {
