@@ -31,7 +31,8 @@ Object {
   ],
 
   \\"scripts\\": {
-    \\"build\\": \\"node scripts/compress.js\\"
+    \\"build\\": \\"node scripts/compress.js\\",
+    \\"import\\": \\"node scripts/import.js\\"
   }
 }
 ",
@@ -137,7 +138,8 @@ Object {
   ],
 
   \\"scripts\\": {
-    \\"build\\": \\"node scripts/compress.js\\"
+    \\"build\\": \\"node scripts/compress.js\\",
+    \\"import\\": \\"node scripts/import.js\\"
   }
 }
 ",
@@ -226,6 +228,13 @@ function log(message) {
   }
 }
 
+function logError(message) {
+	if (process.env.NODE_ENV !== 'test') {
+		console.log('');
+		console.log(chalk.red(message));
+	}
+}
+
 function logIndent(message) {
   log(\`  \${message}\`);
 }
@@ -245,6 +254,7 @@ function logSecondary(message) {
 
 module.exports = {
   log,
+  logError,
   logIndent,
   logNewLine,
   logSecondary
