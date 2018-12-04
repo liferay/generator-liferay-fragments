@@ -15,7 +15,7 @@ let groupId = 20126;
 function askPortalData(callback) {
   let answer = readline.question(`Liferay host & port? [${host}] `);
 
-  host = answer !== '' ? answer : host;
+  host = answer || host;
 
   _askUsername(callback);
 }
@@ -41,7 +41,7 @@ function _askPassword(callback) {
     `Liferay administrator password? [${password}] `
   );
 
-  password = answer !== '' ? answer : password;
+  password = answer || password;
 
   _askCompanies(callback);
 }
@@ -51,7 +51,7 @@ function _askUsername(callback) {
     `Liferay administrator username? [${username}] `
   );
 
-  username = answer !== '' ? answer : username;
+  username = answer || username;
 
   _askPassword(callback);
 }
@@ -67,7 +67,7 @@ function _askCompanies(callback) {
       jar: true
     },
     (error, response, body) => {
-      if (error || (response && response.statusCode != 200)) {
+      if (error || (response && response.statusCode !== 200)) {
         logError(
           `Error getting companies list from ${host}: ${error}, ${response}`
         );
@@ -83,7 +83,7 @@ function _askCompanies(callback) {
 
       let answer = readline.question(`Company ID? [${companyId}] `);
 
-      companyId = answer !== '' ? answer : companyId;
+      companyId = answer || companyId;
 
       _askGroups(callback);
     }
@@ -101,7 +101,7 @@ function _askGroups(callback) {
       jar: true
     },
     (error, response, body) => {
-      if (error || (response && response.statusCode != 200)) {
+      if (error || (response && response.statusCode !== 200)) {
         logError(
           `Error getting groups list from ${host}: ${error}, ${response}`
         );
@@ -115,7 +115,7 @@ function _askGroups(callback) {
 
       let answer = readline.question(`Group ID? [${groupId}] `);
 
-      groupId = answer !== '' ? answer : groupId;
+      groupId = answer || groupId;
 
       callback();
     }

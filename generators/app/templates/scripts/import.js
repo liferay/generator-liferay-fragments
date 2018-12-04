@@ -15,7 +15,7 @@ const request = require('request');
 
 const objectsInProcess = {};
 
-_importCollections = () => {
+function _importCollections() {
   glob
     .sync(`${__dirname}/../src/*/collection.json`)
     .map(collectionJSON => path.resolve(`${collectionJSON}/..`))
@@ -48,7 +48,7 @@ _importCollections = () => {
             `Deploying collection ${chalk.reset(collectionJSON.name)}`
           );
 
-          if (error || (response && response.statusCode != 200)) {
+          if (error || (response && response.statusCode !== 200)) {
             if (
               response.body &&
               response.body.lastIndexOf(
@@ -77,9 +77,9 @@ _importCollections = () => {
         }
       );
     });
-};
+}
 
-_importFragments = (collectionDirectory, collection, updateAll) => {
+function _importFragments(collectionDirectory, collection, updateAll) {
   glob
     .sync(`${collectionDirectory}/*/fragment.json`)
     .map(fragmentJSON => path.resolve(`${fragmentJSON}/..`))
@@ -123,8 +123,8 @@ _importFragments = (collectionDirectory, collection, updateAll) => {
           jar: true,
           url: `${getHost()}/api/jsonws/fragment.fragmententry/add-fragment-entry`
         },
-        (error, response, body) => {
-          if (error || (response && response.statusCode != 200)) {
+        (error, response) => {
+          if (error || (response && response.statusCode !== 200)) {
             if (
               response.body &&
               response.body.lastIndexOf(
@@ -155,9 +155,9 @@ _importFragments = (collectionDirectory, collection, updateAll) => {
         }
       );
     });
-};
+}
 
-_getCollection = (name, key, callback) => {
+function _getCollection(name, key, callback) {
   request.get(
     `${getHost()}/api/jsonws/fragment.fragmentcollection/get-fragment-collections/group-id/${getGroupId()}/name/${name}/start/-1/end/-1/-order-by-comparator`,
     {
@@ -168,7 +168,7 @@ _getCollection = (name, key, callback) => {
       jar: true
     },
     (error, response, body) => {
-      if (error || (response && response.statusCode != 200)) {
+      if (error || (response && response.statusCode !== 200)) {
         logError(
           `Error deploying collection ${chalk.reset(
             name
@@ -182,17 +182,18 @@ _getCollection = (name, key, callback) => {
 
       let collection = {};
 
-      collections.forEach(
-        item =>
-          (collection = item.fragmentCollectionKey === key ? item : collection)
-      );
+      collections.forEach(item => {
+        collection = item.fragmentCollectionKey === key ? item : collection;
+
+        return collection;
+      });
 
       callback(collection);
     }
   );
-};
+}
 
-_getFragment = (name, key, collectionId, callback) => {
+function _getFragment(name, key, collectionId, callback) {
   request.get(
     `${getHost()}/api/jsonws/fragment.fragmententry/get-fragment-entries/group-id/${getGroupId()}/fragment-collection-id/${collectionId}/name/${name}/status/0/start/-1/end/-1/-order-by-comparator`,
     {
@@ -203,7 +204,7 @@ _getFragment = (name, key, collectionId, callback) => {
       jar: true
     },
     (error, response, body) => {
-      if (error || (response && response.statusCode != 200)) {
+      if (error || (response && response.statusCode !== 200)) {
         logError(
           `Error deploying fragment ${chalk.reset(name)}: ${error}, ${response}`
         );
@@ -215,23 +216,25 @@ _getFragment = (name, key, collectionId, callback) => {
 
       let fragment = {};
 
-      fragments.forEach(
-        item => (fragment = item.fragmentEntryKey === key ? item : fragment)
-      );
+      fragments.forEach(item => {
+        fragment = item.fragmentEntryKey === key ? item : fragment;
+
+        return fragment;
+      });
 
       callback(fragment);
     }
   );
-};
+}
 
-_updateCollection = (collectionJSON, collectionKey, collectionDirectory) => {
+function _updateCollection(collectionJSON, collectionKey, collectionDirectory) {
   let answer = readline.question(
     `Collection "${
       collectionJSON.name
     }" already exists, update it including all the fragments? [A/y/n] `
   );
 
-  const updateFlag = (answer !== '' ? answer : 'A').toLowerCase();
+  const updateFlag = (answer || 'A').toLowerCase();
 
   switch (updateFlag.charAt(0)) {
     case 'a':
@@ -252,7 +255,7 @@ _updateCollection = (collectionJSON, collectionKey, collectionDirectory) => {
             url: `${getHost()}/api/jsonws/fragment.fragmentcollection/update-fragment-collection`
           },
           (error, response, body) => {
-            if (error || (response && response.statusCode != 200)) {
+            if (error || (response && response.statusCode !== 200)) {
               logError(
                 `Error updating collection ${chalk.reset(
                   collectionJSON.name
@@ -287,7 +290,7 @@ _updateCollection = (collectionJSON, collectionKey, collectionDirectory) => {
             url: `${getHost()}/api/jsonws/fragment.fragmentcollection/update-fragment-collection`
           },
           (error, response, body) => {
-            if (error || (response && response.statusCode != 200)) {
+            if (error || (response && response.statusCode !== 200)) {
               logError(
                 `Error updating collection ${chalk.reset(
                   collectionJSON.name
@@ -310,10 +313,10 @@ _updateCollection = (collectionJSON, collectionKey, collectionDirectory) => {
       );
       break;
   }
-};
+}
 
-_updateFragment = (name, key, collectionId, css, html, js, updateAll) => {
-  const doUpdateFragment = fragment => {
+function _updateFragment(name, key, collectionId, css, html, js, updateAll) {
+  function doUpdateFragment(fragment) {
     request.post(
       {
         auth: {
@@ -332,11 +335,11 @@ _updateFragment = (name, key, collectionId, css, html, js, updateAll) => {
         jar: true,
         url: `${getHost()}/api/jsonws/fragment.fragmententry/update-fragment-entry`
       },
-      (error, response, body) => {
-        if (error || (response && response.statusCode != 200)) {
+      (error, response) => {
+        if (error || (response && response.statusCode !== 200)) {
           logError(
             `Error updating fragment ${chalk.reset(
-              fragmentJSON.name
+              name
             )}: ${error}, ${response}`
           );
 
@@ -346,7 +349,7 @@ _updateFragment = (name, key, collectionId, css, html, js, updateAll) => {
         }
       }
     );
-  };
+  }
 
   _getFragment(name, key, collectionId, fragment => {
     if (updateAll) {
@@ -356,7 +359,7 @@ _updateFragment = (name, key, collectionId, css, html, js, updateAll) => {
         `Fragment "${name}" already exists, update it including all the fragments? [Y/n]`
       );
 
-      const updateFlag = (answer !== '' ? answer : 'y').toLowerCase();
+      const updateFlag = (answer || 'y').toLowerCase();
 
       switch (updateFlag.charAt(0)) {
         case 'y':
@@ -365,20 +368,20 @@ _updateFragment = (name, key, collectionId, css, html, js, updateAll) => {
         default:
           logNewLine(`Skipping existing fragment ${chalk.reset(name)}`);
 
-          _removeLock(`fragment${fragmentJSON.name}`);
+          _removeLock(`fragment${name}`);
           break;
       }
     }
   });
-};
+}
 
-_removeLock = lockName => {
+function _removeLock(lockName) {
   delete objectsInProcess[lockName];
 
-  if (Object.entries(objectsInProcess).length == 0) {
+  if (Object.entries(objectsInProcess).length === 0) {
     process.stdin.destroy();
   }
-};
+}
 
 askPortalData(_importCollections);
 
