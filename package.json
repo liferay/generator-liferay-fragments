@@ -85,7 +85,7 @@
     ]
   },
   "scripts": {
-    "precommit": "npm run test -- --o && lint-staged",
+    "precommit": "npm run test && lint-staged",
     "lint": "eslint ./generators/ ./utils/",
     "test": "jest"
   },
