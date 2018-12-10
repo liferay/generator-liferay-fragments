@@ -22,11 +22,12 @@ function expectProjectFiles(base) {
 
   return expectFiles(
     base,
-    glob
-      .sync(`${templatesPath}/**/*`)
-      .map(templatePath =>
-        templatePath.replace(templatesPath, '').replace(/\.ejs$/i, '')
-      )
+    glob.sync(`${templatesPath}/**/*`).map(templatePath =>
+      path
+        .resolve(templatePath)
+        .replace(templatesPath, '')
+        .replace(/\.ejs$/i, '')
+    )
   );
 }
 
