@@ -11,6 +11,11 @@ describe('compress-generator/compress', () => {
   beforeEach(() => {
     tmpDir = tmp.dirSync({ unsafeCleanup: true });
     tmpDirName = tmpDir.name;
+
+    fs.copyFileSync(
+      path.join(__dirname, 'assets', 'package.json'),
+      path.join(tmpDirName, 'package.json')
+    );
   });
 
   afterEach(() => {

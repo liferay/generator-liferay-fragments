@@ -1,65 +1,76 @@
 const chalk = require('chalk');
 const fs = require('fs');
-const glob = require('glob');
 const JSZip = require('jszip');
 const path = require('path');
+const getProjectContent = require('../../utils/get-project-content');
 const { log, logNewLine, logIndent, logSecondary } = require('../../utils/log');
 
+/**
+ * Adds a given collection object to the given zip file.
+ * The zip file will be modified
+ * @param {Object} collection Collection to be added
+ * @param {JSZip} zip Zip file to be modified
+ */
+function _addCollectionToZip(collection, zip) {
+  zip.file(
+    `${collection.slug}/collection.json`,
+    JSON.stringify(collection.metadata)
+  );
+
+  logNewLine(`Collection ${chalk.reset(collection.metadata.name)}`);
+
+  collection.fragments.forEach(fragment => {
+    _addFragmentToZip(collection, fragment, zip);
+  });
+}
+
+/**
+ * Adds a given fragment object to the given zip file.
+ * The zip file will be modified
+ * @param {Object} collection Collection to be added
+ * @param {Object} fragment Fragment to be added
+ * @param {JSZip} zip Zip file to be modified
+ */
+function _addFragmentToZip(collection, fragment, zip) {
+  zip.file(
+    `${collection.slug}/${fragment.slug}/fragment.json`,
+    JSON.stringify(fragment.metadata)
+  );
+
+  zip.file(
+    `${collection.slug}/${fragment.slug}/${fragment.metadata.htmlPath}`,
+    fragment.html
+  );
+
+  zip.file(
+    `${collection.slug}/${fragment.slug}/${fragment.metadata.cssPath}`,
+    fragment.css
+  );
+
+  zip.file(
+    `${collection.slug}/${fragment.slug}/${fragment.metadata.jsPath}`,
+    fragment.js
+  );
+
+  logIndent(`fragment ${chalk.reset(fragment.metadata.name)}`);
+}
+
+/**
+ * Compress a whole project from a basePath with all it's
+ * fragments and collections.
+ * @param {string} basePath Base path to use as project
+ * @return {Promise<JSZip>} Promise with the generated zip
+ */
 const compress = basePath =>
   new Promise(resolve => {
     const zip = new JSZip();
+    const project = getProjectContent(basePath);
 
     logNewLine('Generating zip file');
 
-    glob
-      .sync(path.join(basePath, 'src', '*', 'collection.json'))
-      .map(collectionJSON => path.resolve(collectionJSON, '..'))
-      .forEach(collectionDirectory => {
-        const collectionName = path.basename(collectionDirectory);
-        const rest = collectionDirectory.replace(collectionName, '');
-
-        zip.file(
-          path
-            .normalize(path.join(collectionName, 'collection.json'))
-            .split(path.sep)
-            .join('/'),
-          fs.readFileSync(
-            path.resolve(collectionDirectory, 'collection.json'),
-            'utf-8'
-          )
-        );
-
-        logNewLine(`Collection ${chalk.reset(collectionName)}`);
-
-        glob
-          .sync(path.join(collectionDirectory, '*', 'fragment.json'))
-          .map(fragmentJSON => path.resolve(fragmentJSON, '..'))
-          .forEach(fragmentDirectory => {
-            const fragmentName = path.basename(fragmentDirectory);
-
-            logIndent(`fragment ${chalk.reset(fragmentName)}`);
-
-            glob
-              .sync(path.join(fragmentDirectory, '**', '*'))
-              .filter(fragmentFilePath =>
-                fs.lstatSync(fragmentFilePath).isFile()
-              )
-              .map(fragmentFilePath => path.resolve(fragmentFilePath))
-              .map(fragmentFilePath => ({
-                fragmentFileContent: fs.readFileSync(fragmentFilePath, 'utf-8'),
-                fragmentFileLocalPath: fragmentFilePath.replace(rest, '')
-              }))
-              .forEach(({ fragmentFileContent, fragmentFileLocalPath }) => {
-                zip.file(
-                  path
-                    .normalize(fragmentFileLocalPath)
-                    .split(path.sep)
-                    .join('/'),
-                  fragmentFileContent
-                );
-              });
-          });
-      });
+    project.collections.forEach(collection => {
+      _addCollectionToZip(collection, zip);
+    });
 
     try {
       fs.mkdirSync(path.join(basePath, 'build'));
@@ -81,7 +92,7 @@ const compress = basePath =>
         logSecondary(
           'https://dev.liferay.com/discover/portal/-/knowledge_base/7-1/exporting-and-importing-fragments#importing-collections'
         );
-        resolve();
+        resolve(zip);
       });
   });
 

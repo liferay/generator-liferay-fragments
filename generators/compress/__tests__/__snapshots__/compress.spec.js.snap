@@ -11,11 +11,7 @@ Object {
 exports[`compress-generator/compress appends existing collections 2`] = `
 Object {
   "dir": false,
-  "fileContent": "{
-  \\"description\\": \\"Sample Description\\",
-  \\"name\\": \\"Sample Collection\\"
-}
-",
+  "fileContent": "{\\"description\\":\\"Sample Description\\",\\"name\\":\\"Sample Collection\\"}",
   "relativePath": "sample-collection/collection.json",
 }
 `;
@@ -39,11 +35,7 @@ Object {
 exports[`compress-generator/compress appends existing fragments 3`] = `
 Object {
   "dir": false,
-  "fileContent": "{
-  \\"description\\": \\"Sample Description\\",
-  \\"name\\": \\"Sample Collection\\"
-}
-",
+  "fileContent": "{\\"description\\":\\"Sample Description\\",\\"name\\":\\"Sample Collection\\"}",
   "relativePath": "sample-collection/collection.json",
 }
 `;
@@ -51,13 +43,7 @@ Object {
 exports[`compress-generator/compress appends existing fragments 4`] = `
 Object {
   "dir": false,
-  "fileContent": "{
-  \\"cssPath\\": \\"styles.css\\",
-  \\"htmlPath\\": \\"index.html\\",
-  \\"jsPath\\": \\"main.js\\",
-  \\"name\\": \\"Sample Fragment\\"
-}
-",
+  "fileContent": "{\\"cssPath\\":\\"styles.css\\",\\"htmlPath\\":\\"index.html\\",\\"jsPath\\":\\"main.js\\",\\"name\\":\\"Sample Fragment\\"}",
   "relativePath": "sample-collection/sample-fragment/fragment.json",
 }
 `;
@@ -76,19 +62,19 @@ Object {
 exports[`compress-generator/compress appends existing fragments 6`] = `
 Object {
   "dir": false,
-  "fileContent": "const content = fragmentElement.querySelector('.sample-fragment');
+  "fileContent": ".sample-fragment {
+  color: inherit;
+}
 ",
-  "relativePath": "sample-collection/sample-fragment/main.js",
+  "relativePath": "sample-collection/sample-fragment/styles.css",
 }
 `;
 
 exports[`compress-generator/compress appends existing fragments 7`] = `
 Object {
   "dir": false,
-  "fileContent": ".sample-fragment {
-  color: inherit;
-}
+  "fileContent": "const content = fragmentElement.querySelector('.sample-fragment');
 ",
-  "relativePath": "sample-collection/sample-fragment/styles.css",
+  "relativePath": "sample-collection/sample-fragment/main.js",
 }
 `;
