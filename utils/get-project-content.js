@@ -5,7 +5,7 @@ const path = require('path');
 /**
  * Get a list of project collections from a given basePath
  * @param {@string} basePath Base path
- * @return {Array<{metadata: Object, fragments: Array}>} Collections
+ * @return {Array<{slug: string, metadata: Object, fragments: Array}>} Collections
  */
 function _getProjectCollections(basePath) {
   return glob
@@ -26,7 +26,7 @@ function _getProjectCollections(basePath) {
 /**
  * Get a list of fragments from a given collection directory
  * @param {string} collectionDirectory Collection directory
- * @return {Array<{metadata: Object, html: string, css: string, js: string}>}} Fragments
+ * @return {Array<{slug: string, metadata: Object, html: string, css: string, js: string}>}} Fragments
  */
 function _getCollectionFragments(collectionDirectory) {
   return glob

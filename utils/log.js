@@ -13,6 +13,17 @@ function log(message) {
 }
 
 /**
+ * Logs data with different styles
+ * @param {string} message Main message
+ * @param {string} data Associated data
+ */
+function logData(message, data) {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log(`${chalk.green(message)} ${chalk.bold(data)}`);
+  }
+}
+
+/**
  * Logs an error message to the console
  * @param {string} message Message content
  */
@@ -54,6 +65,7 @@ function logSecondary(message) {
 
 module.exports = {
   log,
+  logData,
   logError,
   logIndent,
   logNewLine,
