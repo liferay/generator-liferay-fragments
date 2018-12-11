@@ -93,7 +93,8 @@ async function _importFragment(api, groupId, existingCollection, fragment) {
       name: fragment.metadata.name,
       html: fragment.html,
       css: fragment.css,
-      js: fragment.js
+      js: fragment.js,
+      status: existingFragment.status
     });
   }
 }
