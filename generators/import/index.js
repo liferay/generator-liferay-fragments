@@ -1,10 +1,13 @@
+const chokidar = require('chokidar');
+const path = require('path');
 const api = require('../../utils/api');
 const CustomGenerator = require('../../utils/custom-generator');
 const getProjectContent = require('../../utils/get-project-content');
 const importProject = require('./import');
-const { log, logNewLine, logError } = require('../../utils/log');
+const { log, logData, logNewLine, logError } = require('../../utils/log');
 
 const {
+  IMPORT_WATCH_VAR,
   LIFERAY_COMPANYID_MESSAGE,
   LIFERAY_COMPANYID_VAR,
   LIFERAY_GROUPID_MESSAGE,
@@ -21,6 +24,11 @@ const {
 } = require('../../utils/constants');
 
 module.exports = class extends CustomGenerator {
+  constructor(...args) {
+    super(...args);
+    this.argument(IMPORT_WATCH_VAR, { type: Boolean, required: false });
+  }
+
   /**
    * @inheritdoc
    */
@@ -30,11 +38,11 @@ module.exports = class extends CustomGenerator {
     await this._askHostData();
     await this._askSiteData();
 
-    await importProject(
-      this._api,
-      this.getValue(LIFERAY_GROUPID_VAR),
-      getProjectContent(this.destinationPath())
-    );
+    if (this.getValue(IMPORT_WATCH_VAR)) {
+      await this._watchChanges();
+    } else {
+      await this._importProject();
+    }
   }
 
   /**
@@ -87,22 +95,26 @@ module.exports = class extends CustomGenerator {
    * Request site information
    */
   async _askSiteData() {
+    this._companyChoices = await this._getCompanyChoices();
+
     await this.ask([
       {
         type: 'list',
         name: LIFERAY_COMPANYID_VAR,
         message: LIFERAY_COMPANYID_MESSAGE,
-        choices: await this._getCompanyChoices(),
+        choices: this._companyChoices,
         default: this.getValue(LIFERAY_COMPANYID_VAR)
       }
     ]);
+
+    this._groupChoices = await this._getGroupChoices();
 
     await this.ask([
       {
         type: 'list',
         name: LIFERAY_GROUPID_VAR,
         message: LIFERAY_GROUPID_MESSAGE,
-        choices: await this._getGroupChoices(),
+        choices: this._groupChoices,
         default: this.getValue(LIFERAY_GROUPID_VAR)
       }
     ]);
@@ -152,6 +164,61 @@ module.exports = class extends CustomGenerator {
       name: group.descriptiveName,
       value: group.groupId
     }));
+  }
+
+  /**
+   * Performs a project import
+   * @return {Promise} Promise resolved when import has finished
+   */
+  _importProject() {
+    return importProject(
+      this._api,
+      this.getValue(LIFERAY_GROUPID_VAR),
+      getProjectContent(this.destinationPath())
+    );
+  }
+
+  /**
+   * Watches changes inside project and runs an import
+   * process for any change.
+   * @return {Promise} Promise returned by this methos is never resolved,
+   *  so you can wait for an infinite process until user cancels
+   *  it.
+   */
+  _watchChanges() {
+    const watchPath = path.resolve(this.destinationPath(), 'src');
+    const host = this.getValue(LIFERAY_HOST_VAR);
+    const user = this.getValue(LIFERAY_USERNAME_VAR);
+    const groupId = this.getValue(LIFERAY_GROUPID_VAR);
+    const group = this._groupChoices.find(group => group.value === groupId);
+    const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
+    const company = this._companyChoices.find(
+      company => company.value === companyId
+    );
+
+    let updatePromise = Promise.resolve();
+    let queuedUpdate = false;
+
+    return new Promise(() =>
+      chokidar.watch(watchPath).on('all', async () => {
+        if (!queuedUpdate) {
+          queuedUpdate = true;
+          await updatePromise;
+
+          // eslint-disable-next-line no-console
+          console.clear();
+          log(`Watching changes in ${watchPath}`);
+          log('Press Ctrl+C to stop watching\n');
+          logData('Host', host);
+          logData('User', user);
+          logData('Company', company.name);
+          logData('Group', group.name);
+
+          queuedUpdate = false;
+          updatePromise = this._importProject();
+        }
+      })
+    );
   }
 
   /**
