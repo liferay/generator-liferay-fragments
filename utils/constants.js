@@ -38,6 +38,8 @@ module.exports.FRAGMENT_TYPE_OPTIONS = [
 ];
 module.exports.FRAGMENT_TYPE_VAR = 'fragmentType';
 
+module.exports.IMPORT_WATCH_VAR = 'watch';
+
 module.exports.LIFERAY_COMPANYID_MESSAGE = 'Company ID';
 module.exports.LIFERAY_COMPANYID_VAR = 'companyId';
 
