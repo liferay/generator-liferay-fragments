@@ -5,7 +5,12 @@ const YeomanTest = require('yeoman-test');
 
 function expectFile(base, _path) {
   const filePath = path.join(base, _path);
-  const content = fs.readFileSync(filePath, 'utf-8');
+  const stat = fs.lstatSync(filePath);
+  let content = '';
+
+  if (stat.isFile()) {
+    content = fs.readFileSync(filePath, 'utf-8');
+  }
 
   return expect({
     filePath: _path.split(path.sep).join('/'),
@@ -22,7 +27,7 @@ function expectProjectFiles(base) {
 
   return expectFiles(
     base,
-    glob.sync(`${templatesPath}/**/*`).map(templatePath =>
+    glob.sync(`${templatesPath}/**/*`, { dot: true }).map(templatePath =>
       path
         .resolve(templatePath)
         .replace(templatesPath, '')

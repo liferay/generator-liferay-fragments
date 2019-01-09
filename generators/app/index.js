@@ -62,6 +62,8 @@ class AppGenerator extends CustomGenerator {
   writing() {
     logNewLine('Creating directory');
 
+    this.copyFiles(this.destinationRoot(), ['src/.gitkeep']);
+
     this.copyTemplates(this.destinationRoot(), [
       '.editorconfig',
       '.gitignore',
