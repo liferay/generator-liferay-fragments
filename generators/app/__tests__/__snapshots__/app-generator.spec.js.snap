@@ -2,6 +2,41 @@
 
 exports[`app-generator allows a custom repository name 1`] = `
 Object {
+  "content": "root = true
+
+[*]
+indent_style = space
+indent_size = 2
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+trim_trailing_whitespace = false
+",
+  "filePath": "/.editorconfig",
+}
+`;
+
+exports[`app-generator allows a custom repository name 2`] = `
+Object {
+  "content": "build/
+node_modules/
+",
+  "filePath": "/.gitignore",
+}
+`;
+
+exports[`app-generator allows a custom repository name 3`] = `
+Object {
+  "content": "{}
+",
+  "filePath": "/.yo-rc.json",
+}
+`;
+
+exports[`app-generator allows a custom repository name 4`] = `
+Object {
   "content": "{
   \\"name\\": \\"my-nice-custom-project\\",
   \\"description\\": \\"Liferay Fragments project\\",
@@ -31,7 +66,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows a custom repository name 2`] = `
+exports[`app-generator allows a custom repository name 5`] = `
 Object {
   "content": "# My Nice Custom Project
 
@@ -45,7 +80,56 @@ how to manage this project in the [generator documentation][2].
 }
 `;
 
+exports[`app-generator allows a custom repository name 6`] = `
+Object {
+  "content": "",
+  "filePath": "/src",
+}
+`;
+
+exports[`app-generator allows a custom repository name 7`] = `
+Object {
+  "content": "",
+  "filePath": "/src/.gitkeep",
+}
+`;
+
 exports[`app-generator allows adding sample content 1`] = `
+Object {
+  "content": "root = true
+
+[*]
+indent_style = space
+indent_size = 2
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+trim_trailing_whitespace = false
+",
+  "filePath": "/.editorconfig",
+}
+`;
+
+exports[`app-generator allows adding sample content 2`] = `
+Object {
+  "content": "build/
+node_modules/
+",
+  "filePath": "/.gitignore",
+}
+`;
+
+exports[`app-generator allows adding sample content 3`] = `
+Object {
+  "content": "{}
+",
+  "filePath": "/.yo-rc.json",
+}
+`;
+
+exports[`app-generator allows adding sample content 4`] = `
 Object {
   "content": "{
   \\"name\\": \\"sample-liferay-fragments\\",
@@ -76,7 +160,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 2`] = `
+exports[`app-generator allows adding sample content 5`] = `
 Object {
   "content": "# Sample Liferay Fragments
 
@@ -90,7 +174,21 @@ how to manage this project in the [generator documentation][2].
 }
 `;
 
-exports[`app-generator allows adding sample content 3`] = `
+exports[`app-generator allows adding sample content 6`] = `
+Object {
+  "content": "",
+  "filePath": "/src",
+}
+`;
+
+exports[`app-generator allows adding sample content 7`] = `
+Object {
+  "content": "",
+  "filePath": "/src/.gitkeep",
+}
+`;
+
+exports[`app-generator allows adding sample content 8`] = `
 Object {
   "content": "{
   \\"cssPath\\": \\"styles.css\\",
@@ -104,7 +202,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 4`] = `
+exports[`app-generator allows adding sample content 9`] = `
 Object {
   "content": "<div class=\\"sample-fragment\\">
   Sample fragment
@@ -114,7 +212,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 5`] = `
+exports[`app-generator allows adding sample content 10`] = `
 Object {
   "content": ".sample-fragment {
   color: inherit;
@@ -124,7 +222,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 6`] = `
+exports[`app-generator allows adding sample content 11`] = `
 Object {
   "content": "const content = fragmentElement.querySelector('.sample-fragment');
 ",
@@ -133,6 +231,41 @@ Object {
 `;
 
 exports[`app-generator generates a new project 1`] = `
+Object {
+  "content": "root = true
+
+[*]
+indent_style = space
+indent_size = 2
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+trim_trailing_whitespace = false
+",
+  "filePath": "/.editorconfig",
+}
+`;
+
+exports[`app-generator generates a new project 2`] = `
+Object {
+  "content": "build/
+node_modules/
+",
+  "filePath": "/.gitignore",
+}
+`;
+
+exports[`app-generator generates a new project 3`] = `
+Object {
+  "content": "{}
+",
+  "filePath": "/.yo-rc.json",
+}
+`;
+
+exports[`app-generator generates a new project 4`] = `
 Object {
   "content": "{
   \\"name\\": \\"sample-liferay-fragments\\",
@@ -163,7 +296,7 @@ Object {
 }
 `;
 
-exports[`app-generator generates a new project 2`] = `
+exports[`app-generator generates a new project 5`] = `
 Object {
   "content": "# Sample Liferay Fragments
 
@@ -174,5 +307,19 @@ how to manage this project in the [generator documentation][2].
 [2]: https://www.npmjs.com/package/generator-liferay-fragments#usage
 ",
   "filePath": "/README.md",
+}
+`;
+
+exports[`app-generator generates a new project 6`] = `
+Object {
+  "content": "",
+  "filePath": "/src",
+}
+`;
+
+exports[`app-generator generates a new project 7`] = `
+Object {
+  "content": "",
+  "filePath": "/src/.gitkeep",
 }
 `;

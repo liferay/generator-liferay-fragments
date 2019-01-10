@@ -96,7 +96,8 @@ module.exports = class extends CustomGenerator {
         name: FRAGMENT_TYPE_VAR,
         message: FRAGMENT_TYPE_MESSAGE,
         choices: FRAGMENT_TYPE_OPTIONS,
-        default: this.getValue(FRAGMENT_TYPE_VAR)
+        default: this.getValue(FRAGMENT_TYPE_DEFAULT),
+        when: !this.hasValue(FRAGMENT_TYPE_VAR)
       }
     ]);
 
