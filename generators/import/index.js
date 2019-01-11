@@ -160,7 +160,10 @@ module.exports = class extends CustomGenerator {
 
     const groups = JSON.parse(response.body);
 
-    return groups.map(group => ({
+    return groups.filter(
+      group => group.descriptiveName != 'Global'
+    )
+    .map(group => ({
       name: group.descriptiveName,
       value: group.groupId
     }));
