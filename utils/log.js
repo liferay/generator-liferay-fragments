@@ -30,8 +30,9 @@ function logData(message, data) {
 function logError(message) {
   if (process.env.NODE_ENV !== 'test') {
     console.log('');
-    console.log(chalk.red(message));
   }
+
+  console.log(chalk.red(message));
 }
 
 /**
