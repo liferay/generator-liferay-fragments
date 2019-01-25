@@ -11,6 +11,16 @@ const api = async (options = {}) => {
   const promiseRequest = util.promisify(request);
   const response = await promiseRequest(options);
 
+  return api.parseResponse(response);
+};
+
+/**
+ * @param {object} response API response
+ * @param {number} response.status Response status
+ * @param {string} response.body Response body
+ * @return {object} Response
+ */
+api.parseResponse = response => {
   if (response.status >= 400) {
     throw response;
   } else {
@@ -27,9 +37,9 @@ const api = async (options = {}) => {
     if (responseBody.error) {
       throw new Error(responseBody.error);
     }
-  }
 
-  return response;
+    return responseBody;
+  }
 };
 
 /**
