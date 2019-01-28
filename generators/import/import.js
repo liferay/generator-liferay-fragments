@@ -41,17 +41,12 @@ async function importProject(api, groupId, project) {
  * @return {boolean} True if it has any new change
  */
 function _fragmentHasChanges(existingFragment, fragment) {
-  const hasChanges =
+  return (
     fragment.css !== existingFragment.css ||
     fragment.html !== existingFragment.html ||
     fragment.js !== existingFragment.js ||
-    fragment.metadata.name !== existingFragment.name;
-
-  if (!hasChanges) {
-    logData('Up-to-date', fragment.metadata.name);
-  }
-
-  return hasChanges;
+    fragment.metadata.name !== existingFragment.name
+  );
 }
 
 /**
@@ -147,6 +142,8 @@ async function _importFragment(api, groupId, existingCollection, fragment) {
     });
 
     logData('Updated', fragment.metadata.name);
+  } else if (existingFragment) {
+    logData('Up-to-date', fragment.metadata.name);
   } else {
     existingFragment = await api('/fragment.fragmententry/add-fragment-entry', {
       fragmentCollectionId,

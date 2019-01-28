@@ -88,7 +88,7 @@ module.exports = project => {
       );
 
       if (fragment) {
-        return { error: `Fragment ${body.name} exists` };
+        return { error: `Fragment "${body.name}" exists` };
       }
 
       collection.fragments = [...collection.fragments, newFragment];
