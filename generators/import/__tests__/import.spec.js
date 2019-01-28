@@ -1,47 +1,45 @@
 const getSiteApi = require('./get-site-api');
-const importProject = require('../import');
 const getProjectContent = require('../../../utils/get-project-content');
-const path = require('path');
+const getTestFixtures = require('../../../utils/get-test-fixtures');
+const importProject = require('../import');
+
+/**
+ * @type string
+ */
+const GROUP_ID = '1234';
 
 describe('import-generator/import', () => {
-  let groupId;
-  let projectContent;
+  getTestFixtures()
+    .map(projectPath => getProjectContent(projectPath))
+    .forEach(projectContent => {
+      it('imports fragments to a Liferay Site', async () => {
+        const siteApi = getSiteApi({ collections: [] });
 
-  beforeEach(() => {
-    groupId = '1234';
+        await importProject(siteApi, GROUP_ID, projectContent);
+        expect(siteApi.getProject()).toMatchSnapshot();
+      });
 
-    projectContent = getProjectContent(
-      path.resolve(__dirname, 'assets', 'sample-project-content')
-    );
-  });
-
-  it('imports fragments to a Liferay Site', async () => {
-    const siteApi = getSiteApi({ collections: [] });
-
-    await importProject(siteApi, groupId, projectContent);
-    expect(siteApi.getProject()).toMatchSnapshot();
-  });
-
-  it('updates fragments if they already exist', async () => {
-    const siteApi = getSiteApi({
-      collections: [
-        {
-          name: 'Sample collection name',
-          description: 'Sample collection description',
-          fragmentCollectionId: 'sample-collection',
-
-          fragments: [
+      it('updates fragments if they already exist', async () => {
+        const siteApi = getSiteApi({
+          collections: [
             {
-              name: 'Sample fragment name',
+              name: 'Sample collection name',
+              description: 'Sample collection description',
               fragmentCollectionId: 'sample-collection',
-              fragmentEntryId: 'sample-fragment'
+
+              fragments: [
+                {
+                  name: 'Sample fragment name',
+                  fragmentCollectionId: 'sample-collection',
+                  fragmentEntryId: 'sample-fragment'
+                }
+              ]
             }
           ]
-        }
-      ]
-    });
+        });
 
-    await importProject(siteApi, groupId, projectContent);
-    expect(siteApi.getProject()).toMatchSnapshot();
-  });
+        await importProject(siteApi, GROUP_ID, projectContent);
+        expect(siteApi.getProject()).toMatchSnapshot();
+      });
+    });
 });

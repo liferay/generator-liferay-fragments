@@ -1,11 +1,5 @@
 const getProjectContent = require('../get-project-content');
-const path = require('path');
-
-const SAMPLE_PROJECT_PATH = path.resolve(
-  __dirname,
-  'assets',
-  'sample-project-content'
-);
+const getTestFixtures = require('../get-test-fixtures');
 
 describe('utils/get-project-content', () => {
   it('requires a basePath', () => {
@@ -16,10 +10,12 @@ describe('utils/get-project-content', () => {
     expect(() => getProjectContent('')).toThrow();
   });
 
-  it('matches a project structure', () => {
-    const projectContent = getProjectContent(SAMPLE_PROJECT_PATH);
+  getTestFixtures().forEach(projectPath => {
+    it('matches a project structure', () => {
+      const projectContent = getProjectContent(projectPath);
 
-    projectContent.basePath = '';
-    expect(projectContent).toMatchSnapshot();
+      projectContent.basePath = '';
+      expect(projectContent).toMatchSnapshot();
+    });
   });
 });
