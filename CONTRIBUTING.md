@@ -1,26 +1,25 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to
-make via issue, email, or any other method with the owners of this repository
-before making a change.
+When contributing to this repository, please first discuss the change you wish 
+to make with the owners of this repository via issue, email, or any other 
+method before making a change.
 
-Please note we have a code of conduct, please follow it in all your interactions
-with the project.
+Please note that we have a code of conduct. Please follow it in all your 
+interactions regarding the project.
 
 ## Pull Request Process
 
-While creating your contribution, please take into account these steps, not
-necessarily in order:
+When you create your contribution, please keep this list in mind:
 
+- Start from the existing master branch and add your changes.
+- Create your contribution.
 - Ensure any install or build dependencies are removed before the end of the
   layer when doing a build.
-- Start from existing master branch and add your changes.
-- Write the code you want to contribute with.
-- Add any test if necessary.
-- Ensuring that it covers all needed tests, jsdocs and linting process.
+- Add tests if necessary.
+- Ensure that it passes all tests and linting process and includes JSDocs.
 - Update the README.md with details of changes to the interface, this including
   new parameters, behaviour or even generators.
-- Do not need any version number manually. We use semver for every release,
+- Do not change the version number manually. We use semver for every release,
   but we may publish more requests at once.
-- Create your pull request against master branch and solve any conflicts if
+- Create your pull request against master branch and resolve any conflicts if
   necessary.

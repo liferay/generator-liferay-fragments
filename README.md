@@ -2,7 +2,7 @@
 
 # generator-liferay-fragments
 
-Yeoman generator for creating and maintaining Liferay Fragment projects
+This is a Yeoman generator for creating and maintaining Liferay Fragment projects.
 
 ## Requirements
 
@@ -36,7 +36,7 @@ cd my-new-fragments-project
 
 ## Usage
 
-Once you've created your project, there is a bunch of npm scripts that
+Once you've created your project, there are a bunch of npm scripts that
 will allow you perform many actions with your existing fragments. Fragments
 are organized inside collections, and keep an extremely simple structure:
 
