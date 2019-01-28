@@ -117,14 +117,8 @@ module.exports = class extends CustomGenerator {
    * Tests connection with liferay server
    * @return {Promise<Object>} Response content or connection error
    */
-  async _checkConnection() {
-    const response = await this._api('/user/get-current-user');
-
-    if (response.status >= 400) {
-      throw new Error(`${response.status}\n${await response.body}`);
-    }
-
-    return JSON.parse(response.body);
+  _checkConnection() {
+    return this._api('/user/get-current-user');
   }
 
   /**
@@ -132,8 +126,7 @@ module.exports = class extends CustomGenerator {
    * @return {Array<Object>} List of choices
    */
   async _getCompanyChoices() {
-    const response = await this._api('/company/get-companies');
-    const companies = JSON.parse(response.body);
+    const companies = await this._api('/company/get-companies');
 
     return companies.map(company => ({
       name: company.webId,
@@ -147,11 +140,9 @@ module.exports = class extends CustomGenerator {
    */
   async _getGroupChoices() {
     const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
-    const response = await this._api(
+    const groups = await this._api(
       `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
     );
-
-    const groups = JSON.parse(response.body);
 
     return groups.map(group => ({
       name: group.descriptiveName,
