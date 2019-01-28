@@ -2,6 +2,7 @@ const api = require('../../utils/api');
 const CustomGenerator = require('../../utils/custom-generator');
 const getProjectContent = require('../../utils/get-project-content');
 const exportCollections = require('./export');
+const writeProjectContent = require('../../utils/write-project-content');
 const { log, logNewLine, logError } = require('../../utils/log');
 
 const {
@@ -30,11 +31,15 @@ module.exports = class extends CustomGenerator {
     await this._askHostData();
     await this._askSiteData();
 
-    await exportCollections(
+    const projectContent = getProjectContent(this.destinationPath());
+
+    projectContent.collections = await exportCollections(
       this._api,
       this.getValue(LIFERAY_GROUPID_VAR),
-      getProjectContent(this.destinationPath())
+      projectContent
     );
+
+    writeProjectContent(projectContent);
   }
 
   /**

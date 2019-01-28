@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`export-generator/export exports fragments from a Liferay Site 1`] = `
+Object {
+  "body": Object {
+    "end": -1,
+    "groupId": "1234",
+    "start": -1,
+  },
+  "url": "/fragment.fragmentcollection/get-fragment-collections",
+}
+`;
+
+exports[`export-generator/export exports fragments from a Liferay Site 2`] = `
+Object {
+  "body": Object {
+    "end": -1,
+    "fragmentCollectionId": undefined,
+    "groupId": "1234",
+    "start": -1,
+    "status": 0,
+  },
+  "url": "/fragment.fragmententry/get-fragment-entries",
+}
+`;
+
+exports[`export-generator/export exports fragments from a Liferay Site 3`] = `
+Array [
+  Object {
+    "fragments": Array [
+      Object {
+        "css": ".fragment { color: inherit; }
+",
+        "html": "<div>Fragment</div>
+",
+        "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+        "metadata": Object {
+          "cssPath": "styles.css",
+          "htmlPath": "index.html",
+          "jsPath": "main.js",
+          "name": undefined,
+        },
+        "slug": undefined,
+      },
+      Object {
+        "css": ".fragment { color: inherit; }
+",
+        "html": "<div>Fragment</div>
+",
+        "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+        "metadata": Object {
+          "cssPath": "styles.css",
+          "htmlPath": "index.html",
+          "jsPath": "main.js",
+          "name": undefined,
+        },
+        "slug": undefined,
+      },
+      Object {
+        "css": ".fragment { color: inherit; }
+",
+        "html": "<div>Fragment</div>
+",
+        "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+        "metadata": Object {
+          "cssPath": "styles.css",
+          "htmlPath": "index.html",
+          "jsPath": "main.js",
+          "name": undefined,
+        },
+        "slug": undefined,
+      },
+    ],
+    "metadata": Object {
+      "description": undefined,
+      "name": undefined,
+    },
+    "slug": undefined,
+  },
+]
+`;
