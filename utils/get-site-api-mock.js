@@ -1,4 +1,4 @@
-const api = require('../../../utils/api');
+const api = require('./api');
 
 const ADD_COLLECTION_URL =
   '/fragment.fragmentcollection/add-fragment-collection';

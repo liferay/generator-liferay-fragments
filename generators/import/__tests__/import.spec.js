@@ -1,4 +1,4 @@
-const getSiteApi = require('./get-site-api');
+const getSiteApi = require('../../../utils/get-site-api-mock');
 const getProjectContent = require('../../../utils/get-project-content');
 const getTestFixtures = require('../../../utils/get-test-fixtures');
 const importProject = require('../import');
