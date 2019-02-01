@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`utils/get-project-content matches a project structure 1`] = `
+Object {
+  "basePath": "",
+  "collections": Array [
+    Object {
+      "fragments": Array [
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "metadata": Object {
+            "cssPath": "sample-fragment.css",
+            "htmlPath": "sample-fragment.html",
+            "jsPath": "sample-fragment.js",
+            "name": "Sample element fragment name",
+            "type": "element",
+          },
+          "slug": "sample-element-fragment",
+        },
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "metadata": Object {
+            "cssPath": "sample-fragment.css",
+            "htmlPath": "sample-fragment.html",
+            "jsPath": "sample-fragment.js",
+            "name": "Sample fragment name",
+          },
+          "slug": "sample-fragment",
+        },
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "metadata": Object {
+            "cssPath": "sample-fragment.css",
+            "htmlPath": "sample-fragment.html",
+            "jsPath": "sample-fragment.js",
+            "name": "Sample section fragment name",
+            "type": "section",
+          },
+          "slug": "sample-section-fragment",
+        },
+      ],
+      "metadata": Object {
+        "description": "Sample collection description",
+        "name": "Sample collection name",
+      },
+      "slug": "sample-collection",
+    },
+  ],
+  "project": Object {
+    "name": "sample-project-content",
+  },
+}
+`;

@@ -1,0 +1,363 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`import-generator/import imports fragments to a Liferay Site 1`] = `
+Object {
+  "body": Object {
+    "groupId": "1234",
+    "name": "Sample collection name",
+  },
+  "url": "/fragment.fragmentcollection/get-fragment-collections",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 2`] = `
+Object {
+  "body": Object {
+    "description": "Sample collection description",
+    "fragmentCollectionKey": "sample-collection",
+    "groupId": "1234",
+    "name": "Sample collection name",
+  },
+  "url": "/fragment.fragmentcollection/add-fragment-collection",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 3`] = `
+Object {
+  "body": Object {
+    "fragmentCollectionId": "sample-collection",
+    "groupId": "1234",
+    "name": "Sample element fragment name",
+  },
+  "url": "/fragment.fragmententry/get-fragment-entries",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 4`] = `
+Object {
+  "body": Object {
+    "fragmentCollectionId": "sample-collection",
+    "groupId": "1234",
+    "name": "Sample fragment name",
+  },
+  "url": "/fragment.fragmententry/get-fragment-entries",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 5`] = `
+Object {
+  "body": Object {
+    "fragmentCollectionId": "sample-collection",
+    "groupId": "1234",
+    "name": "Sample section fragment name",
+  },
+  "url": "/fragment.fragmententry/get-fragment-entries",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 6`] = `
+Object {
+  "body": Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentCollectionId": "sample-collection",
+    "fragmentEntryKey": "sample-element-fragment",
+    "groupId": "1234",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample element fragment name",
+    "status": 0,
+    "type": 1,
+  },
+  "url": "/fragment.fragmententry/add-fragment-entry",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 7`] = `
+Object {
+  "body": Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentCollectionId": "sample-collection",
+    "fragmentEntryKey": "sample-fragment",
+    "groupId": "1234",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample fragment name",
+    "status": 0,
+    "type": 0,
+  },
+  "url": "/fragment.fragmententry/add-fragment-entry",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 8`] = `
+Object {
+  "body": Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentCollectionId": "sample-collection",
+    "fragmentEntryKey": "sample-section-fragment",
+    "groupId": "1234",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample section fragment name",
+    "status": 0,
+    "type": 0,
+  },
+  "url": "/fragment.fragmententry/add-fragment-entry",
+}
+`;
+
+exports[`import-generator/import imports fragments to a Liferay Site 9`] = `
+Object {
+  "collections": Array [
+    Object {
+      "description": "Sample collection description",
+      "fragmentCollectionId": "sample-collection",
+      "fragmentCollectionKey": "sample-collection",
+      "fragments": Array [
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentCollectionId": "sample-collection",
+          "fragmentEntryKey": "sample-element-fragment",
+          "groupId": "1234",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "name": "Sample element fragment name",
+          "status": 0,
+          "type": 1,
+        },
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentCollectionId": "sample-collection",
+          "fragmentEntryKey": "sample-fragment",
+          "groupId": "1234",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "name": "Sample fragment name",
+          "status": 0,
+          "type": 0,
+        },
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentCollectionId": "sample-collection",
+          "fragmentEntryKey": "sample-section-fragment",
+          "groupId": "1234",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "name": "Sample section fragment name",
+          "status": 0,
+          "type": 0,
+        },
+      ],
+      "groupId": "1234",
+      "name": "Sample collection name",
+    },
+  ],
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 1`] = `
+Object {
+  "body": Object {
+    "groupId": "1234",
+    "name": "Sample collection name",
+  },
+  "url": "/fragment.fragmentcollection/get-fragment-collections",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 2`] = `
+Object {
+  "body": Object {
+    "description": "Sample collection description",
+    "fragmentCollectionId": "sample-collection",
+    "name": "Sample collection name",
+  },
+  "url": "/fragment.fragmentcollection/update-fragment-collection",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 3`] = `
+Object {
+  "body": Object {
+    "fragmentCollectionId": "sample-collection",
+    "groupId": "1234",
+    "name": "Sample element fragment name",
+  },
+  "url": "/fragment.fragmententry/get-fragment-entries",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 4`] = `
+Object {
+  "body": Object {
+    "fragmentCollectionId": "sample-collection",
+    "groupId": "1234",
+    "name": "Sample fragment name",
+  },
+  "url": "/fragment.fragmententry/get-fragment-entries",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 5`] = `
+Object {
+  "body": Object {
+    "fragmentCollectionId": "sample-collection",
+    "groupId": "1234",
+    "name": "Sample section fragment name",
+  },
+  "url": "/fragment.fragmententry/get-fragment-entries",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 6`] = `
+Object {
+  "body": Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentCollectionId": "sample-collection",
+    "fragmentEntryKey": "sample-element-fragment",
+    "groupId": "1234",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample element fragment name",
+    "status": 0,
+    "type": 1,
+  },
+  "url": "/fragment.fragmententry/add-fragment-entry",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 7`] = `
+Object {
+  "body": Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentEntryId": "sample-fragment",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample fragment name",
+    "status": 0,
+  },
+  "url": "/fragment.fragmententry/update-fragment-entry",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 8`] = `
+Object {
+  "body": Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentCollectionId": "sample-collection",
+    "fragmentEntryKey": "sample-section-fragment",
+    "groupId": "1234",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample section fragment name",
+    "status": 0,
+    "type": 0,
+  },
+  "url": "/fragment.fragmententry/add-fragment-entry",
+}
+`;
+
+exports[`import-generator/import updates fragments if they already exist 9`] = `
+Object {
+  "collections": Array [
+    Object {
+      "description": "Sample collection description",
+      "fragmentCollectionId": "sample-collection",
+      "fragments": Array [
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentCollectionId": "sample-collection",
+          "fragmentEntryId": "sample-fragment",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "name": "Sample fragment name",
+          "type": undefined,
+        },
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentCollectionId": "sample-collection",
+          "fragmentEntryKey": "sample-element-fragment",
+          "groupId": "1234",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "name": "Sample element fragment name",
+          "status": 0,
+          "type": 1,
+        },
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentCollectionId": "sample-collection",
+          "fragmentEntryKey": "sample-section-fragment",
+          "groupId": "1234",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "name": "Sample section fragment name",
+          "status": 0,
+          "type": 0,
+        },
+      ],
+      "name": "Sample collection name",
+    },
+  ],
+}
+`;

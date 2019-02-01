@@ -2,6 +2,8 @@ const api = require('../../utils/api');
 const CustomGenerator = require('../../utils/custom-generator');
 const getProjectContent = require('../../utils/get-project-content');
 const exportCollections = require('./export');
+const getSiteGroups = require('../../utils/get-site-groups');
+const writeProjectContent = require('../../utils/write-project-content');
 const { log, logNewLine, logError } = require('../../utils/log');
 
 const {
@@ -30,11 +32,15 @@ module.exports = class extends CustomGenerator {
     await this._askHostData();
     await this._askSiteData();
 
-    await exportCollections(
+    const projectContent = getProjectContent(this.destinationPath());
+
+    projectContent.collections = await exportCollections(
       this._api,
       this.getValue(LIFERAY_GROUPID_VAR),
-      getProjectContent(this.destinationPath())
+      projectContent
     );
+
+    writeProjectContent(projectContent);
   }
 
   /**
@@ -112,14 +118,8 @@ module.exports = class extends CustomGenerator {
    * Tests connection with liferay server
    * @return {Promise<Object>} Response content or connection error
    */
-  async _checkConnection() {
-    const response = await this._api('/user/get-current-user');
-
-    if (response.status >= 400) {
-      throw new Error(`${response.status}\n${await response.body}`);
-    }
-
-    return JSON.parse(response.body);
+  _checkConnection() {
+    return this._api('/user/get-current-user');
   }
 
   /**
@@ -127,8 +127,7 @@ module.exports = class extends CustomGenerator {
    * @return {Array<Object>} List of choices
    */
   async _getCompanyChoices() {
-    const response = await this._api('/company/get-companies');
-    const companies = JSON.parse(response.body);
+    const companies = await this._api('/company/get-companies');
 
     return companies.map(company => ({
       name: company.webId,
@@ -138,17 +137,12 @@ module.exports = class extends CustomGenerator {
 
   /**
    * Return a list of companies
-   * @return {Array<Object>} List of choices
+   * @return {Promise<Object[]>} List of choices
    */
   async _getGroupChoices() {
     const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
-    const response = await this._api(
-      `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
-    );
 
-    const groups = JSON.parse(response.body);
-
-    return groups.map(group => ({
+    return (await getSiteGroups(this._api, companyId)).map(group => ({
       name: group.descriptiveName,
       value: group.groupId
     }));
