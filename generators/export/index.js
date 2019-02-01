@@ -2,6 +2,7 @@ const api = require('../../utils/api');
 const CustomGenerator = require('../../utils/custom-generator');
 const getProjectContent = require('../../utils/get-project-content');
 const exportCollections = require('./export');
+const getSiteGroups = require('../../utils/get-site-groups');
 const writeProjectContent = require('../../utils/write-project-content');
 const { log, logNewLine, logError } = require('../../utils/log');
 
@@ -136,15 +137,12 @@ module.exports = class extends CustomGenerator {
 
   /**
    * Return a list of companies
-   * @return {Array<Object>} List of choices
+   * @return {Promise<Object[]>} List of choices
    */
   async _getGroupChoices() {
     const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
-    const groups = await this._api(
-      `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
-    );
 
-    return groups.map(group => ({
+    return (await getSiteGroups(this._api, companyId)).map(group => ({
       name: group.descriptiveName,
       value: group.groupId
     }));
