@@ -1,4 +1,10 @@
 /**
+ * Global site descriptiveName
+ * @type {string}
+ */
+const GLOBAL_SITE_DESCRIPTIVE_NAME = 'Global';
+
+/**
  * @param {Object} group Site group
  * @param {string} group.descriptiveName Site group name
  * @return {boolean} True if the give group is a staging group
@@ -49,7 +55,9 @@ const getSiteGroups = async (api, companyId) => {
     `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
   );
 
-  return mergeStagingGroups(siteGroups, stagingGroups);
+  return mergeStagingGroups(siteGroups, stagingGroups).filter(
+    group => group.descriptiveName !== GLOBAL_SITE_DESCRIPTIVE_NAME
+  );
 };
 
 module.exports = getSiteGroups;
