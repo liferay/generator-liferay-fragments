@@ -158,7 +158,28 @@ module.exports = class extends CustomGenerator {
       `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
     );
 
-    const groups = JSON.parse(response.body);
+    let groups = JSON.parse(response.body);
+
+    const stagingResponse = await this._api(
+      `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`
+    )
+
+    //we don't have to worry about this retrieving Sites called (Staging)
+    //because stagingResponse will only have "False Sites" aka staged sites,
+    // and etc
+    const stagingGroups = JSON.parse(stagingResponse.body)
+    .filter(
+      group => group.nameCurrentValue.includes("(Staging)")
+    );
+
+    //this should probably be extracted into a function
+    for (const stagingGroup of stagingGroups) {
+      for (const group of groups) {
+        if (group.descriptiveName == stagingGroup.descriptiveName) {
+          group.groupId = stagingGroup.groupId;
+        }
+      }
+    }
 
     return groups.map(group => ({
       name: group.descriptiveName,
