@@ -40,7 +40,7 @@ module.exports = class extends CustomGenerator {
       projectContent
     );
 
-    writeProjectContent(projectContent);
+    writeProjectContent(projectContent.basePath, projectContent);
   }
 
   /**
