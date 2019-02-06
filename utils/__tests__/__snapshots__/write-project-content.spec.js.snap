@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`utils/write-project-content needs a valid projectBasePath parameter 1`] = `[AssertionError [ERR_ASSERTION]: projectBasePath must be a valid filesystem path]`;
+
+exports[`utils/write-project-content needs a valid projectContent parameter 1`] = `[AssertionError [ERR_ASSERTION]: projectContent must be a valid project object]`;

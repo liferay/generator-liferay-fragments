@@ -1,3 +1,4 @@
+const { assertProjectContent, assertValidPath } = require('./assert');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
@@ -90,6 +91,16 @@ const _writeProjectCollection = async (collectionBasePath, collection) => {
  * @param {object} projectContent Project data
  */
 const writeProjectContent = async (projectBasePath, projectContent) => {
+  assertValidPath(
+    projectBasePath,
+    'projectBasePath must be a valid filesystem path'
+  );
+
+  assertProjectContent(
+    projectContent,
+    'projectContent must be a valid project object'
+  );
+
   mkdirp.sync(path.resolve(projectBasePath, 'src'));
 
   await _updateJSON(
