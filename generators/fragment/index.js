@@ -8,6 +8,7 @@ const {
   FRAGMENT_COLLECTION_SLUG_MESSAGE,
   FRAGMENT_COLLECTION_SLUG_VAR,
   FRAGMENT_NAME_MESSAGE,
+  FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE,
   FRAGMENT_NAME_VAR,
   FRAGMENT_TYPE_DEFAULT,
   FRAGMENT_TYPE_MESSAGE,
@@ -79,6 +80,7 @@ module.exports = class extends CustomGenerator {
         type: 'input',
         name: FRAGMENT_NAME_VAR,
         message: FRAGMENT_NAME_MESSAGE,
+        validate: name => (name ? true : FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE),
         when: !this.hasValue(FRAGMENT_NAME_VAR)
       },
       {
