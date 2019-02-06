@@ -4,7 +4,7 @@ const tmp = require('tmp');
 const writeProjectContent = require('../write-project-content');
 
 describe('utils/write-project-content', () => {
-  getTestFixtures().map(projectPath =>
+  getTestFixtures().forEach(projectPath => {
     it('writes a project inside a given path', async () => {
       const tmpDir = tmp.dirSync({ unsafeCleanup: true });
       const projectContent = getProjectContent(projectPath);
@@ -15,6 +15,6 @@ describe('utils/write-project-content', () => {
       tmpDir.removeCallback();
 
       expect(projectContent.collections).toEqual(newProjectContent.collections);
-    })
-  );
+    });
+  });
 });
