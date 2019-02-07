@@ -7,10 +7,8 @@ const voca = require('voca');
 const {
   FRAGMENT_COLLECTION_SLUG_MESSAGE,
   FRAGMENT_COLLECTION_SLUG_VAR,
-  FRAGMENT_DESCRIPTION_DEFAULT,
-  FRAGMENT_DESCRIPTION_MESSAGE,
-  FRAGMENT_DESCRIPTION_VAR,
   FRAGMENT_NAME_MESSAGE,
+  FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE,
   FRAGMENT_NAME_VAR,
   FRAGMENT_TYPE_DEFAULT,
   FRAGMENT_TYPE_MESSAGE,
@@ -37,8 +35,7 @@ module.exports = class extends CustomGenerator {
   writing() {
     if (this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
       this.composeWith(require.resolve('../collection'), {
-        [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
-        [FRAGMENT_DESCRIPTION_VAR]: this.getValue(FRAGMENT_DESCRIPTION_VAR)
+        [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR)
       });
     } else {
       this.isRequired(FRAGMENT_COLLECTION_SLUG_VAR);
@@ -83,13 +80,8 @@ module.exports = class extends CustomGenerator {
         type: 'input',
         name: FRAGMENT_NAME_VAR,
         message: FRAGMENT_NAME_MESSAGE,
+        validate: name => (name ? true : FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE),
         when: !this.hasValue(FRAGMENT_NAME_VAR)
-      },
-      {
-        type: 'input',
-        name: FRAGMENT_DESCRIPTION_VAR,
-        message: FRAGMENT_DESCRIPTION_MESSAGE,
-        when: !this.hasValue(FRAGMENT_DESCRIPTION_VAR)
       },
       {
         type: 'list',
@@ -100,8 +92,6 @@ module.exports = class extends CustomGenerator {
         when: !this.hasValue(FRAGMENT_TYPE_VAR)
       }
     ]);
-
-    this.setValue(FRAGMENT_DESCRIPTION_VAR, FRAGMENT_DESCRIPTION_DEFAULT);
 
     this.setValue(
       FRAGMENT_SLUG_VAR,
