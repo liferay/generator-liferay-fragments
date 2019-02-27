@@ -1,7 +1,7 @@
 {
-  "name": "Sample element fragment name",
+  "name": "Sample component fragment name",
   "htmlPath": "sample-fragment.html",
   "cssPath": "sample-fragment.css",
   "jsPath": "sample-fragment.js",
-  "type": "element"
+  "type": "component"
 }

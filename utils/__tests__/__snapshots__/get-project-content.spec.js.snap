@@ -19,10 +19,10 @@ fragmentElement.style.color = 'inherit';
             "cssPath": "sample-fragment.css",
             "htmlPath": "sample-fragment.html",
             "jsPath": "sample-fragment.js",
-            "name": "Sample element fragment name",
-            "type": "element",
+            "name": "Sample component fragment name",
+            "type": "component",
           },
-          "slug": "sample-element-fragment",
+          "slug": "sample-component-fragment",
         },
         Object {
           "css": ".fragment { color: inherit; }
