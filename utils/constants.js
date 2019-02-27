@@ -33,7 +33,7 @@ module.exports.FRAGMENT_TYPE_DEFAULT = 'section';
 module.exports.FRAGMENT_TYPE_MESSAGE = 'Fragment type';
 module.exports.FRAGMENT_TYPE_OPTIONS = [
   { name: 'Section', value: 'section' },
-  { name: 'Element', value: 'element' }
+  { name: 'Component', value: 'component' }
 ];
 module.exports.FRAGMENT_TYPE_VAR = 'fragmentType';
 

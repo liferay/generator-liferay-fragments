@@ -5,7 +5,7 @@ const { logData, logNewLine } = require('../../utils/log');
  * @type {object}
  */
 const FRAGMENT_TYPES = {
-  element: 1,
+  component: 1,
   section: 0
 };
 
