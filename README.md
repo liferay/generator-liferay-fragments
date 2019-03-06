@@ -1,8 +1,8 @@
 [![NPM Publish Version][5]][6]
 
-# Liferay Fragments SDK
+# Liferay Fragments CLI
 
-This is an SDK for developing fragments for Liferay DXP. It allows generating fragments from scratch, exporting them from a Liferay instance and importing them back. It also supports developing with your preferred desktop tools, while the SDK watches your changes and sends them to a Liferay instance, so that you can try them in your browser immediately (or almost).
+This is an CLI for developing fragments for Liferay DXP. It allows generating fragments from scratch, exporting them from a Liferay instance and importing them back. It also supports developing with your preferred desktop tools, while the SDK watches your changes and sends them to a Liferay instance, so that you can try them in your browser immediately (or almost).
 
 ## Requirements
 
