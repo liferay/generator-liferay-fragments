@@ -2,7 +2,7 @@
 
 # Liferay Fragments CLI
 
-This is an CLI for developing fragments for Liferay DXP. It allows generating fragments from scratch, exporting them from a Liferay instance and importing them back. It also supports developing with your preferred desktop tools, while the SDK watches your changes and sends them to a Liferay instance, so that you can try them in your browser immediately (or almost).
+This is an CLI for developing fragments for Liferay DXP. It allows generating fragments from scratch, exporting them from a Liferay instance and importing them back. It also supports developing with your preferred desktop tools, while the CLI watches your changes and sends them to a Liferay instance, so that you can try them in your browser immediately (or almost).
 
 ## Requirements
 
@@ -85,7 +85,7 @@ After you have created your own fragments or after making modifications to expor
 
 - `import`
 
-You can also ask the Fragments SDK to watch for further changes and import them automatically. This is very useful during development time, so that you can just work with your preferred editor and the browser to check the changes automatically imported into Liferay.
+You can also ask the Fragments CLI to watch for further changes and import them automatically. This is very useful during development time, so that you can just work with your preferred editor and the browser to check the changes automatically imported into Liferay.
 
 - `import:watch`
 
