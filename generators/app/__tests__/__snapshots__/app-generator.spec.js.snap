@@ -58,7 +58,8 @@ Object {
     \\"compress\\": \\"yo liferay-fragments:compress\\",
     \\"export\\": \\"yo liferay-fragments:export\\",
     \\"import\\": \\"yo liferay-fragments:import\\",
-    \\"import:watch\\": \\"yo liferay-fragments:import --watch\\"
+    \\"import:watch\\": \\"yo liferay-fragments:import --watch\\",
+    \\"preview\\": \\"yo liferay-fragments:preview\\"
   }
 }
 ",
@@ -152,7 +153,8 @@ Object {
     \\"compress\\": \\"yo liferay-fragments:compress\\",
     \\"export\\": \\"yo liferay-fragments:export\\",
     \\"import\\": \\"yo liferay-fragments:import\\",
-    \\"import:watch\\": \\"yo liferay-fragments:import --watch\\"
+    \\"import:watch\\": \\"yo liferay-fragments:import --watch\\",
+    \\"preview\\": \\"yo liferay-fragments:preview\\"
   }
 }
 ",
@@ -288,7 +290,8 @@ Object {
     \\"compress\\": \\"yo liferay-fragments:compress\\",
     \\"export\\": \\"yo liferay-fragments:export\\",
     \\"import\\": \\"yo liferay-fragments:import\\",
-    \\"import:watch\\": \\"yo liferay-fragments:import --watch\\"
+    \\"import:watch\\": \\"yo liferay-fragments:import --watch\\",
+    \\"preview\\": \\"yo liferay-fragments:preview\\"
   }
 }
 ",
