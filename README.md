@@ -89,6 +89,12 @@ You can also ask the Fragments CLI to watch for further changes and import them 
 
 - `import:watch`
 
+### Previewing fragments with a Liferay Server
+
+Sometimes you may want to see how a fragment will look once it has been imported to Liferay. With this command you can specify a Liferay Server and see your fragments rendered without importing them. Moreover, this command has also autoreload features, so you can make changes in your fragments rapidly.
+
+- `preview`
+
 ### Packaging fragments for distribution
 
 After you have finished the development of fragments, they can be distributed as a ZIP file, which can be imported inside any Liferay site. To prepare the ZIP file use the following method.
