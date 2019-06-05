@@ -1,0 +1,37 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  margin: 0;
+  height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+form {
+  color: #000;
+  background-color: #EEE;
+  border-bottom: solid thin #aaa;
+  font-size: 12px;
+  box-shadow: inset 0 -1em 2em rgba(0, 0, 0, 0.1);
+}
+
+select {
+  font-family: inherit;
+  font-size: 12px;
+  color: inherit;
+  background-color: inherit;
+  border-radius: 4px;
+  min-width: 10ch;
+}
+
+label {
+  display: inline-block;
+  padding: 5px;
+}
+
+iframe {
+  border: none;
+  flex-grow: 1;
+}
