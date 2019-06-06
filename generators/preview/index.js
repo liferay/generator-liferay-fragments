@@ -121,9 +121,12 @@ module.exports = class extends AuthGenerator {
     const app = express();
     app.use(express.static(path.join(__dirname, 'assets')));
 
+    let collectionId;
+    let fragmentId;
+
     app.get('/fragment-preview', (request, response) => {
-      const collectionId = request.query.collection;
-      const fragmentId = request.query.fragment;
+      collectionId = request.query.collection;
+      fragmentId = request.query.fragment;
       const projectContent = this._getProjectContent();
 
       const collection = projectContent.collections.find(
@@ -155,8 +158,23 @@ module.exports = class extends AuthGenerator {
     });
 
     app.get('*', (req, res) => {
-      const url = `${this.getValue(LIFERAY_HOST_VAR)}${req.originalUrl}`;
-      request(url, (error, response, body) => res.send(body));
+      const resourceId = /\[resources:(.+)\]/.exec(req.originalUrl);
+
+      if (resourceId && resourceId.length > 1) {
+        res.sendFile(
+          path.join(
+            this.destinationPath(),
+            'src',
+            collectionId,
+            fragmentId,
+            'resources',
+            resourceId[1]
+          )
+        );
+      } else {
+        const url = `${this.getValue(LIFERAY_HOST_VAR)}${req.originalUrl}`;
+        request(url, (error, response, body) => res.send(body));
+      }
     });
 
     app.listen(DEV_SERVER_PORT);
