@@ -51,9 +51,12 @@ module.exports = class extends AuthGenerator {
       logData('Group ID', this.getValue(LIFERAY_GROUPID_VAR));
       logData('Preview URL', `http://localhost:${DEV_SERVER_PORT}`);
     } else {
-      logError('\nYour Liferay Server cannot generate fragment previews');
-      logError('If this an error, please report an issue');
-      logError('https://www.npmjs.com/package/generator-liferay-fragments');
+      logError(
+        '\nYour Liferay Server cannot generate fragment previews.' +
+          '\nUpdate it to a more recent version to use this feature.' +
+          '\n\nIf this an error, please report an issue at' +
+          '\nhttps://www.npmjs.com/package/generator-liferay-fragments'
+      );
     }
   }
 
