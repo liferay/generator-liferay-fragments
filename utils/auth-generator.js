@@ -23,6 +23,18 @@ module.exports = class AuthGenerator extends CustomGenerator {
   /**
    * @inheritdoc
    */
+  constructor(...args) {
+    super(...args);
+
+    this.argument(LIFERAY_HOST_VAR, { type: String, required: false });
+    this.argument(LIFERAY_USERNAME_VAR, { type: String, required: false });
+    this.argument(LIFERAY_PASSWORD_VAR, { type: String, required: false });
+    this.argument(LIFERAY_GROUPID_VAR, { type: String, required: false });
+  }
+
+  /**
+   * @inheritdoc
+   */
   async asking() {
     this._api = api;
 
@@ -43,18 +55,22 @@ module.exports = class AuthGenerator extends CustomGenerator {
         type: 'input',
         name: LIFERAY_HOST_VAR,
         message: LIFERAY_HOST_MESSAGE,
-        default: this.getValue(LIFERAY_HOST_VAR)
+        default: this.getValue(LIFERAY_HOST_VAR),
+        when: !(LIFERAY_HOST_VAR in this.options)
       },
       {
         type: 'input',
         name: LIFERAY_USERNAME_VAR,
         message: LIFERAY_USERNAME_MESSAGE,
-        default: this.getValue(LIFERAY_USERNAME_VAR)
+        default: this.getValue(LIFERAY_USERNAME_VAR),
+        when: !(LIFERAY_USERNAME_VAR in this.options)
       },
       {
         type: 'password',
         name: LIFERAY_PASSWORD_VAR,
-        message: LIFERAY_PASSWORD_MESSAGE
+        message: LIFERAY_PASSWORD_MESSAGE,
+        default: this.getValue(LIFERAY_PASSWORD_VAR),
+        when: !(LIFERAY_PASSWORD_VAR in this.options)
       }
     ]);
 
@@ -70,6 +86,11 @@ module.exports = class AuthGenerator extends CustomGenerator {
           `${error.toString()}\n`
       );
 
+      delete this.options[LIFERAY_HOST_VAR];
+      delete this.options[LIFERAY_USERNAME_VAR];
+      delete this.options[LIFERAY_PASSWORD_VAR];
+      delete this.options[LIFERAY_GROUPID_VAR];
+
       return this._askHostData();
     }
 
@@ -80,29 +101,31 @@ module.exports = class AuthGenerator extends CustomGenerator {
    * Request site information
    */
   async _askSiteData() {
-    this._companyChoices = await this._getCompanyChoices();
+    if (!(LIFERAY_GROUPID_VAR in this.options)) {
+      this._companyChoices = await this._getCompanyChoices();
 
-    await this.ask([
-      {
-        type: 'list',
-        name: LIFERAY_COMPANYID_VAR,
-        message: LIFERAY_COMPANYID_MESSAGE,
-        choices: this._companyChoices,
-        default: this.getValue(LIFERAY_COMPANYID_VAR)
-      }
-    ]);
+      await this.ask([
+        {
+          type: 'list',
+          name: LIFERAY_COMPANYID_VAR,
+          message: LIFERAY_COMPANYID_MESSAGE,
+          choices: this._companyChoices,
+          default: this.getValue(LIFERAY_COMPANYID_VAR)
+        }
+      ]);
 
-    this._groupChoices = await this._getGroupChoices();
+      this._groupChoices = await this._getGroupChoices();
 
-    await this.ask([
-      {
-        type: 'list',
-        name: LIFERAY_GROUPID_VAR,
-        message: LIFERAY_GROUPID_MESSAGE,
-        choices: this._groupChoices,
-        default: this.getValue(LIFERAY_GROUPID_VAR)
-      }
-    ]);
+      await this.ask([
+        {
+          type: 'list',
+          name: LIFERAY_GROUPID_VAR,
+          message: LIFERAY_GROUPID_MESSAGE,
+          choices: this._groupChoices,
+          default: this.getValue(LIFERAY_GROUPID_VAR)
+        }
+      ]);
+    }
   }
 
   /**
