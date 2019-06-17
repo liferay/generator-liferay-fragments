@@ -1,17 +1,12 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "xo",
-    "prettier"
-  ],
+  "extends": ["eslint:recommended", "xo", "prettier"],
   "env": {
     "jest": true,
     "node": true
   },
   "rules": {
-    "no-var": [
-      "error"
-    ],
+    "no-var": ["error"],
+    "valid-jsdoc": ["off"],
     "prettier/prettier": [
       "error",
       {
@@ -20,7 +15,5 @@
       }
     ]
   },
-  "plugins": [
-    "prettier"
-  ]
+  "plugins": ["prettier"]
 }
