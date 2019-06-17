@@ -1,47 +1,32 @@
+const api = require('../../utils/api');
 const { logData } = require('../../utils/log');
 
 /**
  * Exports existing collections from Liferay server to the current project
- * @param {function} api Wrapped API with valid host and authorization
  * @param {string} groupId Group ID
- * @param {Object} project Project object
+ * @param {Object} project
  */
-async function exportCollections(api, groupId, project) {
+async function exportCollections(groupId, project) {
   logData('\nExporting collections to', project.project.name);
-
-  const collections = await api(
-    '/fragment.fragmentcollection/get-fragment-collections',
-    {
-      start: -1,
-      end: -1,
-      groupId
-    }
-  );
+  const collections = await api.getFragmentCollections(groupId);
 
   return Promise.all(
-    collections.map(collection =>
-      _exportCollection(api, groupId, collection, project.basePath)
-    )
+    collections.map(collection => _exportCollection(groupId, collection))
   );
 }
 
 /**
  * Exports a collection from server
- * @param {function} api Wrapped API with valid host and authorization
- * @param {string} groupId Group ID
- * @param {Object} collection Collection
- * @param {string} basePath Project directory
+ * @param {string} groupId
+ * @param {{ name: string, fragmentCollectionId: string, fragmentCollectionKey: string, description: string }} collection
  */
-async function _exportCollection(api, groupId, collection) {
+async function _exportCollection(groupId, collection) {
   logData('Exporting collection', collection.name);
 
-  const fragments = await api('/fragment.fragmententry/get-fragment-entries', {
-    fragmentCollectionId: collection.fragmentCollectionId,
-    status: 0,
-    start: -1,
-    end: -1,
-    groupId
-  });
+  const fragments = await api.getFragmentEntries(
+    groupId,
+    collection.fragmentCollectionId
+  );
 
   return {
     slug: collection.fragmentCollectionKey,

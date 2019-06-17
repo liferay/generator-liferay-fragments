@@ -3,6 +3,7 @@ const express = require('express');
 const request = require('request');
 const ws = require('ws');
 const path = require('path');
+const api = require('../../utils/api');
 const AuthGenerator = require('../../utils/auth-generator');
 const getProjectContent = require('../../utils/get-project-content');
 const { log, logSecondary, logData, logError } = require('../../utils/log');
@@ -93,12 +94,12 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<string>} Fragment's generated preview
    */
   _getPreview(css, html, js) {
-    return this._api('/fragment.fragmententry/render-fragment-entry-preview', {
-      groupId: this.getValue(LIFERAY_GROUPID_VAR),
-      css,
+    return api.renderFragmentPreview(
+      this.getValue(LIFERAY_GROUPID_VAR),
       html,
+      css,
       js
-    });
+    );
   }
 
   /**

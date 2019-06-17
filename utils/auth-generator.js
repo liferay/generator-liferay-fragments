@@ -133,7 +133,7 @@ module.exports = class AuthGenerator extends CustomGenerator {
    * @return {Promise<Object>} Response content or connection error
    */
   _checkConnection() {
-    return this._api('/user/get-current-user');
+    return api.getCurrentUser();
   }
 
   /**
@@ -141,9 +141,7 @@ module.exports = class AuthGenerator extends CustomGenerator {
    * @return {Array<Object>} List of choices
    */
   async _getCompanyChoices() {
-    const companies = await this._api('/company/get-companies');
-
-    return companies.map(company => ({
+    return (await api.getCompanies()).map(company => ({
       name: company.webId,
       value: company.companyId
     }));
