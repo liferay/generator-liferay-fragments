@@ -22,6 +22,7 @@ exports[`app-generator allows a custom repository name 2`] = `
 Object {
   "content": "build/
 node_modules/
+.yo-rc.json
 ",
   "filePath": "/.gitignore",
 }
@@ -117,6 +118,7 @@ exports[`app-generator allows adding sample content 2`] = `
 Object {
   "content": "build/
 node_modules/
+.yo-rc.json
 ",
   "filePath": "/.gitignore",
 }
@@ -254,6 +256,7 @@ exports[`app-generator generates a new project 2`] = `
 Object {
   "content": "build/
 node_modules/
+.yo-rc.json
 ",
   "filePath": "/.gitignore",
 }
