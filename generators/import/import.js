@@ -1,3 +1,4 @@
+const api = require('../../utils/api');
 const { logData, logNewLine } = require('../../utils/log');
 
 /**
@@ -17,16 +18,15 @@ const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
 
 /**
  * Imports current project to Liferay server
- * @param {function} api Wrapped API with valid host and authorization
  * @param {string} groupId Group ID
- * @param {Object} project Local project description
+ * @param {Object} project
  */
-async function importProject(api, groupId, project) {
+async function importProject(groupId, project) {
   logData('\nImporting project', project.project.name);
 
   await Promise.all(
     project.collections.map(async collection => {
-      await _importCollection(api, groupId, collection);
+      await _importCollection(groupId, collection);
     })
   );
 
@@ -66,57 +66,41 @@ function _getFragmentTypeId(type) {
 
 /**
  * Imports a collection to server
- * @param {function} api Wrapped API with valid host and authorization
  * @param {string} groupId Group ID
  * @param {Object} collection Collection
  */
-async function _importCollection(api, groupId, collection) {
+async function _importCollection(groupId, collection) {
   logData('Importing collection', collection.metadata.name);
 
   const { name, description } = collection.metadata;
   const { slug } = collection;
 
-  let existingCollection = await _getExistingCollection(
-    api,
-    groupId,
-    collection
-  );
+  let existingCollection = await _getExistingCollection(groupId, collection);
 
   if (existingCollection) {
     const { fragmentCollectionId } = existingCollection;
-
-    await api(
-      '/fragment.fragmentcollection/update-fragment-collection',
-      { fragmentCollectionId, description, name },
-      { method: 'POST' }
-    );
+    await api.updateFragmentCollection(fragmentCollectionId, name, description);
   } else {
-    existingCollection = await api(
-      '/fragment.fragmentcollection/add-fragment-collection',
-      {
-        fragmentCollectionKey: slug,
-        description,
-        groupId,
-        name
-      }
-    );
+    await api.addFragmentCollection(groupId, slug, name, description);
+    existingCollection = await _getExistingCollection(groupId, collection);
   }
 
-  await Promise.all(
-    collection.fragments.map(async fragment => {
-      await _importFragment(api, groupId, existingCollection, fragment);
-    })
-  );
+  if (existingCollection) {
+    await Promise.all(
+      collection.fragments.map(async fragment => {
+        await _importFragment(groupId, existingCollection, fragment);
+      })
+    );
+  }
 }
 
 /**
  * Imports a given fragment to Liferay server
- * @param {function} api Wrapped API with valid host and authorization
  * @param {string} groupId Group ID
  * @param {object} existingCollection Collection
  * @param {object} fragment Fragment
  */
-async function _importFragment(api, groupId, existingCollection, fragment) {
+async function _importFragment(groupId, existingCollection, fragment) {
   const { fragmentCollectionId } = existingCollection;
   const { css, html, js } = fragment;
   const { name } = fragment.metadata;
@@ -125,15 +109,13 @@ async function _importFragment(api, groupId, existingCollection, fragment) {
   const status = 0;
 
   let existingFragment = await _getExistingFragment(
-    api,
     groupId,
     existingCollection,
     fragment
   );
 
   if (existingFragment && _fragmentHasChanges(existingFragment, fragment)) {
-    await api('/fragment.fragmententry/update-fragment-entry', {
-      fragmentEntryId: existingFragment.fragmentEntryId,
+    await api.updateFragmentEntry(existingFragment.fragmentEntryId, {
       status,
       name,
       html,
@@ -145,17 +127,19 @@ async function _importFragment(api, groupId, existingCollection, fragment) {
   } else if (existingFragment) {
     logData('Up-to-date', fragment.metadata.name);
   } else {
-    existingFragment = await api('/fragment.fragmententry/add-fragment-entry', {
+    existingFragment = await api.addFragmentEntry(
+      groupId,
       fragmentCollectionId,
       fragmentEntryKey,
-      groupId,
-      status,
-      name,
-      type,
-      html,
-      css,
-      js
-    });
+      {
+        status,
+        name,
+        type,
+        html,
+        css,
+        js
+      }
+    );
 
     logData('Added', fragment.metadata.name);
   }
@@ -163,17 +147,14 @@ async function _importFragment(api, groupId, existingCollection, fragment) {
 
 /**
  * Gets an existing collection from server
- * @param {function} api Wrapped API with valid host and authorization
  * @param {string} groupId Group ID
- * @param {Object} collection Local collection
+ * @param {{ fragmentCollectionId: string, metadata: { name: string } }} collection
+ * @return {Promise<{ name: string, fragmentCollectionId: string, fragmentCollectionKey: string, description: string }|null>}
  */
-async function _getExistingCollection(api, groupId, collection) {
-  const existingCollections = await api(
-    '/fragment.fragmentcollection/get-fragment-collections',
-    {
-      name: collection.metadata.name,
-      groupId
-    }
+async function _getExistingCollection(groupId, collection) {
+  const existingCollections = await api.getFragmentCollections(
+    groupId,
+    collection.metadata.name
   );
 
   return existingCollections.find(
@@ -183,24 +164,15 @@ async function _getExistingCollection(api, groupId, collection) {
 
 /**
  * Gets an existing fragment from server
- * @param {function} api Wrapped API with valid host and authorization
  * @param {string} groupId Group ID
  * @param {Object} existingCollection Existing collection
  * @param {Object} fragment Local fragment
  */
-async function _getExistingFragment(
-  api,
-  groupId,
-  existingCollection,
-  fragment
-) {
-  const existingFragments = await api(
-    '/fragment.fragmententry/get-fragment-entries',
-    {
-      fragmentCollectionId: existingCollection.fragmentCollectionId,
-      name: fragment.metadata.name,
-      groupId
-    }
+async function _getExistingFragment(groupId, existingCollection, fragment) {
+  const existingFragments = await api.getFragmentEntries(
+    groupId,
+    existingCollection.fragmentCollectionId,
+    fragment.metadata.name
   );
 
   return existingFragments.find(

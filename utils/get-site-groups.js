@@ -1,3 +1,5 @@
+const api = require('./api');
+
 /**
  * Global site descriptiveName
  * @type {string}
@@ -14,7 +16,7 @@ const isStagingGroup = group => group.descriptiveName.endsWith(' (Staging)');
 /**
  * Returns a function that matches groups by descriptiveName
  * @param {string} descriptiveName Group descriptiveName matcher
- * @return {Function} Group matcher
+ * @return {({ descriptiveName: string }) => boolean} Group matcher
  */
 const matchGroupName = descriptiveName => {
   /**
@@ -42,18 +44,12 @@ const mergeStagingGroups = (siteGroups, stagingGroups) => [
 
 /**
  * Returns a list of groups for the given company using the given api
- * @param {Function} api Wrapped api function
  * @param {string} companyId Company ID
  * @return {Promise<Array<Object>>} Site groups
  */
-const getSiteGroups = async (api, companyId) => {
-  const stagingGroups = await api(
-    `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`
-  );
-
-  const siteGroups = await api(
-    `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
-  );
+const getSiteGroups = async companyId => {
+  const stagingGroups = await api.getStagingCompanies(companyId);
+  const siteGroups = await api.getSiteGroups(companyId);
 
   return mergeStagingGroups(siteGroups, stagingGroups).filter(
     group => group.descriptiveName !== GLOBAL_SITE_DESCRIPTIVE_NAME

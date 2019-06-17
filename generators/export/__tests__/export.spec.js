@@ -1,4 +1,4 @@
-const getSiteApi = require('../../../utils/get-site-api-mock');
+const api = require('../../../utils/api');
 const getProjectContent = require('../../../utils/get-project-content');
 const getTestFixtures = require('../../../utils/get-test-fixtures');
 const exportCollections = require('../export');
@@ -9,18 +9,45 @@ const exportCollections = require('../export');
 const GROUP_ID = '1234';
 
 describe('export-generator/export', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
+  });
+
   getTestFixtures().forEach(projectPath => {
     it('exports fragments from a Liferay Site', async () => {
       const projectContent = getProjectContent(projectPath);
-      const siteApi = getSiteApi(projectContent);
 
-      const newProjectContent = await exportCollections(
-        siteApi,
-        GROUP_ID,
-        projectContent
-      );
+      jest.spyOn(api, 'getFragmentCollections').mockImplementation(async () => [
+        {
+          fragmentCollectionId: 'collection-a',
+          fragmentCollectionKey: 'collection-a',
+          name: 'Collection A',
+          description: 'This is collection A'
+        },
+        {
+          fragmentCollectionId: 'collection-b',
+          fragmentCollectionKey: 'collection-b',
+          name: 'Collection B',
+          description: 'This is collection B'
+        }
+      ]);
 
-      expect(newProjectContent).toMatchSnapshot();
+      jest
+        .spyOn(api, 'getFragmentEntries')
+        .mockImplementation(async (groupId, fragmentCollectionId) => [
+          {
+            fragmentEntryKey: `${groupId}-${fragmentCollectionId}-fragment-a`,
+            name: 'Fragment A',
+            html: '<fragment-a></fragment-a>',
+            css: '.fragment {}',
+            js: 'console.log("fragment")'
+          }
+        ]);
+
+      expect(
+        await exportCollections(GROUP_ID, projectContent)
+      ).toMatchSnapshot();
     });
   });
 });
