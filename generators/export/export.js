@@ -4,7 +4,8 @@ const { logData } = require('../../utils/log');
 /**
  * Exports existing collections from Liferay server to the current project
  * @param {string} groupId Group ID
- * @param {Object} project
+ * @param {import('../../types/index').IProject} project
+ * @return {Promise<import('../../types').ICollection[]>}
  */
 async function exportCollections(groupId, project) {
   logData('\nExporting collections to', project.project.name);
@@ -18,7 +19,8 @@ async function exportCollections(groupId, project) {
 /**
  * Exports a collection from server
  * @param {string} groupId
- * @param {{ name: string, fragmentCollectionId: string, fragmentCollectionKey: string, description: string }} collection
+ * @param {import('../../types/index').IServerCollection} collection
+ * @return {Promise<import('../../types/index').ICollection>}
  */
 async function _exportCollection(groupId, collection) {
   logData('Exporting collection', collection.name);
@@ -30,6 +32,7 @@ async function _exportCollection(groupId, collection) {
 
   return {
     slug: collection.fragmentCollectionKey,
+    fragmentCollectionId: collection.fragmentCollectionId,
     metadata: {
       name: collection.name,
       description: collection.description
@@ -37,6 +40,7 @@ async function _exportCollection(groupId, collection) {
     fragments: fragments.map(fragment => ({
       slug: fragment.fragmentEntryKey,
       metadata: {
+        type: fragment.type,
         name: fragment.name,
         cssPath: 'styles.css',
         htmlPath: 'index.html',

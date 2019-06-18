@@ -1,19 +1,15 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "checkJs": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "jsx": "react",
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
-    "outDir": "./build/",
     "pretty": true,
     "resolveJsonModule": true,
-    "sourceMap": true,
-    "strict": false,
-    "target": "esnext"
+    "strict": true,
+    "target": "esnext",
+    "outDir": "./build/"
   }
 }

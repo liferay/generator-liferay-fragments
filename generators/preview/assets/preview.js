@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* global SOCKET_SERVER_PORT */
 
 /** @type {HTMLSelectElement} */

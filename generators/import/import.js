@@ -19,7 +19,7 @@ const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
 /**
  * Imports current project to Liferay server
  * @param {string} groupId Group ID
- * @param {Object} project
+ * @param {import('../../types/index').IProject} project
  */
 async function importProject(groupId, project) {
   logData('\nImporting project', project.project.name);
@@ -36,8 +36,8 @@ async function importProject(groupId, project) {
 /**
  * Checks if the given existingFragment is outdated comparing
  * with the given fragment.
- * @param {object} existingFragment Server fragment
- * @param {object} fragment Local fragment
+ * @param {import('../../types/index').IServerFragment} existingFragment Server fragment
+ * @param {import('../../types/index').IFragment} fragment Local fragment
  * @return {boolean} True if it has any new change
  */
 function _fragmentHasChanges(existingFragment, fragment) {
@@ -66,8 +66,8 @@ function _getFragmentTypeId(type) {
 
 /**
  * Imports a collection to server
- * @param {string} groupId Group ID
- * @param {Object} collection Collection
+ * @param {string} groupId
+ * @param {import('../../types/index').ICollection} collection
  */
 async function _importCollection(groupId, collection) {
   logData('Importing collection', collection.metadata.name);
@@ -88,7 +88,9 @@ async function _importCollection(groupId, collection) {
   if (existingCollection) {
     await Promise.all(
       collection.fragments.map(async fragment => {
-        await _importFragment(groupId, existingCollection, fragment);
+        if (existingCollection) {
+          await _importFragment(groupId, existingCollection, fragment);
+        }
       })
     );
   }
@@ -97,8 +99,8 @@ async function _importCollection(groupId, collection) {
 /**
  * Imports a given fragment to Liferay server
  * @param {string} groupId Group ID
- * @param {object} existingCollection Collection
- * @param {object} fragment Fragment
+ * @param {import('../../types/index').IServerCollection} existingCollection
+ * @param {import('../../types/index').IFragment} fragment
  */
 async function _importFragment(groupId, existingCollection, fragment) {
   const { fragmentCollectionId } = existingCollection;
@@ -148,8 +150,8 @@ async function _importFragment(groupId, existingCollection, fragment) {
 /**
  * Gets an existing collection from server
  * @param {string} groupId Group ID
- * @param {{ fragmentCollectionId: string, metadata: { name: string } }} collection
- * @return {Promise<{ name: string, fragmentCollectionId: string, fragmentCollectionKey: string, description: string }|null>}
+ * @param {import('../../types/index').ICollection} collection
+ * @return {Promise<import('../../types/index').IServerCollection|undefined>}
  */
 async function _getExistingCollection(groupId, collection) {
   const existingCollections = await api.getFragmentCollections(
@@ -165,8 +167,8 @@ async function _getExistingCollection(groupId, collection) {
 /**
  * Gets an existing fragment from server
  * @param {string} groupId Group ID
- * @param {Object} existingCollection Existing collection
- * @param {Object} fragment Local fragment
+ * @param {import('../../types/index').IServerCollection} existingCollection
+ * @param {import('../../types/index').IFragment} fragment
  */
 async function _getExistingFragment(groupId, existingCollection, fragment) {
   const existingFragments = await api.getFragmentEntries(

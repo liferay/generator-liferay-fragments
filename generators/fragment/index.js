@@ -43,8 +43,8 @@ module.exports = class extends CustomGenerator {
 
       const basePath = path.join(
         'src',
-        this.getValue(FRAGMENT_COLLECTION_SLUG_VAR),
-        this.getValue(FRAGMENT_SLUG_VAR)
+        this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
+        this.getValue(FRAGMENT_SLUG_VAR) || ''
       );
 
       this.copyTemplates(basePath, [
@@ -80,6 +80,7 @@ module.exports = class extends CustomGenerator {
         type: 'input',
         name: FRAGMENT_NAME_VAR,
         message: FRAGMENT_NAME_MESSAGE,
+        /** @param {string} name */
         validate: name => (name ? true : FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE),
         when: !this.hasValue(FRAGMENT_NAME_VAR)
       },
@@ -105,10 +106,11 @@ module.exports = class extends CustomGenerator {
    * Read the list of created collections from the project structure
    * and returns a list of choices. It also adds an extra 'new collection'
    * option for adding new collections.
-   * @return {Array<{name:string, value: string, short: string}>} List of
+   * @return {import('yeoman-generator-types').IChoice[]} List of
    *  choices parseable by yeoman's ask method.
    */
   _getCollectionChoices() {
+    /** @type {import('yeoman-generator-types').IChoice[]} */
     let choices = [];
 
     try {

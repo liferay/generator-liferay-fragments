@@ -1,11 +1,16 @@
 const compress = require('../compress');
 const fs = require('fs');
 const path = require('path');
+// @ts-ignore
 const tmp = require('tmp');
 const checkZip = require('./check-zip');
 
 describe('compress-generator/compress', () => {
+  // @ts-ignore
+  /** @type {import('tmp').SynchronousResult} */
   let tmpDir;
+
+  /** @type {string} */
   let tmpDirName;
 
   beforeEach(() => {

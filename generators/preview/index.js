@@ -18,14 +18,13 @@ const SOCKET_SERVER_PORT = 8082;
 
 module.exports = class extends AuthGenerator {
   /**
-   * @inheritdoc
+   * @param {any} args
+   * @param {any} options
    */
-  constructor(...args) {
-    super(...args);
+  constructor(args, options) {
+    super(args, options);
 
-    /**
-     * @type {Socket[]}
-     */
+    /** @type {ws[]} */
     this._connectedSockets = [];
   }
 
@@ -48,8 +47,8 @@ module.exports = class extends AuthGenerator {
       logSecondary('Visit preview URL and start developing to your fragments');
 
       log('');
-      logData('Liferay Server URL', this.getValue(LIFERAY_HOST_VAR));
-      logData('Group ID', this.getValue(LIFERAY_GROUPID_VAR));
+      logData('Liferay Server URL', this.getValue(LIFERAY_HOST_VAR) || '');
+      logData('Group ID', this.getValue(LIFERAY_GROUPID_VAR) || '');
       logData('Preview URL', `http://localhost:${DEV_SERVER_PORT}`);
     } else {
       logError(
@@ -94,17 +93,18 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<string>} Fragment's generated preview
    */
   _getPreview(css, html, js) {
-    return api.renderFragmentPreview(
-      this.getValue(LIFERAY_GROUPID_VAR),
-      html,
-      css,
-      js
-    );
+    const groupId = this.getValue(LIFERAY_GROUPID_VAR);
+
+    if (groupId) {
+      return api.renderFragmentPreview(groupId, html, css, js);
+    }
+
+    return Promise.reject(new Error('GroupId not found'));
   }
 
   /**
    * Get's project content for generator's destinationPath
-   * @return {object} Project content
+   * @return {import('../../types/index').IProject} Project content
    */
   _getProjectContent() {
     return getProjectContent(this.destinationPath());
@@ -122,8 +122,8 @@ module.exports = class extends AuthGenerator {
     const app = express();
     app.use(express.static(path.join(__dirname, 'assets')));
 
-    let collectionId;
-    let fragmentId;
+    let collectionId = '';
+    let fragmentId = '';
 
     app.get('/fragment-preview', (request, response) => {
       collectionId = request.query.collection;
@@ -174,6 +174,7 @@ module.exports = class extends AuthGenerator {
         );
       } else {
         const url = `${this.getValue(LIFERAY_HOST_VAR)}${req.originalUrl}`;
+        // @ts-ignore
         request(url, (error, response, body) => res.send(body));
       }
     });

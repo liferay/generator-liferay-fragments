@@ -32,8 +32,8 @@ const _updateJSON = async (path, content) => {
 
 /**
  * @param {string} fragmentBasePath Fragment base path
- * @param {object} collection Collection data
- * @param {object} fragment Fragment date
+ * @param {import('../types/index').ICollection} collection
+ * @param {import('../types/index').IFragment} fragment
  */
 const _writeProjectFragment = async (
   fragmentBasePath,
@@ -65,7 +65,7 @@ const _writeProjectFragment = async (
 
 /**
  * @param {string} collectionBasePath Collection base path
- * @param {object} collection Collection data
+ * @param {import('../types/index').ICollection} collection
  */
 const _writeProjectCollection = async (collectionBasePath, collection) => {
   mkdirp.sync(path.resolve(collectionBasePath));
@@ -87,8 +87,8 @@ const _writeProjectCollection = async (collectionBasePath, collection) => {
 };
 
 /**
- * @param {string} projectBasePath Project base path
- * @param {object} projectContent Project data
+ * @param {string} projectBasePath
+ * @param {import('../types/index').IProject} projectContent
  */
 const writeProjectContent = async (projectBasePath, projectContent) => {
   assertValidPath(

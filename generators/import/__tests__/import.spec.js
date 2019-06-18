@@ -57,7 +57,11 @@ describe('import-generator/import', () => {
           collection.fragments.map(fragment => ({
             name: fragment.metadata.name,
             fragmentEntryId: fragment.slug,
-            fragmentEntryKey: fragment.slug
+            fragmentEntryKey: fragment.slug,
+            type: fragment.metadata.type,
+            html: fragment.html,
+            css: fragment.css,
+            js: fragment.js
           }))
         )
         .reduce((a, b) => [...a, ...b], []);

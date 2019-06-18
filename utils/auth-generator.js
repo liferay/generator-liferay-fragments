@@ -21,23 +21,43 @@ const {
 
 module.exports = class AuthGenerator extends CustomGenerator {
   /**
-   * @inheritdoc
+   * @param {any} args
+   * @param {any} options
    */
-  constructor(...args) {
-    super(...args);
+  constructor(args, options) {
+    super(args, options);
 
-    this.argument(LIFERAY_HOST_VAR, { type: String, required: false });
-    this.argument(LIFERAY_USERNAME_VAR, { type: String, required: false });
-    this.argument(LIFERAY_PASSWORD_VAR, { type: String, required: false });
-    this.argument(LIFERAY_GROUPID_VAR, { type: String, required: false });
+    /** @type {import('yeoman-generator-types').IChoice[]} */
+    this._groupChoices = [];
+
+    /** @type {import('yeoman-generator-types').IChoice[]} */
+    this._companyChoices = [];
+
+    this.argument(LIFERAY_HOST_VAR, {
+      type: String,
+      required: false
+    });
+
+    this.argument(LIFERAY_USERNAME_VAR, {
+      type: String,
+      required: false
+    });
+
+    this.argument(LIFERAY_PASSWORD_VAR, {
+      type: String,
+      required: false
+    });
+
+    this.argument(LIFERAY_GROUPID_VAR, {
+      type: String,
+      required: false
+    });
   }
 
   /**
    * @inheritdoc
    */
   async asking() {
-    this._api = api;
-
     await this._askHostData();
     await this._askSiteData();
   }
@@ -79,6 +99,7 @@ module.exports = class AuthGenerator extends CustomGenerator {
     try {
       this._wrapApi();
       await this._checkConnection();
+      log('Connection successful\n');
     } catch (error) {
       logError(
         'Connection unsuccessful,\n' +
@@ -91,10 +112,8 @@ module.exports = class AuthGenerator extends CustomGenerator {
       delete this.options[LIFERAY_PASSWORD_VAR];
       delete this.options[LIFERAY_GROUPID_VAR];
 
-      return this._askHostData();
+      this._askHostData();
     }
-
-    log('Connection successful\n');
   }
 
   /**
@@ -130,7 +149,7 @@ module.exports = class AuthGenerator extends CustomGenerator {
 
   /**
    * Tests connection with liferay server
-   * @return {Promise<Object>} Response content or connection error
+   * @return {Promise<any>} Response content or connection error
    */
   _checkConnection() {
     return api.getCurrentUser();
@@ -138,7 +157,7 @@ module.exports = class AuthGenerator extends CustomGenerator {
 
   /**
    * Return a list of companies
-   * @return {Array<Object>} List of choices
+   * @return {Promise<import('yeoman-generator-types').IChoice[]>} List of choices
    */
   async _getCompanyChoices() {
     return (await api.getCompanies()).map(company => ({
@@ -149,27 +168,35 @@ module.exports = class AuthGenerator extends CustomGenerator {
 
   /**
    * Return a list of companies
-   * @return {Promise<Array<Object>>} List of choices
+   * @return {Promise<import('yeoman-generator-types').IChoice[]>} List of choices
    */
   async _getGroupChoices() {
     const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
 
-    return (await getSiteGroups(this._api, companyId)).map(group => ({
-      name: group.descriptiveName,
-      value: group.groupId
-    }));
+    if (companyId) {
+      return (await getSiteGroups(companyId)).map(group => ({
+        name: group.descriptiveName,
+        value: group.groupId
+      }));
+    }
+
+    return [];
   }
 
   /**
    * Wraps API calls with current host and user information
    */
   _wrapApi() {
+    const host = this.getValue(LIFERAY_HOST_VAR);
     const user = this.getValue(LIFERAY_USERNAME_VAR);
     const pass = this.getValue(LIFERAY_PASSWORD_VAR);
 
-    this._api = api.wrap(
-      this.getValue(LIFERAY_HOST_VAR),
-      Buffer.from(`${user}:${pass}`).toString('base64')
-    );
+    if (host && user && pass) {
+      api.init(
+        host,
+        Buffer.from(`${user}:${pass}`).toString('base64'),
+        'NO_TOKEN'
+      );
+    }
   }
 };
