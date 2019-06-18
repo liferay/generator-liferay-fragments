@@ -3,6 +3,10 @@ const glob = require('glob');
 const path = require('path');
 const YeomanTest = require('yeoman-test');
 
+/**
+ * @param {string} base
+ * @param {string} _path
+ */
 function expectFile(base, _path) {
   const filePath = path.join(base, _path);
   const stat = fs.lstatSync(filePath);
@@ -18,10 +22,17 @@ function expectFile(base, _path) {
   }).toMatchSnapshot();
 }
 
+/**
+ * @param {string} base
+ * @param {string[]} paths
+ */
 function expectFiles(base, paths) {
   return paths.map(_path => expectFile(base, _path));
 }
 
+/**
+ * @param {string} base
+ */
 function expectProjectFiles(base) {
   const templatesPath = path.resolve(__dirname, '..', 'templates');
 

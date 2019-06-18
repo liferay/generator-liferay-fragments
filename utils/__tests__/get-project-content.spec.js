@@ -2,12 +2,8 @@ const getProjectContent = require('../get-project-content');
 const getTestFixtures = require('../get-test-fixtures');
 
 describe('utils/get-project-content', () => {
-  it('requires a basePath', () => {
-    expect(() => getProjectContent()).toThrow();
-  });
-
   it('requires a valid package.json file', () => {
-    expect(() => getProjectContent('')).toThrow();
+    expect(() => getProjectContent(Math.random().toString())).toThrow();
   });
 
   getTestFixtures().forEach(projectPath => {

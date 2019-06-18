@@ -8,7 +8,7 @@ const { log, logNewLine, logIndent, logSecondary } = require('../../utils/log');
 /**
  * Adds a given collection object to the given zip file.
  * The zip file will be modified
- * @param {Object} collection Collection to be added
+ * @param {import('../../types/index').ICollection} collection Collection to be added
  * @param {JSZip} zip Zip file to be modified
  */
 function _addCollectionToZip(collection, zip) {
@@ -27,8 +27,8 @@ function _addCollectionToZip(collection, zip) {
 /**
  * Adds a given fragment object to the given zip file.
  * The zip file will be modified
- * @param {Object} collection Collection to be added
- * @param {Object} fragment Fragment to be added
+ * @param {import('../../types/index').ICollection} collection Collection to be added
+ * @param {import('../../types/index').IFragment} fragment Fragment to be added
  * @param {JSZip} zip Zip file to be modified
  */
 function _addFragmentToZip(collection, fragment, zip) {

@@ -2,12 +2,17 @@ const fs = require('fs');
 const path = require('path');
 const JSZip = require('jszip');
 
+/**
+ * @param {string} tmpDirName
+ */
 module.exports = async function(tmpDirName) {
   const data = fs.readFileSync(
     path.join(tmpDirName, 'build', 'liferay-fragments.zip')
   );
 
   const zip = await JSZip.loadAsync(data);
+
+  /** @type {Promise<void>[]} */
   const promises = [];
 
   zip.forEach((relativePath, file) => {

@@ -38,6 +38,8 @@ describe('export-generator/export', () => {
         .mockImplementation(async (groupId, fragmentCollectionId) => [
           {
             fragmentEntryKey: `${groupId}-${fragmentCollectionId}-fragment-a`,
+            fragmentEntryId: `${groupId}-${fragmentCollectionId}-fragment-a`,
+            type: '1',
             name: 'Fragment A',
             html: '<fragment-a></fragment-a>',
             css: '.fragment {}',

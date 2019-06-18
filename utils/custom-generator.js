@@ -15,17 +15,28 @@ const path = require('path');
  * @see Generator
  */
 class CustomGenerator extends Generator {
-  constructor(...args) {
-    super(...args);
+  /**
+   * @param {any} args
+   * @param {any} options
+   */
+  constructor(args, options) {
+    super(args, options);
+
+    /** @type {import('yeoman-generator-types').IAnswerGroup} */
     this.defaultValues = {};
+
+    /** @type {import('yeoman-generator-types').IAnswerGroup} */
     this.answers = {};
+
+    /** @type {import('yeoman-generator-types').IAnswerGroup} */
+    this.options = this.options || {};
   }
 
   /**
    * Prompts the given question(s) to the user and merges
    * the response with this.answers object.
-   * @param {object|object[]} question Any valid yeoman question(s)
-   * @return {Promise<object>} Merged answers
+   * @param {import('yeoman-generator-types').IQuestion|import('yeoman-generator-types').IQuestion[]} question
+   * @return {Promise<import('yeoman-generator-types').IAnswerGroup>} Merged answers
    */
   async ask(question) {
     const answers = await this.prompt(question);
@@ -36,8 +47,8 @@ class CustomGenerator extends Generator {
   /**
    * Copies the given file to the given destination, using
    * this.templatePath and this.destinationPath internally.
-   * @param {*} filePath File path
-   * @param {*} destinationPath Destination path
+   * @param {string} filePath
+   * @param {string} destinationPath
    */
   copyFile(filePath, destinationPath) {
     this.fs.copy(
@@ -62,8 +73,8 @@ class CustomGenerator extends Generator {
    * Copies the given template to the given destination, using
    * this.templatePath and this.destinationPath internally.
    * All templates receive the data collected from this generator.
-   * @param {*} templatePath Template path
-   * @param {*} destinationPath Destination path
+   * @param {string} templatePath
+   * @param {string} destinationPath
    */
   copyTemplate(templatePath, destinationPath) {
     this.fs.copyTpl(
@@ -93,7 +104,7 @@ class CustomGenerator extends Generator {
    * Returns a value for the given key, looking in answers, then options and
    * finally defaultValues.
    * @param {string} key Value key
-   * @return {*} Found value, undefined if none
+   * @return {string|undefined} Found value, undefined if none
    */
   getValue(key) {
     return this.answers[key] || this.options[key] || this.defaultValues[key];
@@ -117,15 +128,17 @@ class CustomGenerator extends Generator {
    * @param {string} variable Variable name
    */
   isRequired(variable) {
-    if (!this.getValue(variable) || !this.getValue(variable).trim()) {
-      this.env.error(`${variable} is required`);
+    let value = this.getValue(variable) || '';
+
+    if (!value || !value.trim()) {
+      this.env.error(new Error(`${variable} is required`));
     }
   }
 
   /**
-   * Stores the given value inside the given key inside defaultOptions
-   * @param {string} key Value key
-   * @param {*} value Value
+   * Stores the given value inside the given key inside defaultValues
+   * @param {string} key
+   * @param {string} value
    */
   setValue(key, value) {
     this.defaultValues[key] = value;

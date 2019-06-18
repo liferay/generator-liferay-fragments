@@ -5,6 +5,8 @@ Object {
   "basePath": "",
   "collections": Array [
     Object {
+      "fragmentCollectionId": "sample-collection",
+      "fragmentCollectionKey": "sample-collection",
       "fragments": Array [
         Object {
           "css": ".fragment { color: inherit; }

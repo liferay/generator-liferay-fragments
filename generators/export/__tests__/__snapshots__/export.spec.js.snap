@@ -3,6 +3,7 @@
 exports[`export-generator/export exports fragments from a Liferay Site 1`] = `
 Array [
   Object {
+    "fragmentCollectionId": "collection-a",
     "fragments": Array [
       Object {
         "css": ".fragment {}",
@@ -13,6 +14,7 @@ Array [
           "htmlPath": "index.html",
           "jsPath": "main.js",
           "name": "Fragment A",
+          "type": "1",
         },
         "slug": "1234-collection-a-fragment-a",
       },
@@ -24,6 +26,7 @@ Array [
     "slug": "collection-a",
   },
   Object {
+    "fragmentCollectionId": "collection-b",
     "fragments": Array [
       Object {
         "css": ".fragment {}",
@@ -34,6 +37,7 @@ Array [
           "htmlPath": "index.html",
           "jsPath": "main.js",
           "name": "Fragment A",
+          "type": "1",
         },
         "slug": "1234-collection-b-fragment-a",
       },

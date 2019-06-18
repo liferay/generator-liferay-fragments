@@ -73,7 +73,8 @@ Object {
 exports[`compress-generator/compress appends existing fragments 7`] = `
 Object {
   "dir": false,
-  "fileContent": "const content = fragmentElement.querySelector('.sample-fragment');
+  "fileContent": "// @ts-nocheck
+const content = fragmentElement.querySelector('.sample-fragment');
 ",
   "relativePath": "sample-collection/sample-fragment/main.js",
 }

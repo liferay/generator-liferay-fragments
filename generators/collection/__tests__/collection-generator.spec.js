@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const YeomanTest = require('yeoman-test');
 
+/**
+ * @param  {string[]} paths
+ */
 function expectFile(...paths) {
   return expect(
     fs.readFileSync(path.join(...paths), 'utf-8')

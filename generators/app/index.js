@@ -51,7 +51,9 @@ class AppGenerator extends CustomGenerator {
 
     this.isRequired(PROJECT_SLUG_VAR);
 
-    this.destinationRoot(this.destinationPath(this.getValue(PROJECT_SLUG_VAR)));
+    this.destinationRoot(
+      this.destinationPath(this.getValue(PROJECT_SLUG_VAR) || '')
+    );
   }
 
   /**

@@ -37,7 +37,7 @@ const api = {
       { method, url: `${this._host}${url}` },
       options
     );
-    const response = await promiseRequest(opts);
+    const response = await promiseRequest(opts, undefined);
     return this.parseResponse(response);
   },
 
@@ -101,20 +101,34 @@ const api = {
     return this.request('POST', url, Object.assign({}, { formData }, options));
   },
 
+  /**
+   * @return {Promise<''>}
+   */
   getCurrentUser() {
-    return this.postFormData('/api/jsonws/user/get-curren-user');
+    return this.postFormData('/api/jsonws/user/get-current-user');
   },
 
+  /**
+   * @return {Promise<import('../types/index').ICompany[]>}
+   */
   getCompanies() {
     return this.postFormData('/api/jsonws/company/get-companies');
   },
 
+  /**
+   * @param {string} companyId
+   * @return {Promise<import('../types/index').ISiteGroup[]>}
+   */
   getStagingCompanies(companyId) {
     return this.postFormData(
       `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`
     );
   },
 
+  /**
+   * @param {string} companyId
+   * @return {Promise<import('../types/index').ISiteGroup[]>}
+   */
   getSiteGroups(companyId) {
     return this.postFormData(
       `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
@@ -125,9 +139,12 @@ const api = {
    * @param {string} groupId
    * @param {string} fragmentCollectionId
    * @param {string} [name]
-   * @return {Promise<Array<{ fragmentEntryKey: string, name: string, html: string, css: string, js: string }>>}
+   * @return {Promise<import('../types/index').IServerFragment[]>}
    */
   getFragmentEntries(groupId, fragmentCollectionId, name) {
+    /**
+     * @type {import('../types/index').IGetFragmentEntriesOptions}
+     */
     const options = {
       groupId,
       fragmentCollectionId,
@@ -152,9 +169,10 @@ const api = {
   /**
    * @param {string} groupId
    * @param {string} [name]
-   * @return {Promise<Array<{ name: string, fragmentCollectionId: string, fragmentCollectionKey: string, description: string }>>}
+   * @return {Promise<import('../types/index').IServerCollection[]>}
    */
   getFragmentCollections(groupId, name) {
+    /** @type {{ groupId: string, name?: string, start: number, end: number }} */
     const options = {
       groupId,
       start: -1,
@@ -225,6 +243,10 @@ const api = {
     );
   },
 
+  /**
+   * @param {string} fragmentEntryId
+   * @param {{ status: number, name: string, html: string, css: string, js: string }} data
+   */
   updateFragmentEntry(fragmentEntryId, { status, name, html, css, js }) {
     return this.postFormData('/fragment.fragmententry/update-fragment-entry', {
       fragmentEntryId,
@@ -236,6 +258,12 @@ const api = {
     });
   },
 
+  /**
+   * @param {string} groupId
+   * @param {string} fragmentCollectionId
+   * @param {string} fragmentEntryKey
+   * @param {{ status: number, name: string, type: number, html: string, css: string, js: string }} data
+   */
   addFragmentEntry(
     groupId,
     fragmentCollectionId,
@@ -255,6 +283,12 @@ const api = {
     });
   },
 
+  /**
+   * @param {string} groupId
+   * @param {string} html
+   * @param {string} css
+   * @param {string} js
+   */
   renderFragmentPreview(groupId, html, css, js) {
     return this.postFormData(
       '/fragment.fragmententry/render-fragment-entry-preview',

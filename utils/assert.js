@@ -1,8 +1,9 @@
+// @ts-ignore
 const assert = require('assert') || require('assert').strict;
 const path = require('path');
 
 /**
- * @param {*} data Given data
+ * @param {any} data Given data
  * @param {string} [message='Expected data to be an object'] Error message
  */
 const assertObject = (data, message = 'Expected data to be an object') => {
@@ -11,7 +12,7 @@ const assertObject = (data, message = 'Expected data to be an object') => {
 };
 
 /**
- * @param {*} data Given data
+ * @param {any} data Given data
  * @param {string} [message='Expected data to be an Array'] Error message
  */
 const assertArray = (data, message = 'Expected data to be an Array') => {
@@ -20,7 +21,7 @@ const assertArray = (data, message = 'Expected data to be an Array') => {
 };
 
 /**
- * @param {*} data Given data
+ * @param {any} data Given data
  * @param {string} [message='Expected data to be a string'] Error message
  */
 const assertString = (data, message = 'Expected data to be a string') => {
@@ -28,7 +29,7 @@ const assertString = (data, message = 'Expected data to be a string') => {
 };
 
 /**
- * @param {*} data Given data
+ * @param {any} data Given data
  * @param {string} [message='Expected data to be a projectContent'] Error message
  */
 const assertProjectContent = (
@@ -42,7 +43,7 @@ const assertProjectContent = (
 };
 
 /**
- * @param {*} data Given data
+ * @param {any} data Given data
  * @param {string} [message='Expected data to be a valid path'] Error message
  */
 const assertValidPath = (

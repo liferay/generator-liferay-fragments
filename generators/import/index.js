@@ -1,3 +1,4 @@
+// @ts-ignore
 const chokidar = require('chokidar');
 const path = require('path');
 const AuthGenerator = require('../../utils/auth-generator');
@@ -14,9 +15,13 @@ const {
 } = require('../../utils/constants');
 
 module.exports = class extends AuthGenerator {
-  constructor(...args) {
-    super(...args);
-    this.argument(IMPORT_WATCH_VAR, { type: Boolean, required: false });
+  /**
+   * @param {any} args
+   * @param {any} options
+   */
+  constructor(args, options) {
+    super(args, options);
+    this.argument(IMPORT_WATCH_VAR, { type: String, required: false });
   }
 
   /**
@@ -34,20 +39,22 @@ module.exports = class extends AuthGenerator {
 
   /**
    * Performs a project import
-   * @return {Promise} Promise resolved when import has finished
+   * @return {Promise<void>} Promise resolved when import has finished
    */
   _importProject() {
-    return importProject(
-      this._api,
-      this.getValue(LIFERAY_GROUPID_VAR),
-      getProjectContent(this.destinationPath())
-    );
+    const groupId = this.getValue(LIFERAY_GROUPID_VAR);
+
+    if (groupId) {
+      return importProject(groupId, getProjectContent(this.destinationPath()));
+    }
+
+    return Promise.reject(new Error('GroupId not found'));
   }
 
   /**
    * Watches changes inside project and runs an import
    * process for any change.
-   * @return {Promise} Promise returned by this methos is never resolved,
+   * @return {Promise<void>} Promise returned by this methos is never resolved,
    *  so you can wait for an infinite process until user cancels
    *  it.
    */
@@ -56,11 +63,17 @@ module.exports = class extends AuthGenerator {
     const host = this.getValue(LIFERAY_HOST_VAR);
     const user = this.getValue(LIFERAY_USERNAME_VAR);
     const groupId = this.getValue(LIFERAY_GROUPID_VAR);
-    const group = this._groupChoices.find(group => group.value === groupId);
     const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
+
+    const group = this._groupChoices.find(group => group.value === groupId);
+
     const company = this._companyChoices.find(
       company => company.value === companyId
     );
+
+    if (!host || !user || !group || !company) {
+      throw new Error('Unexpected error: invalid server data');
+    }
 
     let updatePromise = Promise.resolve();
     let queuedUpdate = false;
