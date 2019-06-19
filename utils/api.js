@@ -4,18 +4,38 @@ const request = require('request');
 const api = {
   _host: '',
   _basicAuthToken: '',
-  _oauthToken: '',
+
+  /**
+   * @type {import('../types/index').IOauthToken}
+   */
+  _oauthToken: {
+    accessToken: '',
+    refreshToken: '',
+    expirationDate: new Date('1991-1-1')
+  },
 
   /**
    * Initializes api
    * @param {string} host
    * @param {string} basicAuthToken
-   * @param {string} oauthToken
+   * @param {import('../types/index').IServerOauthToken} [oauthToken]
    */
   init(host, basicAuthToken, oauthToken) {
     this._host = host;
     this._basicAuthToken = basicAuthToken;
-    this._oauthToken = oauthToken;
+
+    if (oauthToken) {
+      const expirationDate = new Date();
+      expirationDate.setSeconds(
+        expirationDate.getSeconds() + oauthToken.expires_in - 60
+      );
+
+      this._oauthToken = {
+        accessToken: oauthToken.access_token,
+        refreshToken: oauthToken.refresh_token,
+        expirationDate
+      };
+    }
   },
 
   /**
@@ -96,6 +116,16 @@ const api = {
 
   /**
    * @param {string} url
+   * @param {object} [form={}]
+   * @param {object} [options={}]
+   * @return {Promise<object|string>}
+   */
+  postForm(url, form, options) {
+    return this.request('POST', url, Object.assign({}, { form }, options));
+  },
+
+  /**
+   * @param {string} url
    * @param {object} [formData={}]
    * @param {object} [options={}]
    * @return {Promise<object|string>}
@@ -105,14 +135,61 @@ const api = {
   },
 
   /**
-   * @return {Promise<''>}
+   * @param {string} username
+   * @param {string} password
+   * @return {Promise<import('../types/index').IServerOauthToken>}
    */
-  async getCurrentUser() {
-    return this.postFormData(
+  getOAuthToken(username, password) {
+    return this.postForm('/o/oauth2/token', {
+      grant_type: 'password', // eslint-disable-line camelcase
+      client_id: 'FragmentRenderer', // eslint-disable-line camelcase
+      username,
+      password
+    });
+  },
+
+  /**
+   * Tries to refresh existing oauth2Token.
+   * It existing token is invalid it sets it to null.
+   */
+  async refreshOAuthToken() {
+    if (this._oauthToken.expirationDate < new Date()) {
+      try {
+        const oauthToken = await this.postForm('/o/oauth2/token', {
+          client_id: 'FragmentRenderer', // eslint-disable-line camelcase
+          grant_type: 'refresh_token', // eslint-disable-line camelcase
+          refresh_token: this._oauthToken.refreshToken // eslint-disable-line camelcase
+        });
+
+        this.init(this._host, this._basicAuthToken, oauthToken);
+      } catch (error) {
+        this._oauthToken = {
+          accessToken: '',
+          refreshToken: '',
+          expirationDate: new Date('1991-1-1')
+        };
+      }
+    }
+  },
+
+  /**
+   * Checks authentication with both BasicAuth and OAuth2
+   * @return {Promise<void>}
+   */
+  async checkAuthentication() {
+    await this.postFormData(
       '/api/jsonws/user/get-current-user',
       {},
       {
         headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
+    );
+
+    await this.postFormData(
+      '/api/jsonws/user/get-current-user',
+      {},
+      {
+        headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
       }
     );
   },
@@ -334,7 +411,7 @@ const api = {
         js
       },
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
       }
     );
   }

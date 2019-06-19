@@ -21,6 +21,7 @@ declare module 'yeoman-generator-types' {
     default?: string | boolean;
     when?: boolean;
     validate?: (val: string) => boolean | string;
+    store?: boolean;
   }
 
   interface IListQuestion extends IBasicQuestion {
@@ -51,6 +52,11 @@ declare module 'yeoman-generator' {
         destinationPath: string,
         data?: { [key: string]: string }
       ): void;
+    };
+
+    config: {
+      get(key: string): string;
+      set(key: string, value: string): void;
     };
 
     constructor(args: any, options: any);

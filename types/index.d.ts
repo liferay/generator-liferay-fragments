@@ -16,6 +16,20 @@ export interface ICollection {
   fragments: IFragment[];
 }
 
+export interface IServerOauthToken {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  scope: string;
+  refresh_token: string;
+}
+
+export interface IOauthToken {
+  accessToken: string;
+  refreshToken: string;
+  expirationDate: Date;
+}
+
 export interface IFragment {
   slug: string;
   metadata: {
