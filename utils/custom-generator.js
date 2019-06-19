@@ -107,7 +107,12 @@ class CustomGenerator extends Generator {
    * @return {string|undefined} Found value, undefined if none
    */
   getValue(key) {
-    return this.answers[key] || this.options[key] || this.defaultValues[key];
+    return (
+      this.answers[key] ||
+      this.options[key] ||
+      this.config.get(key) ||
+      this.defaultValues[key]
+    );
   }
 
   /**
@@ -118,7 +123,10 @@ class CustomGenerator extends Generator {
    */
   hasValue(key) {
     return (
-      key in this.answers || key in this.options || key in this.defaultValues
+      key in this.answers ||
+      key in this.options ||
+      Boolean(this.config.get(key)) ||
+      key in this.defaultValues
     );
   }
 

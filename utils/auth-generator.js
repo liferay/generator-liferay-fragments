@@ -76,14 +76,16 @@ module.exports = class AuthGenerator extends CustomGenerator {
         name: LIFERAY_HOST_VAR,
         message: LIFERAY_HOST_MESSAGE,
         default: this.getValue(LIFERAY_HOST_VAR),
-        when: !(LIFERAY_HOST_VAR in this.options)
+        when: !(LIFERAY_HOST_VAR in this.options),
+        store: true
       },
       {
         type: 'input',
         name: LIFERAY_USERNAME_VAR,
         message: LIFERAY_USERNAME_MESSAGE,
         default: this.getValue(LIFERAY_USERNAME_VAR),
-        when: !(LIFERAY_USERNAME_VAR in this.options)
+        when: !(LIFERAY_USERNAME_VAR in this.options),
+        store: true
       },
       {
         type: 'password',
@@ -97,7 +99,7 @@ module.exports = class AuthGenerator extends CustomGenerator {
     logNewLine('Checking connection...');
 
     try {
-      this._wrapApi();
+      await this._wrapApi();
       await this._checkConnection();
       log('Connection successful\n');
     } catch (error) {
@@ -129,7 +131,8 @@ module.exports = class AuthGenerator extends CustomGenerator {
           name: LIFERAY_COMPANYID_VAR,
           message: LIFERAY_COMPANYID_MESSAGE,
           choices: this._companyChoices,
-          default: this.getValue(LIFERAY_COMPANYID_VAR)
+          default: this.getValue(LIFERAY_COMPANYID_VAR),
+          store: true
         }
       ]);
 
@@ -141,7 +144,8 @@ module.exports = class AuthGenerator extends CustomGenerator {
           name: LIFERAY_GROUPID_VAR,
           message: LIFERAY_GROUPID_MESSAGE,
           choices: this._groupChoices,
-          default: this.getValue(LIFERAY_GROUPID_VAR)
+          default: this.getValue(LIFERAY_GROUPID_VAR),
+          store: true
         }
       ]);
     }
@@ -149,10 +153,10 @@ module.exports = class AuthGenerator extends CustomGenerator {
 
   /**
    * Tests connection with liferay server
-   * @return {Promise<any>} Response content or connection error
+   * @return {Promise<void>}
    */
   _checkConnection() {
-    return api.getCurrentUser();
+    return api.checkAuthentication();
   }
 
   /**
@@ -194,17 +198,16 @@ module.exports = class AuthGenerator extends CustomGenerator {
   /**
    * Wraps API calls with current host and user information
    */
-  _wrapApi() {
-    const host = this.getValue(LIFERAY_HOST_VAR);
-    const user = this.getValue(LIFERAY_USERNAME_VAR);
-    const pass = this.getValue(LIFERAY_PASSWORD_VAR);
+  async _wrapApi() {
+    const host = this.getValue(LIFERAY_HOST_VAR) || '';
+    const user = this.getValue(LIFERAY_USERNAME_VAR) || '';
+    const pass = this.getValue(LIFERAY_PASSWORD_VAR) || '';
+    const base64Token = Buffer.from(`${user}:${pass}`).toString('base64');
 
-    if (host && user && pass) {
-      api.init(
-        host,
-        Buffer.from(`${user}:${pass}`).toString('base64'),
-        'NO_TOKEN'
-      );
-    }
+    api.init(host, base64Token);
+
+    try {
+      api.init(host, base64Token, await api.getOAuthToken(user, pass));
+    } catch (error) {}
   }
 };
