@@ -401,9 +401,11 @@ const api = {
    * @param {string} css
    * @param {string} js
    */
-  renderFragmentPreview(groupId, html, css, js) {
+  async renderFragmentPreview(groupId, html, css, js) {
+    await this.refreshOAuthToken();
+
     return this.postFormData(
-      '/api/jsonws/fragment.fragmententry/render-fragment-entry-preview',
+      '/c/portal/fragment/render_fragment_entry',
       {
         groupId,
         html,

@@ -25,6 +25,7 @@ The first step is always to generate a new project. You must do this even if you
 ```bash
 yo liferay-fragments
 ```
+
 This command will guide you through a project creation and will
 ask you some simple questions. Then you can just cd to this new project
 and start working.
@@ -36,7 +37,7 @@ cd my-new-fragments-project
 ## Usage
 
 Once you've created your project, there are several npm scripts that
-will allow you to create fragments and fragment collections, export fragments from a Liferay instance and manage your existing fragments. 
+will allow you to create fragments and fragment collections, export fragments from a Liferay instance and manage your existing fragments.
 
 ### Creating New Fragments
 
@@ -53,9 +54,10 @@ Once a collection has been created, you can add as many fragments as desired ins
 ### Fragments Directory Structure
 
 Collections and fragments must follow an specific (although simple) directory structure so that they can be imported into a Liferay instance. The information about each collection and fragment is stored inside `JSON` files,
-and you can change them manually, there is no magic in here. 
+and you can change them manually, there is no magic in here.
 
 This is a sample directory structure with two collections and two fragments within the first collection:
+
 ```
 src/
   collection-a/
@@ -102,6 +104,7 @@ After you have finished the development of fragments, they can be distributed as
 - `compress`
 
 ## References
+
 [1]: https://yeoman.io
 [2]: https://www.npmjs.com
 [3]: https://nodejs.org
