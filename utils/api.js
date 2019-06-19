@@ -37,6 +37,7 @@ const api = {
       { method, url: `${this._host}${url}` },
       options
     );
+
     const response = await promiseRequest(opts, undefined);
     return this.parseResponse(response);
   },
@@ -49,7 +50,9 @@ const api = {
    */
   parseResponse(response) {
     if (response.statusCode >= 400) {
-      throw response;
+      throw new Error(
+        `${response.statusCode} ${response.body.substr(0, 100)}...`
+      );
     }
 
     /** @type {object|string} */
@@ -104,15 +107,27 @@ const api = {
   /**
    * @return {Promise<''>}
    */
-  getCurrentUser() {
-    return this.postFormData('/api/jsonws/user/get-current-user');
+  async getCurrentUser() {
+    return this.postFormData(
+      '/api/jsonws/user/get-current-user',
+      {},
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
+    );
   },
 
   /**
    * @return {Promise<import('../types/index').ICompany[]>}
    */
   getCompanies() {
-    return this.postFormData('/api/jsonws/company/get-companies');
+    return this.postFormData(
+      '/api/jsonws/company/get-companies',
+      {},
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
+    );
   },
 
   /**
@@ -121,7 +136,11 @@ const api = {
    */
   getStagingCompanies(companyId) {
     return this.postFormData(
-      `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`
+      `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`,
+      {},
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
     );
   },
 
@@ -131,7 +150,11 @@ const api = {
    */
   getSiteGroups(companyId) {
     return this.postFormData(
-      `/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`
+      `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`,
+      {},
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
     );
   },
 
@@ -248,14 +271,20 @@ const api = {
    * @param {{ status: number, name: string, html: string, css: string, js: string }} data
    */
   updateFragmentEntry(fragmentEntryId, { status, name, html, css, js }) {
-    return this.postFormData('/fragment.fragmententry/update-fragment-entry', {
-      fragmentEntryId,
-      status,
-      name,
-      html,
-      css,
-      js
-    });
+    return this.postFormData(
+      '/api/jsonws/fragment.fragmententry/update-fragment-entry',
+      {
+        fragmentEntryId,
+        status,
+        name,
+        html,
+        css,
+        js
+      },
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
+    );
   },
 
   /**
@@ -270,17 +299,23 @@ const api = {
     fragmentEntryKey,
     { status, name, type, html, css, js }
   ) {
-    return this.postFormData('/fragment.fragmententry/add-fragment-entry', {
-      fragmentCollectionId,
-      fragmentEntryKey,
-      groupId,
-      status,
-      name,
-      type,
-      html,
-      css,
-      js
-    });
+    return this.postFormData(
+      '/api/jsonws/fragment.fragmententry/add-fragment-entry',
+      {
+        fragmentCollectionId,
+        fragmentEntryKey,
+        groupId,
+        status,
+        name,
+        type,
+        html,
+        css,
+        js
+      },
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
+    );
   },
 
   /**
@@ -291,12 +326,15 @@ const api = {
    */
   renderFragmentPreview(groupId, html, css, js) {
     return this.postFormData(
-      '/fragment.fragmententry/render-fragment-entry-preview',
+      '/api/jsonws/fragment.fragmententry/render-fragment-entry-preview',
       {
         groupId,
         html,
         css,
         js
+      },
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
       }
     );
   }

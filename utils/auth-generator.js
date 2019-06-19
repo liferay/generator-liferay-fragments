@@ -112,7 +112,7 @@ module.exports = class AuthGenerator extends CustomGenerator {
       delete this.options[LIFERAY_PASSWORD_VAR];
       delete this.options[LIFERAY_GROUPID_VAR];
 
-      this._askHostData();
+      await this._askHostData();
     }
   }
 
@@ -160,10 +160,14 @@ module.exports = class AuthGenerator extends CustomGenerator {
    * @return {Promise<import('yeoman-generator-types').IChoice[]>} List of choices
    */
   async _getCompanyChoices() {
-    return (await api.getCompanies()).map(company => ({
-      name: company.webId,
-      value: company.companyId
-    }));
+    try {
+      return (await api.getCompanies()).map(company => ({
+        name: company.webId,
+        value: company.companyId
+      }));
+    } catch (error) {
+      throw new Error('Unable to get site companies');
+    }
   }
 
   /**
@@ -174,10 +178,14 @@ module.exports = class AuthGenerator extends CustomGenerator {
     const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
 
     if (companyId) {
-      return (await getSiteGroups(companyId)).map(group => ({
-        name: group.descriptiveName,
-        value: group.groupId
-      }));
+      try {
+        return (await getSiteGroups(companyId)).map(group => ({
+          name: group.descriptiveName,
+          value: group.groupId
+        }));
+      } catch (error) {
+        throw new Error('Unable to get groups');
+      }
     }
 
     return [];
