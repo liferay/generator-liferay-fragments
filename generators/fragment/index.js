@@ -33,21 +33,21 @@ module.exports = class extends CustomGenerator {
    * @inheritdoc
    */
   writing() {
-    if (this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
+    if (this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
       this.composeWith(require.resolve('../collection'), {
-        [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR)
+        [FRAGMENT_NAME_VAR]: this._getValue(FRAGMENT_NAME_VAR)
       });
     } else {
-      this.isRequired(FRAGMENT_COLLECTION_SLUG_VAR);
-      this.isRequired(FRAGMENT_SLUG_VAR);
+      this._isRequired(FRAGMENT_COLLECTION_SLUG_VAR);
+      this._isRequired(FRAGMENT_SLUG_VAR);
 
       const basePath = path.join(
         'src',
-        this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
-        this.getValue(FRAGMENT_SLUG_VAR) || ''
+        this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
+        this._getValue(FRAGMENT_SLUG_VAR) || ''
       );
 
-      this.copyTemplates(basePath, [
+      this._copyTemplates(basePath, [
         'index.html',
         'main.js',
         'styles.css',
@@ -62,12 +62,12 @@ module.exports = class extends CustomGenerator {
    * @see _getCollectionChoices
    */
   async _askCollection() {
-    await this.ask({
+    await this._ask({
       type: 'list',
       name: FRAGMENT_COLLECTION_SLUG_VAR,
       message: FRAGMENT_COLLECTION_SLUG_MESSAGE,
       choices: this._getCollectionChoices(),
-      when: !this.hasValue(FRAGMENT_COLLECTION_SLUG_VAR)
+      when: !this._hasValue(FRAGMENT_COLLECTION_SLUG_VAR)
     });
   }
 
@@ -75,31 +75,31 @@ module.exports = class extends CustomGenerator {
    * Requests fragment information and sets the fragment slug.
    */
   async _askFragmentData() {
-    await this.ask([
+    await this._ask([
       {
         type: 'input',
         name: FRAGMENT_NAME_VAR,
         message: FRAGMENT_NAME_MESSAGE,
         /** @param {string} name */
         validate: name => (name ? true : FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE),
-        when: !this.hasValue(FRAGMENT_NAME_VAR)
+        when: !this._hasValue(FRAGMENT_NAME_VAR)
       },
       {
         type: 'list',
         name: FRAGMENT_TYPE_VAR,
         message: FRAGMENT_TYPE_MESSAGE,
         choices: FRAGMENT_TYPE_OPTIONS,
-        default: this.getValue(FRAGMENT_TYPE_DEFAULT),
-        when: !this.hasValue(FRAGMENT_TYPE_VAR)
+        default: this._getValue(FRAGMENT_TYPE_DEFAULT),
+        when: !this._hasValue(FRAGMENT_TYPE_VAR)
       }
     ]);
 
-    this.setValue(
+    this._setValue(
       FRAGMENT_SLUG_VAR,
-      voca.slugify(this.getValue(FRAGMENT_NAME_VAR))
+      voca.slugify(this._getValue(FRAGMENT_NAME_VAR))
     );
 
-    this.setValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
+    this._setValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
   }
 
   /**

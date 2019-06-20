@@ -30,7 +30,7 @@ module.exports = class extends AuthGenerator {
   async asking() {
     await super.asking();
 
-    if (this.getValue(IMPORT_WATCH_VAR)) {
+    if (this._getValue(IMPORT_WATCH_VAR)) {
       await this._watchChanges();
     } else {
       await this._importProject();
@@ -42,7 +42,7 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<void>} Promise resolved when import has finished
    */
   _importProject() {
-    const groupId = this.getValue(LIFERAY_GROUPID_VAR);
+    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
 
     if (groupId) {
       return importProject(groupId, getProjectContent(this.destinationPath()));
@@ -60,10 +60,10 @@ module.exports = class extends AuthGenerator {
    */
   _watchChanges() {
     const watchPath = path.resolve(this.destinationPath(), 'src');
-    const host = this.getValue(LIFERAY_HOST_VAR);
-    const user = this.getValue(LIFERAY_USERNAME_VAR);
-    const groupId = this.getValue(LIFERAY_GROUPID_VAR);
-    const companyId = this.getValue(LIFERAY_COMPANYID_VAR);
+    const host = this._getValue(LIFERAY_HOST_VAR);
+    const user = this._getValue(LIFERAY_USERNAME_VAR);
+    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+    const companyId = this._getValue(LIFERAY_COMPANYID_VAR);
 
     const group = this._groupChoices.find(group => group.value === groupId);
 

@@ -47,8 +47,8 @@ module.exports = class extends AuthGenerator {
       logSecondary('Visit preview URL and start developing to your fragments');
 
       log('');
-      logData('Liferay Server URL', this.getValue(LIFERAY_HOST_VAR) || '');
-      logData('Group ID', this.getValue(LIFERAY_GROUPID_VAR) || '');
+      logData('Liferay Server URL', this._getValue(LIFERAY_HOST_VAR) || '');
+      logData('Group ID', this._getValue(LIFERAY_GROUPID_VAR) || '');
       logData('Preview URL', `http://localhost:${DEV_SERVER_PORT}`);
     } else {
       logError(
@@ -93,7 +93,7 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<string>} Fragment's generated preview
    */
   _getPreview(css, html, js) {
-    const groupId = this.getValue(LIFERAY_GROUPID_VAR);
+    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
 
     if (groupId) {
       return api.renderFragmentPreview(groupId, html, css, js);
@@ -173,7 +173,7 @@ module.exports = class extends AuthGenerator {
           )
         );
       } else {
-        const url = `${this.getValue(LIFERAY_HOST_VAR)}${req.originalUrl}`;
+        const url = `${this._getValue(LIFERAY_HOST_VAR)}${req.originalUrl}`;
         // @ts-ignore
         request(url, (error, response, body) => res.send(body));
       }

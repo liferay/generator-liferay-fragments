@@ -13,7 +13,7 @@ module.exports = class extends AuthGenerator {
     const projectContent = getProjectContent(this.destinationPath());
 
     projectContent.collections = await exportCollections(
-      this.getValue(LIFERAY_GROUPID_VAR) || '',
+      this._getValue(LIFERAY_GROUPID_VAR) || '',
       projectContent
     );
 
