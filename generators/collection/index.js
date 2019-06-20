@@ -19,38 +19,38 @@ module.exports = class extends CustomGenerator {
    * @inheritdoc
    */
   async prompting() {
-    await this.ask([
+    await this._ask([
       {
         type: 'input',
         name: COLLECTION_NAME_VAR,
         message: COLLECTION_NAME_MESSAGE,
         validate: name =>
           name ? true : COLLECTION_NAME_NON_EMPTY_ERROR_MESSAGE,
-        when: !this.hasValue(COLLECTION_NAME_VAR)
+        when: !this._hasValue(COLLECTION_NAME_VAR)
       },
       {
         type: 'input',
         name: COLLECTION_DESCRIPTION_VAR,
         message: COLLECTION_DESCRIPTION_MESSAGE,
-        when: !this.hasValue(COLLECTION_DESCRIPTION_VAR)
+        when: !this._hasValue(COLLECTION_DESCRIPTION_VAR)
       }
     ]);
 
-    this.setValue(COLLECTION_DESCRIPTION_VAR, COLLECTION_DESCRIPTION_DEFAULT);
+    this._setValue(COLLECTION_DESCRIPTION_VAR, COLLECTION_DESCRIPTION_DEFAULT);
 
-    this.setValue(
+    this._setValue(
       COLLECTION_SLUG_VAR,
-      voca.slugify(this.getValue(COLLECTION_NAME_VAR))
+      voca.slugify(this._getValue(COLLECTION_NAME_VAR))
     );
 
-    this.isRequired(COLLECTION_SLUG_VAR);
+    this._isRequired(COLLECTION_SLUG_VAR);
   }
 
   /**
    * @inheritdoc
    */
   writing() {
-    this.copyTemplates(`src/${this.getValue(COLLECTION_SLUG_VAR)}`, [
+    this._copyTemplates(`src/${this._getValue(COLLECTION_SLUG_VAR)}`, [
       'collection.json'
     ]);
   }
@@ -59,13 +59,13 @@ module.exports = class extends CustomGenerator {
    * @inheritdoc
    */
   end() {
-    const fragmentName = this.getValue(FRAGMENT_NAME_VAR);
+    const fragmentName = this._getValue(FRAGMENT_NAME_VAR);
 
     if (fragmentName) {
       this.composeWith(require.resolve('../fragment'), {
         [FRAGMENT_NAME_VAR]: fragmentName,
-        [FRAGMENT_TYPE_VAR]: this.getValue(FRAGMENT_TYPE_VAR),
-        [FRAGMENT_COLLECTION_SLUG_VAR]: this.getValue(COLLECTION_SLUG_VAR)
+        [FRAGMENT_TYPE_VAR]: this._getValue(FRAGMENT_TYPE_VAR),
+        [FRAGMENT_COLLECTION_SLUG_VAR]: this._getValue(COLLECTION_SLUG_VAR)
       });
     }
   }

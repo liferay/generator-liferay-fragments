@@ -38,7 +38,7 @@ class CustomGenerator extends Generator {
    * @param {import('yeoman-generator-types').IQuestion|import('yeoman-generator-types').IQuestion[]} question
    * @return {Promise<import('yeoman-generator-types').IAnswerGroup>} Merged answers
    */
-  async ask(question) {
+  async _ask(question) {
     const answers = await this.prompt(question);
     this.answers = Object.assign({}, this.answers, answers);
     return this.answers;
@@ -50,7 +50,7 @@ class CustomGenerator extends Generator {
    * @param {string} filePath
    * @param {string} destinationPath
    */
-  copyFile(filePath, destinationPath) {
+  _copyFile(filePath, destinationPath) {
     this.fs.copy(
       this.templatePath(filePath),
       this.destinationPath(destinationPath)
@@ -63,9 +63,9 @@ class CustomGenerator extends Generator {
    * @param {string} basePath Basepath where templates will be copied
    * @param {string[]} filePaths List of templates to be copied
    */
-  copyFiles(basePath, filePaths) {
+  _copyFiles(basePath, filePaths) {
     filePaths.forEach(filePath =>
-      this.copyFile(filePath, path.join(basePath, filePath))
+      this._copyFile(filePath, path.join(basePath, filePath))
     );
   }
 
@@ -76,7 +76,7 @@ class CustomGenerator extends Generator {
    * @param {string} templatePath
    * @param {string} destinationPath
    */
-  copyTemplate(templatePath, destinationPath) {
+  _copyTemplate(templatePath, destinationPath) {
     this.fs.copyTpl(
       this.templatePath(templatePath),
       this.destinationPath(destinationPath),
@@ -91,9 +91,9 @@ class CustomGenerator extends Generator {
    * @param {string} basePath Basepath where templates will be copied
    * @param {string[]} templatePaths List of templates to be copied
    */
-  copyTemplates(basePath, templatePaths) {
+  _copyTemplates(basePath, templatePaths) {
     templatePaths.forEach(templatePath =>
-      this.copyTemplate(
+      this._copyTemplate(
         `${templatePath}.ejs`,
         path.join(basePath, templatePath)
       )
@@ -106,7 +106,7 @@ class CustomGenerator extends Generator {
    * @param {string} key Value key
    * @return {string|undefined} Found value, undefined if none
    */
-  getValue(key) {
+  _getValue(key) {
     return (
       this.answers[key] ||
       this.options[key] ||
@@ -121,7 +121,7 @@ class CustomGenerator extends Generator {
    * @param {string} key Value key
    * @return {boolean} Wether the value is defined or not
    */
-  hasValue(key) {
+  _hasValue(key) {
     return (
       key in this.answers ||
       key in this.options ||
@@ -135,8 +135,8 @@ class CustomGenerator extends Generator {
    * execution if not.
    * @param {string} variable Variable name
    */
-  isRequired(variable) {
-    let value = this.getValue(variable) || '';
+  _isRequired(variable) {
+    let value = this._getValue(variable) || '';
 
     if (!value || !value.trim()) {
       this.env.error(new Error(`${variable} is required`));
@@ -148,7 +148,7 @@ class CustomGenerator extends Generator {
    * @param {string} key
    * @param {string} value
    */
-  setValue(key, value) {
+  _setValue(key, value) {
     this.defaultValues[key] = value;
   }
 }
