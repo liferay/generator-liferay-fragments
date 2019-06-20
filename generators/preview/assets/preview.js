@@ -46,10 +46,7 @@ collectionSelect.addEventListener('change', () => {
 fragmentSelect.addEventListener('change', () => {
   if (fragmentSelect.value) {
     syncSelectFieldURL(fragmentSelect);
-
-    preview.src = `/fragment-preview?collection=${
-      collectionSelect.value
-    }&fragment=${fragmentSelect.value}`;
+    preview.src = `/fragment-preview?collection=${collectionSelect.value}&fragment=${fragmentSelect.value}`;
   }
 });
 
