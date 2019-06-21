@@ -75,7 +75,15 @@ function _getCollectionFragments(collectionDirectory) {
             'utf-8'
           ),
 
-          js: fs.readFileSync(path.resolve(directory, metadata.jsPath), 'utf-8')
+          js: fs.readFileSync(
+            path.resolve(directory, metadata.jsPath),
+            'utf-8'
+          ),
+
+          config: fs.readFileSync(
+            path.resolve(directory, metadata.configPath),
+            'utf-8'
+          )
         };
       }
     );

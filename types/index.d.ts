@@ -36,12 +36,14 @@ export interface IFragment {
     cssPath: string;
     htmlPath: string;
     jsPath: string;
+    configPath: string;
     name: string;
     type: string;
   };
   css: string;
   html: string;
   js: string;
+  config: string;
 }
 
 export interface ICompany {
@@ -69,6 +71,7 @@ export interface IServerFragment {
   html: string;
   css: string;
   js: string;
+  config: string;
 }
 
 export interface IGetFragmentEntriesOptions {

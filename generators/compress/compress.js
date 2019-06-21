@@ -52,6 +52,11 @@ function _addFragmentToZip(collection, fragment, zip) {
     fragment.js
   );
 
+  zip.file(
+    `${collection.slug}/${fragment.slug}/${fragment.metadata.configPath}`,
+    fragment.config
+  );
+
   logIndent(`fragment ${chalk.reset(fragment.metadata.name)}`);
 }
 
