@@ -58,6 +58,17 @@ describe('compress-generator/compress', () => {
     );
 
     fs.copyFileSync(
+      path.join(__dirname, 'assets', 'config.json'),
+      path.join(
+        tmpDirName,
+        'src',
+        'sample-collection',
+        'sample-fragment',
+        'config.json'
+      )
+    );
+
+    fs.copyFileSync(
       path.join(__dirname, 'assets', 'fragment.json'),
       path.join(
         tmpDirName,
