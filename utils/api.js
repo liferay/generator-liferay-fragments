@@ -345,9 +345,12 @@ const api = {
 
   /**
    * @param {string} fragmentEntryId
-   * @param {{ status: number, name: string, html: string, css: string, js: string }} data
+   * @param {{ status: number, name: string, html: string, css: string, js: string, config: string, previewFileEntryId?: number}} data
    */
-  updateFragmentEntry(fragmentEntryId, { status, name, html, css, js }) {
+  updateFragmentEntry(
+    fragmentEntryId,
+    { status, name, html, css, js, config, previewFileEntryId = 0 }
+  ) {
     return this.postFormData(
       '/api/jsonws/fragment.fragmententry/update-fragment-entry',
       {
@@ -356,7 +359,9 @@ const api = {
         name,
         html,
         css,
-        js
+        js,
+        configuration: config,
+        previewFileEntryId
       },
       {
         headers: { Authorization: `Basic ${this._basicAuthToken}` }
@@ -368,13 +373,13 @@ const api = {
    * @param {string} groupId
    * @param {string} fragmentCollectionId
    * @param {string} fragmentEntryKey
-   * @param {{ status: number, name: string, type: number, html: string, css: string, js: string }} data
+   * @param {{ status: number, name: string, type: number, html: string, css: string, js: string, config: string, previewFileEntryId?: number}} data
    */
   addFragmentEntry(
     groupId,
     fragmentCollectionId,
     fragmentEntryKey,
-    { status, name, type, html, css, js }
+    { status, name, type, html, css, js, config, previewFileEntryId = 0 }
   ) {
     return this.postFormData(
       '/api/jsonws/fragment.fragmententry/add-fragment-entry',
@@ -387,7 +392,9 @@ const api = {
         type,
         html,
         css,
-        js
+        js,
+        configuration: config,
+        previewFileEntryId
       },
       {
         headers: { Authorization: `Basic ${this._basicAuthToken}` }
