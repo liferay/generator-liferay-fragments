@@ -51,7 +51,8 @@ module.exports = class extends CustomGenerator {
         'index.html',
         'main.js',
         'styles.css',
-        'fragment.json'
+        'fragment.json',
+        'config.json'
       ]);
     }
   }
