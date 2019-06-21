@@ -15,6 +15,10 @@ Array [
   "sample-collection",
   "sample-component-fragment",
   Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
     "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
@@ -36,6 +40,10 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
     "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
@@ -57,6 +65,10 @@ Array [
   "sample-collection",
   "sample-section-fragment",
   Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
     "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
@@ -86,6 +98,10 @@ Array [
   "sample-collection",
   "sample-component-fragment",
   Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
     "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
@@ -107,6 +123,10 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
     "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
@@ -128,6 +148,10 @@ Array [
   "sample-collection",
   "sample-section-fragment",
   Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
     "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
@@ -156,5 +180,71 @@ Array [
   "sample-collection",
   "Sample collection name",
   "Sample collection description",
+]
+`;
+
+exports[`import-generator/import updates fragments if they already exist: updateFragmentEntry 1`] = `
+Array [
+  "sample-component-fragment",
+  Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
+    "css": ".fragment { color: inherit; }
+",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample component fragment name",
+    "status": 0,
+  },
+]
+`;
+
+exports[`import-generator/import updates fragments if they already exist: updateFragmentEntry 2`] = `
+Array [
+  "sample-fragment",
+  Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
+    "css": ".fragment { color: inherit; }
+",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample fragment name",
+    "status": 0,
+  },
+]
+`;
+
+exports[`import-generator/import updates fragments if they already exist: updateFragmentEntry 3`] = `
+Array [
+  "sample-section-fragment",
+  Object {
+    "config": "{
+  \\"fields\\": []
+}
+",
+    "css": ".fragment { color: inherit; }
+",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample section fragment name",
+    "status": 0,
+  },
 ]
 `;

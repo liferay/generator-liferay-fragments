@@ -43,7 +43,7 @@ Object {
 exports[`compress-generator/compress appends existing fragments 4`] = `
 Object {
   "dir": false,
-  "fileContent": "{\\"cssPath\\":\\"styles.css\\",\\"htmlPath\\":\\"index.html\\",\\"jsPath\\":\\"main.js\\",\\"name\\":\\"Sample Fragment\\"}",
+  "fileContent": "{\\"cssPath\\":\\"styles.css\\",\\"htmlPath\\":\\"index.html\\",\\"jsPath\\":\\"main.js\\",\\"configPath\\":\\"config.json\\",\\"name\\":\\"Sample Fragment\\"}",
   "relativePath": "sample-collection/sample-fragment/fragment.json",
 }
 `;
@@ -77,5 +77,16 @@ Object {
 const content = fragmentElement.querySelector('.sample-fragment');
 ",
   "relativePath": "sample-collection/sample-fragment/main.js",
+}
+`;
+
+exports[`compress-generator/compress appends existing fragments 8`] = `
+Object {
+  "dir": false,
+  "fileContent": "{
+  \\"fields\\": []
+}
+",
+  "relativePath": "sample-collection/sample-fragment/config.json",
 }
 `;

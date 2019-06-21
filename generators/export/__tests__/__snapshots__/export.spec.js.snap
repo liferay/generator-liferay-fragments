@@ -6,10 +6,12 @@ Array [
     "fragmentCollectionId": "collection-a",
     "fragments": Array [
       Object {
+        "config": undefined,
         "css": ".fragment {}",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
+          "configPath": "config.json",
           "cssPath": "styles.css",
           "htmlPath": "index.html",
           "jsPath": "main.js",
@@ -29,10 +31,12 @@ Array [
     "fragmentCollectionId": "collection-b",
     "fragments": Array [
       Object {
+        "config": undefined,
         "css": ".fragment {}",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
+          "configPath": "config.json",
           "cssPath": "styles.css",
           "htmlPath": "index.html",
           "jsPath": "main.js",

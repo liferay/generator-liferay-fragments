@@ -196,6 +196,7 @@ exports[`app-generator allows adding sample content 8`] = `
 Object {
   "content": "{
   \\"cssPath\\": \\"styles.css\\",
+  \\"configPath\\": \\"config.json\\",
   \\"htmlPath\\": \\"index.html\\",
   \\"jsPath\\": \\"main.js\\",
   \\"name\\": \\"Sample fragment\\",
