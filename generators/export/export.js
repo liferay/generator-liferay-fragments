@@ -50,7 +50,7 @@ async function _exportCollection(groupId, collection) {
       css: fragment.css,
       html: fragment.html,
       js: fragment.js,
-      config: fragment.config
+      config: fragment.configuration
     }))
   };
 }
