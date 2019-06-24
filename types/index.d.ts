@@ -71,7 +71,7 @@ export interface IServerFragment {
   html: string;
   css: string;
   js: string;
-  config: string;
+  configuration: string;
 }
 
 export interface IGetFragmentEntriesOptions {
