@@ -3,7 +3,7 @@
 exports[`fragment-generator generates a new fragment 1`] = `
 "{
   \\"cssPath\\": \\"styles.css\\",
-  \\"configPath\\": \\"config.json\\",
+  \\"fragmentConfigurationPath\\": \\"fragment-configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
   \\"jsPath\\": \\"main.js\\",
   \\"name\\": \\"Sample Fragment\\",

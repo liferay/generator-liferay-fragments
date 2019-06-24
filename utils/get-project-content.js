@@ -80,8 +80,8 @@ function _getCollectionFragments(collectionDirectory) {
             'utf-8'
           ),
 
-          config: fs.readFileSync(
-            path.resolve(directory, metadata.configPath),
+          fragmentConfiguration: fs.readFileSync(
+            path.resolve(directory, metadata.fragmentConfigurationPath),
             'utf-8'
           )
         };

@@ -15,11 +15,11 @@ Array [
   "sample-collection",
   "sample-component-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -40,11 +40,11 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -65,11 +65,11 @@ Array [
   "sample-collection",
   "sample-section-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -98,11 +98,11 @@ Array [
   "sample-collection",
   "sample-component-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -123,11 +123,11 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -148,11 +148,11 @@ Array [
   "sample-collection",
   "sample-section-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -187,11 +187,11 @@ exports[`import-generator/import updates fragments if they already exist: update
 Array [
   "sample-component-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -209,11 +209,11 @@ exports[`import-generator/import updates fragments if they already exist: update
 Array [
   "sample-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -231,11 +231,11 @@ exports[`import-generator/import updates fragments if they already exist: update
 Array [
   "sample-section-fragment",
   Object {
-    "config": "{
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
