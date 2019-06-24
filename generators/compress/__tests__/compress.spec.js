@@ -58,13 +58,13 @@ describe('compress-generator/compress', () => {
     );
 
     fs.copyFileSync(
-      path.join(__dirname, 'assets', 'config.json'),
+      path.join(__dirname, 'assets', 'fragment-configuration.json'),
       path.join(
         tmpDirName,
         'src',
         'sample-collection',
         'sample-fragment',
-        'config.json'
+        'fragment-configuration.json'
       )
     );
 

@@ -43,7 +43,7 @@ Object {
 exports[`compress-generator/compress appends existing fragments 4`] = `
 Object {
   "dir": false,
-  "fileContent": "{\\"cssPath\\":\\"styles.css\\",\\"htmlPath\\":\\"index.html\\",\\"jsPath\\":\\"main.js\\",\\"configPath\\":\\"config.json\\",\\"name\\":\\"Sample Fragment\\"}",
+  "fileContent": "{\\"cssPath\\":\\"styles.css\\",\\"htmlPath\\":\\"index.html\\",\\"jsPath\\":\\"main.js\\",\\"fragmentConfigurationPath\\":\\"fragment-configuration.json\\",\\"name\\":\\"Sample Fragment\\"}",
   "relativePath": "sample-collection/sample-fragment/fragment.json",
 }
 `;
@@ -87,6 +87,6 @@ Object {
   \\"fields\\": []
 }
 ",
-  "relativePath": "sample-collection/sample-fragment/config.json",
+  "relativePath": "sample-collection/sample-fragment/fragment-configuration.json",
 }
 `;

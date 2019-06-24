@@ -9,11 +9,11 @@ Object {
       "fragmentCollectionKey": "sample-collection",
       "fragments": Array [
         Object {
-          "config": "{
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-          "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
 ",
@@ -22,8 +22,8 @@ Object {
 fragmentElement.style.color = 'inherit';
 ",
           "metadata": Object {
-            "configPath": "config.json",
             "cssPath": "sample-fragment.css",
+            "fragmentConfigurationPath": "fragment-configuration.json",
             "htmlPath": "sample-fragment.html",
             "jsPath": "sample-fragment.js",
             "name": "Sample component fragment name",
@@ -32,11 +32,11 @@ fragmentElement.style.color = 'inherit';
           "slug": "sample-component-fragment",
         },
         Object {
-          "config": "{
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-          "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
 ",
@@ -45,8 +45,8 @@ fragmentElement.style.color = 'inherit';
 fragmentElement.style.color = 'inherit';
 ",
           "metadata": Object {
-            "configPath": "config.json",
             "cssPath": "sample-fragment.css",
+            "fragmentConfigurationPath": "fragment-configuration.json",
             "htmlPath": "sample-fragment.html",
             "jsPath": "sample-fragment.js",
             "name": "Sample fragment name",
@@ -54,11 +54,11 @@ fragmentElement.style.color = 'inherit';
           "slug": "sample-fragment",
         },
         Object {
-          "config": "{
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentConfiguration": "{
   \\"fields\\": []
 }
-",
-          "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
 ",
@@ -67,8 +67,8 @@ fragmentElement.style.color = 'inherit';
 fragmentElement.style.color = 'inherit';
 ",
           "metadata": Object {
-            "configPath": "config.json",
             "cssPath": "sample-fragment.css",
+            "fragmentConfigurationPath": "fragment-configuration.json",
             "htmlPath": "sample-fragment.html",
             "jsPath": "sample-fragment.js",
             "name": "Sample section fragment name",

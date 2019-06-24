@@ -6,13 +6,13 @@ Array [
     "fragmentCollectionId": "collection-a",
     "fragments": Array [
       Object {
-        "config": undefined,
         "css": ".fragment {}",
+        "fragmentConfiguration": "{\\"fields\\": []}",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
-          "configPath": "config.json",
           "cssPath": "styles.css",
+          "fragmentConfigurationPath": "fragment-configuration.json",
           "htmlPath": "index.html",
           "jsPath": "main.js",
           "name": "Fragment A",
@@ -31,13 +31,13 @@ Array [
     "fragmentCollectionId": "collection-b",
     "fragments": Array [
       Object {
-        "config": undefined,
         "css": ".fragment {}",
+        "fragmentConfiguration": "{\\"fields\\": []}",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
-          "configPath": "config.json",
           "cssPath": "styles.css",
+          "fragmentConfigurationPath": "fragment-configuration.json",
           "htmlPath": "index.html",
           "jsPath": "main.js",
           "name": "Fragment A",

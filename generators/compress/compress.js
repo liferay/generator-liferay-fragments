@@ -53,8 +53,8 @@ function _addFragmentToZip(collection, fragment, zip) {
   );
 
   zip.file(
-    `${collection.slug}/${fragment.slug}/${fragment.metadata.configPath}`,
-    fragment.config
+    `${collection.slug}/${fragment.slug}/${fragment.metadata.fragmentConfigurationPath}`,
+    fragment.fragmentConfiguration
   );
 
   logIndent(`fragment ${chalk.reset(fragment.metadata.name)}`);
