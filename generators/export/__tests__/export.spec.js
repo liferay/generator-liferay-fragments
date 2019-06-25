@@ -39,7 +39,7 @@ describe('export-generator/export', () => {
           {
             fragmentEntryKey: `${groupId}-${fragmentCollectionId}-fragment-a`,
             fragmentEntryId: `${groupId}-${fragmentCollectionId}-fragment-a`,
-            configuration: '{"fields": []}',
+            configuration: '{"fieldSets": []}',
             type: '1',
             name: 'Fragment A',
             html: '<fragment-a></fragment-a>',

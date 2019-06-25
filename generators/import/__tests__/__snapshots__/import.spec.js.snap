@@ -18,7 +18,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -43,7 +43,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -68,7 +68,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -101,7 +101,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -126,7 +126,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -151,7 +151,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -190,7 +190,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -212,7 +212,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>
@@ -234,7 +234,7 @@ Array [
     "css": ".fragment { color: inherit; }
 ",
     "fragmentConfiguration": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
     "html": "<div>Fragment</div>

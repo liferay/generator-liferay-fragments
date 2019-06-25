@@ -7,7 +7,7 @@ Array [
     "fragments": Array [
       Object {
         "css": ".fragment {}",
-        "fragmentConfiguration": "{\\"fields\\": []}",
+        "fragmentConfiguration": "{\\"fieldSets\\": []}",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -32,7 +32,7 @@ Array [
     "fragments": Array [
       Object {
         "css": ".fragment {}",
-        "fragmentConfiguration": "{\\"fields\\": []}",
+        "fragmentConfiguration": "{\\"fieldSets\\": []}",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
