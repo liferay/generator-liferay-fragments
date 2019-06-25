@@ -84,7 +84,7 @@ exports[`compress-generator/compress appends existing fragments 8`] = `
 Object {
   "dir": false,
   "fileContent": "{
-  \\"fields\\": []
+  \\"fieldSets\\": []
 }
 ",
   "relativePath": "sample-collection/sample-fragment/fragment-configuration.json",
