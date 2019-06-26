@@ -4,14 +4,14 @@ body {
   align-content: stretch;
   margin: 0;
   height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
 }
 
 form {
   color: #000;
-  background-color: #EEE;
+  background-color: #eee;
   border-bottom: solid thin #aaa;
   font-size: 12px;
   box-shadow: inset 0 -1em 2em rgba(0, 0, 0, 0.1);
