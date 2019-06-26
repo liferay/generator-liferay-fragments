@@ -75,7 +75,8 @@
     ]
   },
   "scripts": {
-    "precommit": "npm run test && lint-staged",
+    "precommit": "lint-staged",
+    "format:all": "eslint --quiet --fix $(git ls-files | grep \"\\.\\(js\\)$\") && prettier --loglevel error --write $(git ls-files | grep -v \"\\.\\(js\\)$\")",
     "typecheck": "tsc --allowJs true --checkJs true --esModuleInterop true --module esnext --moduleResolution node --noEmit true --pretty true --resolveJsonModule true --strict true --target esnext types/*",
     "typecheck:all": "npm run typecheck -- $(git ls-files | grep \"\\.\\(js\\)$\")",
     "lint": "eslint ./generators/ ./utils/",
