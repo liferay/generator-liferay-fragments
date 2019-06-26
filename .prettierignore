@@ -1,1 +1,10 @@
+fixtures
+LICENSE
+.editorconfig
+.eslintignore
+.gitattributes
+.gitignore
+.gitkeep
+.prettierignore
 *.ejs
+*.snap
