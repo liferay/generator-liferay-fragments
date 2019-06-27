@@ -103,8 +103,6 @@ After you have finished the development of fragments, they can be distributed as
 
 - `compress`
 
-## References
-
 [1]: https://yeoman.io
 [2]: https://www.npmjs.com
 [3]: https://nodejs.org
