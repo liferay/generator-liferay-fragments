@@ -89,3 +89,87 @@ fragmentElement.style.color = 'inherit';
   },
 }
 `;
+
+exports[`utils/get-project-content matches a project structure 2`] = `
+Object {
+  "basePath": "",
+  "collections": Array [
+    Object {
+      "fragmentCollectionId": "sample-collection",
+      "fragmentCollectionKey": "sample-collection",
+      "fragments": Array [
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentConfiguration": "{
+  \\"fieldSets\\": []
+}
+",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "metadata": Object {
+            "cssPath": "c/s/s/sample-fragment.css",
+            "fragmentConfigurationPath": "fragment-configuration/fragment-configuration.json",
+            "htmlPath": "h/t/m/l/sample-fragment.html",
+            "jsPath": "j/s/sample-fragment.js",
+            "name": "Sample fragment name",
+          },
+          "slug": "sample-fragment",
+        },
+      ],
+      "metadata": Object {
+        "description": "Sample collection description",
+        "name": "Sample collection name",
+      },
+      "slug": "sample-collection",
+    },
+  ],
+  "project": Object {
+    "name": "sample-project-with-custom-paths",
+  },
+}
+`;
+
+exports[`utils/get-project-content matches a project structure 3`] = `
+Object {
+  "basePath": "",
+  "collections": Array [
+    Object {
+      "fragmentCollectionId": "sample-collection",
+      "fragmentCollectionKey": "sample-collection",
+      "fragments": Array [
+        Object {
+          "css": ".fragment { color: inherit; }
+",
+          "fragmentConfiguration": "",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "metadata": Object {
+            "cssPath": "sample-fragment.css",
+            "htmlPath": "sample-fragment.html",
+            "jsPath": "sample-fragment.js",
+            "name": "Sample fragment name",
+          },
+          "slug": "sample-fragment",
+        },
+      ],
+      "metadata": Object {
+        "description": "Sample collection description",
+        "name": "Sample collection name",
+      },
+      "slug": "sample-collection",
+    },
+  ],
+  "project": Object {
+    "name": "sample-project-without-fragment-configuration",
+  },
+}
+`;
