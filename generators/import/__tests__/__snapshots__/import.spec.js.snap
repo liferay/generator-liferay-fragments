@@ -9,6 +9,24 @@ Array [
 ]
 `;
 
+exports[`import-generator/import imports collections to a Liferay Site: addFragmentCollection 2`] = `
+Array [
+  "1234",
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import imports collections to a Liferay Site: addFragmentCollection 3`] = `
+Array [
+  "1234",
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
 exports[`import-generator/import imports fragments to a Liferay site: addFragmentEntry 1`] = `
 Array [
   "1234",
@@ -84,7 +102,70 @@ fragmentElement.style.color = 'inherit';
 ]
 `;
 
+exports[`import-generator/import imports fragments to a Liferay site: addFragmentEntry 4`] = `
+Array [
+  "1234",
+  "sample-collection",
+  "sample-fragment",
+  Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "{
+  \\"fieldSets\\": []
+}
+",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample fragment name",
+    "status": 0,
+    "type": 0,
+  },
+]
+`;
+
+exports[`import-generator/import imports fragments to a Liferay site: addFragmentEntry 5`] = `
+Array [
+  "1234",
+  "sample-collection",
+  "sample-fragment",
+  Object {
+    "css": ".fragment { color: inherit; }
+",
+    "fragmentConfiguration": "",
+    "html": "<div>Fragment</div>
+",
+    "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+    "name": "Sample fragment name",
+    "status": 0,
+    "type": 0,
+  },
+]
+`;
+
 exports[`import-generator/import imports fragments to a Liferay site: updateFragmentCollection 1`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import imports fragments to a Liferay site: updateFragmentCollection 2`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import imports fragments to a Liferay site: updateFragmentCollection 3`] = `
 Array [
   "sample-collection",
   "Sample collection name",
@@ -167,46 +248,10 @@ fragmentElement.style.color = 'inherit';
 ]
 `;
 
-exports[`import-generator/import updates collections if they already exist: updateFragmentCollection 1`] = `
+exports[`import-generator/import updates collections if they already exist: addFragmentEntry 4`] = `
 Array [
+  "1234",
   "sample-collection",
-  "Sample collection name",
-  "Sample collection description",
-]
-`;
-
-exports[`import-generator/import updates fragments if they already exist: updateFragmentCollection 1`] = `
-Array [
-  "sample-collection",
-  "Sample collection name",
-  "Sample collection description",
-]
-`;
-
-exports[`import-generator/import updates fragments if they already exist: updateFragmentEntry 1`] = `
-Array [
-  "sample-component-fragment",
-  Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
-  \\"fieldSets\\": []
-}
-",
-    "html": "<div>Fragment</div>
-",
-    "js": "/* global fragmentElement */
-
-fragmentElement.style.color = 'inherit';
-",
-    "name": "Sample component fragment name",
-    "status": 0,
-  },
-]
-`;
-
-exports[`import-generator/import updates fragments if they already exist: updateFragmentEntry 2`] = `
-Array [
   "sample-fragment",
   Object {
     "css": ".fragment { color: inherit; }
@@ -223,28 +268,77 @@ fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample fragment name",
     "status": 0,
+    "type": 0,
   },
 ]
 `;
 
-exports[`import-generator/import updates fragments if they already exist: updateFragmentEntry 3`] = `
+exports[`import-generator/import updates collections if they already exist: addFragmentEntry 5`] = `
 Array [
-  "sample-section-fragment",
+  "1234",
+  "sample-collection",
+  "sample-fragment",
   Object {
     "css": ".fragment { color: inherit; }
 ",
-    "fragmentConfiguration": "{
-  \\"fieldSets\\": []
-}
-",
+    "fragmentConfiguration": "",
     "html": "<div>Fragment</div>
 ",
     "js": "/* global fragmentElement */
 
 fragmentElement.style.color = 'inherit';
 ",
-    "name": "Sample section fragment name",
+    "name": "Sample fragment name",
     "status": 0,
+    "type": 0,
   },
+]
+`;
+
+exports[`import-generator/import updates collections if they already exist: updateFragmentCollection 1`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import updates collections if they already exist: updateFragmentCollection 2`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import updates collections if they already exist: updateFragmentCollection 3`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import updates fragments if they already exist: updateFragmentCollection 1`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import updates fragments if they already exist: updateFragmentCollection 2`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
+]
+`;
+
+exports[`import-generator/import updates fragments if they already exist: updateFragmentCollection 3`] = `
+Array [
+  "sample-collection",
+  "Sample collection name",
+  "Sample collection description",
 ]
 `;
