@@ -1,11 +1,11 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish 
-to make with the owners of this repository via issue, email, or any other 
+When contributing to this repository, please first discuss the change you wish
+to make with the owners of this repository via issue, email, or any other
 method before making a change.
 
-Please note that we have a code of conduct. Please follow it in all your 
-interactions regarding the project.
+Please note that we have a code of conduct and [code guidelines][1].
+Please follow it in all your interactions regarding the project.
 
 ## Pull Request Process
 
@@ -23,3 +23,5 @@ When you create your contribution, please keep this list in mind:
   but we may publish more requests at once.
 - Create your pull request against master branch and resolve any conflicts if
   necessary.
+
+[1]: https://github.com/liferay/liferay-frontend-guidelines
