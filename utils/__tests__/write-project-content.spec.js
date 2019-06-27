@@ -1,20 +1,33 @@
 const getProjectContent = require('../get-project-content');
 const tmp = require('tmp');
-const getTestFixtures = require('../get-test-fixtures');
 const writeProjectContent = require('../write-project-content');
+const fs = require('fs');
+const path = require('path');
 
 describe('utils/write-project-content', () => {
-  getTestFixtures().forEach(projectPath => {
-    it('writes a project inside a given path', async () => {
-      const tmpDir = tmp.dirSync({ unsafeCleanup: true });
-      const projectContent = getProjectContent(projectPath);
+  const projectCollections = JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, 'assets', 'project-collection.json'),
+      'utf-8'
+    )
+  );
 
-      await writeProjectContent(tmpDir.name, projectContent);
+  it('writes a project inside a given path', async () => {
+    const projectContent = {
+      basePath: __dirname,
+      project: {
+        name: 'sample-project'
+      },
+      collections: projectCollections
+    };
 
-      const newProjectContent = getProjectContent(tmpDir.name);
-      tmpDir.removeCallback();
+    const tmpDir = tmp.dirSync({ unsafeCleanup: true });
 
-      expect(projectContent.collections).toEqual(newProjectContent.collections);
-    });
+    await writeProjectContent(tmpDir.name, projectContent);
+
+    const newProjectContent = getProjectContent(tmpDir.name);
+    tmpDir.removeCallback();
+
+    expect(projectContent.collections).toEqual(newProjectContent.collections);
   });
 });

@@ -2,5 +2,6 @@
   "name": "Sample fragment name",
   "htmlPath": "sample-fragment.html",
   "cssPath": "sample-fragment.css",
-  "jsPath": "sample-fragment.js"
+  "jsPath": "sample-fragment.js",
+  "fragmentConfigurationPath": "fragment-configuration.json"
 }

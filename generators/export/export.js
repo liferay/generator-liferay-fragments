@@ -44,11 +44,13 @@ async function _exportCollection(groupId, collection) {
         name: fragment.name,
         cssPath: 'styles.css',
         htmlPath: 'index.html',
-        jsPath: 'main.js'
+        jsPath: 'main.js',
+        fragmentConfigurationPath: 'fragment-configuration.json'
       },
       css: fragment.css,
       html: fragment.html,
-      js: fragment.js
+      js: fragment.js,
+      fragmentConfiguration: fragment.configuration
     }))
   };
 }

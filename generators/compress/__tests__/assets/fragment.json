@@ -2,5 +2,6 @@
   "cssPath": "styles.css",
   "htmlPath": "index.html",
   "jsPath": "main.js",
+  "fragmentConfigurationPath": "fragment-configuration.json",
   "name": "Sample Fragment"
 }

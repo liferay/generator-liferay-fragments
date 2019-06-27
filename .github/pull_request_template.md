@@ -3,4 +3,4 @@
 > - Any change needs to be discussed before proceeding.
 > - Read contribution guides and be sure you meet them.
 >
-> *You can ignore this if you're fixing a typo or so.*
+> _You can ignore this if you're fixing a typo or so._

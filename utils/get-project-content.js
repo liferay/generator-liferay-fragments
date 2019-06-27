@@ -75,10 +75,39 @@ function _getCollectionFragments(collectionDirectory) {
             'utf-8'
           ),
 
-          js: fs.readFileSync(path.resolve(directory, metadata.jsPath), 'utf-8')
+          js: fs.readFileSync(
+            path.resolve(directory, metadata.jsPath),
+            'utf-8'
+          ),
+
+          fragmentConfiguration: _getFramentConfiguration(
+            directory,
+            metadata.fragmentConfigurationPath
+          )
         };
       }
     );
+}
+
+/**
+ * Gets the fragment configuration from its file, if exist, if not it
+ * returns an empty string
+ * @param {string} directory
+ * @param {string} fragmentConfigurationPath
+ * @return {string} Configuration
+ */
+function _getFramentConfiguration(directory, fragmentConfigurationPath) {
+  if (
+    fragmentConfigurationPath &&
+    fs.existsSync(path.resolve(directory, fragmentConfigurationPath))
+  ) {
+    return fs.readFileSync(
+      path.resolve(directory, fragmentConfigurationPath),
+      'utf-8'
+    );
+  }
+
+  return '';
 }
 
 /**
