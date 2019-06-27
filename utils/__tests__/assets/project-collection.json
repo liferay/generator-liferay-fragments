@@ -1,0 +1,57 @@
+[
+    {
+      "slug": "sample-collection",
+      "fragmentCollectionId": "sample-collection",
+      "fragmentCollectionKey": "sample-collection",
+      "metadata": {
+        "description": "Sample collection description",
+        "name": "Sample collection name"
+      },
+      "fragments": [
+        {
+          "slug": "sample-component-fragment",
+          "metadata": {
+            "name": "Sample component fragment name",
+            "htmlPath": "sample-fragment.html",
+            "cssPath": "sample-fragment.css",
+            "jsPath": "sample-fragment.js",
+            "fragmentConfigurationPath": "fragment-configuration.json",
+            "type": "component"
+          },
+          "html": "<div>Fragment</div>\n",
+          "css": ".fragment { color: inherit; }\n",
+          "js": "/* global fragmentElement */\n\nfragmentElement.style.color = 'inherit';\n",
+          "fragmentConfiguration": "{\n  \"fieldSets\": []\n}\n"
+        },
+        {
+          "slug": "sample-fragment",
+          "metadata": {
+            "name": "Sample fragment name",
+            "htmlPath": "sample-fragment.html",
+            "cssPath": "sample-fragment.css",
+            "jsPath": "sample-fragment.js",
+            "fragmentConfigurationPath": "fragment-configuration.json"
+          },
+          "html": "<div>Fragment</div>\n",
+          "css": ".fragment { color: inherit; }\n",
+          "js": "/* global fragmentElement */\n\nfragmentElement.style.color = 'inherit';\n",
+          "fragmentConfiguration": "{\n  \"fieldSets\": []\n}\n"
+        },
+        {
+          "slug": "sample-section-fragment",
+          "metadata": {
+            "name": "Sample section fragment name",
+            "htmlPath": "sample-fragment.html",
+            "cssPath": "sample-fragment.css",
+            "jsPath": "sample-fragment.js",
+            "fragmentConfigurationPath": "fragment-configuration.json",
+            "type": "section"
+          },
+          "html": "<div>Fragment</div>\n",
+          "css": ".fragment { color: inherit; }\n",
+          "js": "/* global fragmentElement */\n\nfragmentElement.style.color = 'inherit';\n",
+          "fragmentConfiguration": ""
+        }
+      ]
+    }
+]
