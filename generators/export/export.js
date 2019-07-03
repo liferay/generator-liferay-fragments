@@ -45,12 +45,12 @@ async function _exportCollection(groupId, collection) {
         cssPath: 'styles.css',
         htmlPath: 'index.html',
         jsPath: 'main.js',
-        fragmentConfigurationPath: 'fragment-configuration.json'
+        configurationPath: 'configuration.json'
       },
       css: fragment.css,
       html: fragment.html,
       js: fragment.js,
-      fragmentConfiguration: fragment.configuration
+      configuration: fragment.configuration
     }))
   };
 }

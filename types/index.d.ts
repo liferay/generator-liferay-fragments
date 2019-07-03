@@ -36,14 +36,14 @@ export interface IFragment {
     cssPath: string;
     htmlPath: string;
     jsPath: string;
-    fragmentConfigurationPath: string;
+    configurationPath: string;
     name: string;
     type: string;
   };
   css: string;
   html: string;
   js: string;
-  fragmentConfiguration: string;
+  configuration: string;
 }
 
 export interface ICompany {

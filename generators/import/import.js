@@ -45,7 +45,7 @@ function _fragmentHasChanges(existingFragment, fragment) {
     fragment.css !== existingFragment.css ||
     fragment.html !== existingFragment.html ||
     fragment.js !== existingFragment.js ||
-    fragment.fragmentConfiguration !== existingFragment.configuration ||
+    fragment.configuration !== existingFragment.configuration ||
     fragment.metadata.name !== existingFragment.name
   );
 }
@@ -105,7 +105,7 @@ async function _importCollection(groupId, collection) {
  */
 async function _importFragment(groupId, existingCollection, fragment) {
   const { fragmentCollectionId } = existingCollection;
-  const { css, html, js, fragmentConfiguration } = fragment;
+  const { css, html, js, configuration } = fragment;
   const { name } = fragment.metadata;
   const type = _getFragmentTypeId(fragment.metadata.type);
   const fragmentEntryKey = fragment.slug;
@@ -124,7 +124,7 @@ async function _importFragment(groupId, existingCollection, fragment) {
       html,
       css,
       js,
-      fragmentConfiguration
+      configuration
     });
 
     logData('Updated', fragment.metadata.name);
@@ -142,7 +142,7 @@ async function _importFragment(groupId, existingCollection, fragment) {
         html,
         css,
         js,
-        fragmentConfiguration
+        configuration
       }
     );
 

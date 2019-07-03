@@ -9,11 +9,11 @@ Object {
       "fragmentCollectionKey": "sample-collection",
       "fragments": Array [
         Object {
-          "css": ".fragment { color: inherit; }
-",
-          "fragmentConfiguration": "{
+          "configuration": "{
   \\"fieldSets\\": []
 }
+",
+          "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
 ",
@@ -22,8 +22,8 @@ Object {
 fragmentElement.style.color = 'inherit';
 ",
           "metadata": Object {
+            "configurationPath": "configuration.json",
             "cssPath": "sample-fragment.css",
-            "fragmentConfigurationPath": "fragment-configuration.json",
             "htmlPath": "sample-fragment.html",
             "jsPath": "sample-fragment.js",
             "name": "Sample component fragment name",
@@ -32,11 +32,11 @@ fragmentElement.style.color = 'inherit';
           "slug": "sample-component-fragment",
         },
         Object {
-          "css": ".fragment { color: inherit; }
-",
-          "fragmentConfiguration": "{
+          "configuration": "{
   \\"fieldSets\\": []
 }
+",
+          "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
 ",
@@ -45,8 +45,8 @@ fragmentElement.style.color = 'inherit';
 fragmentElement.style.color = 'inherit';
 ",
           "metadata": Object {
+            "configurationPath": "configuration.json",
             "cssPath": "sample-fragment.css",
-            "fragmentConfigurationPath": "fragment-configuration.json",
             "htmlPath": "sample-fragment.html",
             "jsPath": "sample-fragment.js",
             "name": "Sample fragment name",
@@ -54,11 +54,11 @@ fragmentElement.style.color = 'inherit';
           "slug": "sample-fragment",
         },
         Object {
-          "css": ".fragment { color: inherit; }
-",
-          "fragmentConfiguration": "{
+          "configuration": "{
   \\"fieldSets\\": []
 }
+",
+          "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
 ",
@@ -67,8 +67,8 @@ fragmentElement.style.color = 'inherit';
 fragmentElement.style.color = 'inherit';
 ",
           "metadata": Object {
+            "configurationPath": "configuration.json",
             "cssPath": "sample-fragment.css",
-            "fragmentConfigurationPath": "fragment-configuration.json",
             "htmlPath": "sample-fragment.html",
             "jsPath": "sample-fragment.js",
             "name": "Sample section fragment name",
@@ -99,11 +99,11 @@ Object {
       "fragmentCollectionKey": "sample-collection",
       "fragments": Array [
         Object {
-          "css": ".fragment { color: inherit; }
-",
-          "fragmentConfiguration": "{
+          "configuration": "{
   \\"fieldSets\\": []
 }
+",
+          "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
 ",
@@ -112,8 +112,8 @@ Object {
 fragmentElement.style.color = 'inherit';
 ",
           "metadata": Object {
+            "configurationPath": "configuration/configuration.json",
             "cssPath": "c/s/s/sample-fragment.css",
-            "fragmentConfigurationPath": "fragment-configuration/fragment-configuration.json",
             "htmlPath": "h/t/m/l/sample-fragment.html",
             "jsPath": "j/s/sample-fragment.js",
             "name": "Sample fragment name",
@@ -143,9 +143,9 @@ Object {
       "fragmentCollectionKey": "sample-collection",
       "fragments": Array [
         Object {
+          "configuration": "",
           "css": ".fragment { color: inherit; }
 ",
-          "fragmentConfiguration": "",
           "html": "<div>Fragment</div>
 ",
           "js": "/* global fragmentElement */

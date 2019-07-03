@@ -62,7 +62,7 @@ describe('import-generator/import', () => {
             html: fragment.html,
             css: fragment.css,
             js: fragment.js,
-            configuration: fragment.fragmentConfiguration
+            configuration: fragment.configuration
           }))
         )
         .reduce((a, b) => [...a, ...b], []);

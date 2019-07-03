@@ -80,9 +80,9 @@ function _getCollectionFragments(collectionDirectory) {
             'utf-8'
           ),
 
-          fragmentConfiguration: _getFramentConfiguration(
+          configuration: _getFramentConfiguration(
             directory,
-            metadata.fragmentConfigurationPath
+            metadata.configurationPath
           )
         };
       }
@@ -93,18 +93,15 @@ function _getCollectionFragments(collectionDirectory) {
  * Gets the fragment configuration from its file, if exist, if not it
  * returns an empty string
  * @param {string} directory
- * @param {string} fragmentConfigurationPath
+ * @param {string} configurationPath
  * @return {string} Configuration
  */
-function _getFramentConfiguration(directory, fragmentConfigurationPath) {
+function _getFramentConfiguration(directory, configurationPath) {
   if (
-    fragmentConfigurationPath &&
-    fs.existsSync(path.resolve(directory, fragmentConfigurationPath))
+    configurationPath &&
+    fs.existsSync(path.resolve(directory, configurationPath))
   ) {
-    return fs.readFileSync(
-      path.resolve(directory, fragmentConfigurationPath),
-      'utf-8'
-    );
+    return fs.readFileSync(path.resolve(directory, configurationPath), 'utf-8');
   }
 
   return '';

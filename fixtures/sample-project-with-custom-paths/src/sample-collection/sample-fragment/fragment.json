@@ -3,5 +3,5 @@
   "htmlPath": "h/t/m/l/sample-fragment.html",
   "cssPath": "c/s/s/sample-fragment.css",
   "jsPath": "j/s/sample-fragment.js",
-  "fragmentConfigurationPath": "fragment-configuration/fragment-configuration.json"
+  "configurationPath": "configuration/configuration.json"
 }
