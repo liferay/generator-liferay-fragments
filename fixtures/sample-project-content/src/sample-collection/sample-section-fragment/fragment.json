@@ -3,6 +3,6 @@
   "htmlPath": "sample-fragment.html",
   "cssPath": "sample-fragment.css",
   "jsPath": "sample-fragment.js",
-  "fragmentConfigurationPath": "fragment-configuration.json",
+  "configurationPath": "configuration.json",
   "type": "section"
 }

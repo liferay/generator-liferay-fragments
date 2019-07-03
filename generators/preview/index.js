@@ -146,7 +146,7 @@ module.exports = class extends AuthGenerator {
             fragment.css,
             fragment.html,
             fragment.js,
-            fragment.fragmentConfiguration
+            fragment.configuration
           ).then(preview => {
             response.send(preview);
           });

@@ -53,8 +53,8 @@ const _writeProjectFragment = async (
   );
 
   await _updateFile(
-    path.resolve(fragmentBasePath, fragment.metadata.fragmentConfigurationPath),
-    fragment.fragmentConfiguration
+    path.resolve(fragmentBasePath, fragment.metadata.configurationPath),
+    fragment.configuration
   );
 
   await _updateFile(

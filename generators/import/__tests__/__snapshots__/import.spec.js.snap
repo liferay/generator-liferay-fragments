@@ -33,11 +33,11 @@ Array [
   "sample-collection",
   "sample-component-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -58,11 +58,11 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -83,11 +83,11 @@ Array [
   "sample-collection",
   "sample-section-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -108,11 +108,11 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -133,9 +133,9 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
+    "configuration": "",
     "css": ".fragment { color: inherit; }
 ",
-    "fragmentConfiguration": "",
     "html": "<div>Fragment</div>
 ",
     "js": "/* global fragmentElement */
@@ -179,11 +179,11 @@ Array [
   "sample-collection",
   "sample-component-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -204,11 +204,11 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -229,11 +229,11 @@ Array [
   "sample-collection",
   "sample-section-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -254,11 +254,11 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
-    "css": ".fragment { color: inherit; }
-",
-    "fragmentConfiguration": "{
+    "configuration": "{
   \\"fieldSets\\": []
 }
+",
+    "css": ".fragment { color: inherit; }
 ",
     "html": "<div>Fragment</div>
 ",
@@ -279,9 +279,9 @@ Array [
   "sample-collection",
   "sample-fragment",
   Object {
+    "configuration": "",
     "css": ".fragment { color: inherit; }
 ",
-    "fragmentConfiguration": "",
     "html": "<div>Fragment</div>
 ",
     "js": "/* global fragmentElement */
