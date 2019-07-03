@@ -69,7 +69,8 @@ module.exports = class extends AuthGenerator {
       const preview = await this._getPreview(
         '.test {}',
         '<test></test>',
-        'test();'
+        'test();',
+        '{fieldSets:[]}'
       );
 
       if (
@@ -90,13 +91,14 @@ module.exports = class extends AuthGenerator {
    * @param {string} css Fragment's CSS
    * @param {string} html Fragment's HTML
    * @param {string} js Fragments's JS
+   * @param {string} configuration Fragments's configuration
    * @return {Promise<string>} Fragment's generated preview
    */
-  _getPreview(css, html, js) {
+  _getPreview(css, html, js, configuration) {
     const groupId = this._getValue(LIFERAY_GROUPID_VAR);
 
     if (groupId) {
-      return api.renderFragmentPreview(groupId, html, css, js);
+      return api.renderFragmentPreview(groupId, html, css, js, configuration);
     }
 
     return Promise.reject(new Error('GroupId not found'));
@@ -140,11 +142,14 @@ module.exports = class extends AuthGenerator {
         );
 
         if (fragment) {
-          this._getPreview(fragment.css, fragment.html, fragment.js).then(
-            preview => {
-              response.send(preview);
-            }
-          );
+          this._getPreview(
+            fragment.css,
+            fragment.html,
+            fragment.js,
+            fragment.fragmentConfiguration
+          ).then(preview => {
+            response.send(preview);
+          });
         }
       } else {
         response.send('');

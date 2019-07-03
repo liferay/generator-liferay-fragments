@@ -424,8 +424,9 @@ const api = {
    * @param {string} html
    * @param {string} css
    * @param {string} js
+   * @param {string} configuration
    */
-  async renderFragmentPreview(groupId, html, css, js) {
+  async renderFragmentPreview(groupId, html, css, js, configuration) {
     await this.refreshOAuthToken();
 
     return this.postFormData(
@@ -434,7 +435,8 @@ const api = {
         groupId,
         html,
         css,
-        js
+        js,
+        configuration
       },
       {
         headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
