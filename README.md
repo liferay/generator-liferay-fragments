@@ -124,6 +124,9 @@ npm run import:watch
 
 ### Previewing fragments with a Liferay Server
 
+> *Warning*: this functionality is only available with Liferay 7.2 Fixpack 1 or later.
+> You also need to include the marketplace [Oauth 2 Plugin][7] in your Liferay Portal.
+
 Sometimes you may want to see how a fragment will look once it has been imported
 to Liferay. With the `preview` command, you can specify a Liferay Server and see
 your fragments rendered without importing them. Moreover, this command also
@@ -149,3 +152,4 @@ npm run compress
 [4]: https://github.com/lerna
 [5]: https://badge.fury.io/js/generator-liferay-fragments.svg?style=flat
 [6]: https://www.npmjs.com/package/generator-liferay-fragments
+[7]: https://web.liferay.com/marketplace/-/mp/application/109571986
