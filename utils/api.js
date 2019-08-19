@@ -69,12 +69,6 @@ const api = {
    * @return {object|string}
    */
   parseResponse(response) {
-    if (response.statusCode >= 400) {
-      throw new Error(
-        `${response.statusCode} ${response.body.substr(0, 100)}...`
-      );
-    }
-
     /** @type {object|string} */
     let responseBody = response.body;
 
@@ -95,6 +89,12 @@ const api = {
       if ('error' in responseBody) {
         throw new Error(responseBody.error);
       }
+    }
+
+    if (response.statusCode >= 400) {
+      throw new Error(
+        `${response.statusCode} ${response.body.substr(0, 100)}...`
+      );
     }
 
     return responseBody;

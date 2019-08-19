@@ -1,5 +1,5 @@
 const api = require('../../utils/api');
-const { logData, logNewLine } = require('../../utils/log');
+const { logData, logErrorData, logNewLine } = require('../../utils/log');
 
 /**
  * Fragment types
@@ -117,36 +117,40 @@ async function _importFragment(groupId, existingCollection, fragment) {
     fragment
   );
 
-  if (existingFragment && _fragmentHasChanges(existingFragment, fragment)) {
-    await api.updateFragmentEntry(existingFragment.fragmentEntryId, {
-      status,
-      name,
-      html,
-      css,
-      js,
-      configuration
-    });
-
-    logData('Updated', fragment.metadata.name);
-  } else if (existingFragment) {
-    logData('Up-to-date', fragment.metadata.name);
-  } else {
-    existingFragment = await api.addFragmentEntry(
-      groupId,
-      fragmentCollectionId,
-      fragmentEntryKey,
-      {
+  try {
+    if (existingFragment && _fragmentHasChanges(existingFragment, fragment)) {
+      await api.updateFragmentEntry(existingFragment.fragmentEntryId, {
         status,
         name,
-        type,
         html,
         css,
         js,
         configuration
-      }
-    );
+      });
 
-    logData('Added', fragment.metadata.name);
+      logData('Updated', fragment.metadata.name);
+    } else if (existingFragment) {
+      logData('Up-to-date', fragment.metadata.name);
+    } else {
+      existingFragment = await api.addFragmentEntry(
+        groupId,
+        fragmentCollectionId,
+        fragmentEntryKey,
+        {
+          status,
+          name,
+          type,
+          html,
+          css,
+          js,
+          configuration
+        }
+      );
+
+      logData('Added', fragment.metadata.name);
+    }
+  } catch (error) {
+    logErrorData('Error', fragment.metadata.name, error.toString());
   }
 }
 

@@ -28,11 +28,25 @@ function logData(message, data) {
  * @param {string} message Message content
  */
 function logError(message) {
-  if (process.env.NODE_ENV !== 'test') {
+  console.log(chalk.red(message));
+}
+
+/**
+ * Logs error data with an optional description
+ * @param {string} message
+ * @param {string} data
+ * @param {string} [description='']
+ */
+function logErrorData(message, data, description) {
+  if (description) {
     console.log('');
   }
 
-  console.log(chalk.red(message));
+  console.log(`${chalk.bold(chalk.red(message))} ${chalk.bold(data)}`);
+
+  if (description) {
+    console.log(description);
+  }
 }
 
 /**
@@ -68,6 +82,7 @@ module.exports = {
   log,
   logData,
   logError,
+  logErrorData,
   logIndent,
   logNewLine,
   logSecondary
