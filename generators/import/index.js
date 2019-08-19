@@ -4,7 +4,7 @@ const path = require('path');
 const AuthGenerator = require('../../utils/auth-generator');
 const getProjectContent = require('../../utils/get-project-content');
 const importProject = require('./import');
-const { log, logData } = require('../../utils/log');
+const { log } = require('../../utils/log');
 
 const {
   IMPORT_WATCH_VAR,
@@ -88,10 +88,10 @@ module.exports = class extends AuthGenerator {
           console.clear();
           log(`Watching changes in ${watchPath}`);
           log('Press Ctrl+C to stop watching\n');
-          logData('Host', host);
-          logData('User', user);
-          logData('Company', company.name);
-          logData('Group', group.name);
+          log('Host', { data: host });
+          log('User', { data: user });
+          log('Company', { data: company.name });
+          log('Group', { data: group.name });
 
           queuedUpdate = false;
           updatePromise = this._importProject();

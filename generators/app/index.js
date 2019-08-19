@@ -1,5 +1,5 @@
 const CustomGenerator = require('../../utils/custom-generator');
-const { log, logNewLine } = require('../../utils/log');
+const { log } = require('../../utils/log');
 const voca = require('voca');
 
 const {
@@ -60,7 +60,7 @@ class AppGenerator extends CustomGenerator {
    * @inheritdoc
    */
   writing() {
-    logNewLine('Creating directory');
+    log('Creating directory', { newLine: true });
 
     this._copyFiles(this.destinationRoot(), ['src/.gitkeep']);
 
@@ -77,7 +77,7 @@ class AppGenerator extends CustomGenerator {
    * @inheritdoc
    */
   install() {
-    logNewLine('Installing dependencies');
+    log('Installing dependencies', { newLine: true });
 
     this.npmInstall(['yo', 'generator-liferay-fragments'], {
       loglevel: 'silent',
@@ -91,7 +91,7 @@ class AppGenerator extends CustomGenerator {
    */
   end() {
     if (this._getValue(ADD_SAMPLE_CONTENT_VAR)) {
-      logNewLine('Adding sample content');
+      log('Adding sample content', { newLine: true });
 
       this.composeWith(require.resolve('../collection'), {
         [COLLECTION_NAME_VAR]: COLLECTION_NAME_SAMPLE,
@@ -104,7 +104,7 @@ class AppGenerator extends CustomGenerator {
     }
 
     setTimeout(() => {
-      logNewLine('Done!');
+      log('Done!', { newLine: true, level: 'success' });
       log("You're ready to create fragments.");
     }, 100);
   }

@@ -1,9 +1,8 @@
-const chalk = require('chalk');
 const fs = require('fs');
 const JSZip = require('jszip');
 const path = require('path');
 const getProjectContent = require('../../utils/get-project-content');
-const { log, logNewLine, logIndent, logSecondary } = require('../../utils/log');
+const { log } = require('../../utils/log');
 
 /**
  * Adds a given collection object to the given zip file.
@@ -17,7 +16,11 @@ function _addCollectionToZip(collection, zip) {
     JSON.stringify(collection.metadata)
   );
 
-  logNewLine(`Collection ${chalk.reset(collection.metadata.name)}`);
+  log('Collection', {
+    newLine: true,
+    level: 'success',
+    data: collection.metadata.name
+  });
 
   collection.fragments.forEach(fragment => {
     _addFragmentToZip(collection, fragment, zip);
@@ -57,7 +60,11 @@ function _addFragmentToZip(collection, fragment, zip) {
     fragment.configuration
   );
 
-  logIndent(`fragment ${chalk.reset(fragment.metadata.name)}`);
+  log('fragment', {
+    level: 'success',
+    indent: true,
+    data: fragment.metadata.name
+  });
 }
 
 /**
@@ -71,7 +78,7 @@ const compress = basePath =>
     const zip = new JSZip();
     const project = getProjectContent(basePath);
 
-    logNewLine('Generating zip file');
+    log('Generating zip file', { newLine: true });
 
     project.collections.forEach(collection => {
       _addCollectionToZip(collection, zip);
@@ -92,9 +99,14 @@ const compress = basePath =>
         )
       )
       .on('finish', () => {
-        logNewLine('build/liferay-fragments.zip file created ');
-        log('Import them to your liferay-portal to start using them:');
-        logSecondary(
+        log('build/liferay-fragments.zip file created', {
+          newLine: true,
+          level: 'success'
+        });
+        log('Import them to your liferay-portal to start using them:', {
+          level: 'success'
+        });
+        log(
           'https://dev.liferay.com/discover/portal/-/knowledge_base/7-1/exporting-and-importing-fragments#importing-collections'
         );
         resolve(zip);

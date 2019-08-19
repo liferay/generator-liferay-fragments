@@ -1,5 +1,5 @@
 const api = require('../../utils/api');
-const { logData, logErrorData, logNewLine } = require('../../utils/log');
+const { log } = require('../../utils/log');
 
 /**
  * Fragment types
@@ -22,15 +22,19 @@ const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
  * @param {import('../../types/index').IProject} project
  */
 async function importProject(groupId, project) {
-  logData('\nImporting project', project.project.name);
+  log('Importing project', { data: project.project.name, newLine: true });
 
-  await Promise.all(
-    project.collections.map(async collection => {
-      await _importCollection(groupId, collection);
-    })
-  );
+  try {
+    await Promise.all(
+      project.collections.map(async collection => {
+        await _importCollection(groupId, collection);
+      })
+    );
 
-  logNewLine('Project sent successfully');
+    log('Project sent successfully', { newLine: true, level: 'success' });
+  } catch (error) {
+    log('Project sent with errors', { newLine: true, level: 'error' });
+  }
 }
 
 /**
@@ -71,7 +75,7 @@ function _getFragmentTypeId(type) {
  * @param {import('../../types/index').ICollection} collection
  */
 async function _importCollection(groupId, collection) {
-  logData('Importing collection', collection.metadata.name);
+  log('Importing collection', { data: collection.metadata.name });
 
   const { name, description } = collection.metadata;
   const { slug } = collection;
@@ -128,9 +132,9 @@ async function _importFragment(groupId, existingCollection, fragment) {
         configuration
       });
 
-      logData('Updated', fragment.metadata.name);
+      log('Updated', { data: fragment.metadata.name });
     } else if (existingFragment) {
-      logData('Up-to-date', fragment.metadata.name);
+      log('Up-to-date', { data: fragment.metadata.name });
     } else {
       existingFragment = await api.addFragmentEntry(
         groupId,
@@ -147,10 +151,16 @@ async function _importFragment(groupId, existingCollection, fragment) {
         }
       );
 
-      logData('Added', fragment.metadata.name);
+      log('Added', { data: fragment.metadata.name, level: 'success' });
     }
   } catch (error) {
-    logErrorData('Error', fragment.metadata.name, error.toString());
+    log('Error', {
+      data: fragment.metadata.name,
+      description: error.toString(),
+      level: 'error'
+    });
+
+    throw error;
   }
 }
 

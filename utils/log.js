@@ -5,85 +5,49 @@ const chalk = require('chalk');
 /**
  * Logs a simple message to the console
  * @param {string} message Message content
+ * @param {object} [options]
+ * @param {boolean} [options.newLine=false]
+ * @param {boolean} [options.indent=false]
+ * @param {'info'|'success'|'error'} [options.level='info']
+ * @param {string} [options.data='']
+ * @param {string} [options.description='']
  */
-function log(message) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(chalk.green(message));
-  }
-}
+function log(message, options = {}) {
+  if (process.env.NODE_ENV !== 'test' || options.level === 'error') {
+    let _message = message;
 
-/**
- * Logs data with different styles
- * @param {string} message Main message
- * @param {string} data Associated data
- */
-function logData(message, data) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(`${chalk.green(message)} ${chalk.bold(data)}`);
-  }
-}
+    switch (options.level) {
+      case 'success':
+        _message = chalk.green(_message);
+        break;
+      case 'error':
+        _message = chalk.bold(chalk.red(_message));
+        break;
+      default:
+        _message = chalk.reset(_message);
+        break;
+    }
 
-/**
- * Logs an error message to the console
- * @param {string} message Message content
- */
-function logError(message) {
-  console.log(chalk.red(message));
-}
+    if (options.newLine || options.description) {
+      _message = `\n${_message}`;
+    }
 
-/**
- * Logs error data with an optional description
- * @param {string} message
- * @param {string} data
- * @param {string} [description='']
- */
-function logErrorData(message, data, description) {
-  if (description) {
-    console.log('');
-  }
+    if (options.indent) {
+      _message = `  ${_message}`;
+    }
 
-  console.log(`${chalk.bold(chalk.red(message))} ${chalk.bold(data)}`);
+    if (options.data) {
+      _message = `${_message} ${chalk.bold(options.data)}`;
+    }
 
-  if (description) {
-    console.log(description);
-  }
-}
+    console.log(_message);
 
-/**
- * Logs an indented message to the console
- * @param {string} message Message content
- */
-function logIndent(message) {
-  log(`  ${message}`);
-}
-
-/**
- * Logs a new line, then a simple message to the console
- * @param {string} message Message content
- */
-function logNewLine(message) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log('');
-    log(message);
-  }
-}
-
-/**
- * Logs a secondary styled message to the console
- * @param {string} message Message content
- */
-function logSecondary(message) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(message);
+    if (options.description) {
+      console.log(options.description);
+    }
   }
 }
 
 module.exports = {
-  log,
-  logData,
-  logError,
-  logErrorData,
-  logIndent,
-  logNewLine,
-  logSecondary
+  log
 };
