@@ -92,9 +92,7 @@ const api = {
     }
 
     if (response.statusCode >= 400) {
-      throw new Error(
-        `${response.statusCode} ${response.body.substr(0, 100)}...`
-      );
+      throw new Error(`${response.statusCode} ${response.body}`);
     }
 
     return responseBody;
