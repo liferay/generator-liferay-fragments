@@ -6,7 +6,7 @@ const path = require('path');
 const api = require('../../utils/api');
 const AuthGenerator = require('../../utils/auth-generator');
 const getProjectContent = require('../../utils/get-project-content');
-const { log, logSecondary, logData, logError } = require('../../utils/log');
+const { log, LOG_LEVEL } = require('../../utils/log');
 
 const {
   LIFERAY_HOST_VAR,
@@ -34,28 +34,32 @@ module.exports = class extends AuthGenerator {
   async asking() {
     await super.asking();
 
-    log('\nChecking site compatibility...');
+    log('Checking site compatibility...', { newLine: true });
 
     if (await this._checkPreviewCompatibility()) {
-      log('Found compatible Liferay Server');
+      log('Found compatible Liferay Server', { level: LOG_LEVEL.success });
 
       this._runExpressServer();
       this._runSocketServer();
       this._watchChanges();
 
-      logSecondary('\nDevelopment server connected to liferay');
-      logSecondary('Visit preview URL and start developing to your fragments');
+      log('\nDevelopment server connected to liferay');
+      log('Visit preview URL and start developing to your fragments');
 
-      log('');
-      logData('Liferay Server URL', this._getValue(LIFERAY_HOST_VAR) || '');
-      logData('Group ID', this._getValue(LIFERAY_GROUPID_VAR) || '');
-      logData('Preview URL', `http://localhost:${DEV_SERVER_PORT}`);
+      log('Liferay Server URL', {
+        newLine: true,
+        data: this._getValue(LIFERAY_HOST_VAR) || ''
+      });
+
+      log('Group ID', { data: this._getValue(LIFERAY_GROUPID_VAR) || '' });
+      log('Preview URL', { data: `http://localhost:${DEV_SERVER_PORT}` });
     } else {
-      logError(
+      log(
         '\nYour Liferay Server cannot generate fragment previews.' +
           '\nUpdate it to a more recent version to use this feature.' +
           '\n\nIf this an error, please report an issue at' +
-          '\nhttps://www.npmjs.com/package/generator-liferay-fragments'
+          '\nhttps://www.npmjs.com/package/generator-liferay-fragments',
+        { level: LOG_LEVEL.error }
       );
     }
   }

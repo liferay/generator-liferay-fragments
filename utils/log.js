@@ -3,72 +3,61 @@
 const chalk = require('chalk');
 
 /**
+ * @type {{ [key: string]: 'LOG_LEVEL_INFO'|'LOG_LEVEL_SUCCESS'|'LOG_LEVEL_ERROR' }}
+ */
+const LOG_LEVEL = {
+  info: 'LOG_LEVEL_INFO',
+  success: 'LOG_LEVEL_SUCCESS',
+  error: 'LOG_LEVEL_ERROR'
+};
+
+/**
  * Logs a simple message to the console
  * @param {string} message Message content
+ * @param {object} [options]
+ * @param {boolean} [options.newLine=false]
+ * @param {boolean} [options.indent=false]
+ * @param {'LOG_LEVEL_INFO'|'LOG_LEVEL_SUCCESS'|'LOG_LEVEL_ERROR'} [options.level=LOG_LEVEL.info]
+ * @param {string} [options.data='']
+ * @param {string} [options.description='']
  */
-function log(message) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(chalk.green(message));
-  }
-}
+function log(message, options = {}) {
+  if (process.env.NODE_ENV !== 'test' || options.level === LOG_LEVEL.error) {
+    let _message = message;
 
-/**
- * Logs data with different styles
- * @param {string} message Main message
- * @param {string} data Associated data
- */
-function logData(message, data) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(`${chalk.green(message)} ${chalk.bold(data)}`);
-  }
-}
+    switch (options.level) {
+      case LOG_LEVEL.success:
+        _message = chalk.green(_message);
+        break;
+      case LOG_LEVEL.error:
+        _message = chalk.bold(chalk.red(_message));
+        break;
+      default:
+        _message = chalk.reset(_message);
+        break;
+    }
 
-/**
- * Logs an error message to the console
- * @param {string} message Message content
- */
-function logError(message) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log('');
-  }
+    if (options.newLine || options.description) {
+      _message = `\n${_message}`;
+    }
 
-  console.log(chalk.red(message));
-}
+    if (options.indent) {
+      _message = `  ${_message}`;
+    }
 
-/**
- * Logs an indented message to the console
- * @param {string} message Message content
- */
-function logIndent(message) {
-  log(`  ${message}`);
-}
+    if (options.data) {
+      _message = `${_message} ${chalk.bold(options.data)}`;
+    }
 
-/**
- * Logs a new line, then a simple message to the console
- * @param {string} message Message content
- */
-function logNewLine(message) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log('');
-    log(message);
-  }
-}
+    console.log(_message);
 
-/**
- * Logs a secondary styled message to the console
- * @param {string} message Message content
- */
-function logSecondary(message) {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(message);
+    if (options.description) {
+      console.log(options.description);
+    }
   }
 }
 
 module.exports = {
-  log,
-  logData,
-  logError,
-  logIndent,
-  logNewLine,
-  logSecondary
+  LOG_LEVEL,
+  log
 };

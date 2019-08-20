@@ -1,5 +1,5 @@
 const api = require('../../utils/api');
-const { logData } = require('../../utils/log');
+const { log } = require('../../utils/log');
 
 /**
  * Exports existing collections from Liferay server to the current project
@@ -8,7 +8,11 @@ const { logData } = require('../../utils/log');
  * @return {Promise<import('../../types').ICollection[]>}
  */
 async function exportCollections(groupId, project) {
-  logData('\nExporting collections to', project.project.name);
+  log('Exporting collections to', {
+    data: project.project.name,
+    newLine: true
+  });
+
   const collections = await api.getFragmentCollections(groupId);
 
   return Promise.all(
@@ -23,7 +27,7 @@ async function exportCollections(groupId, project) {
  * @return {Promise<import('../../types/index').ICollection>}
  */
 async function _exportCollection(groupId, collection) {
-  logData('Exporting collection', collection.name);
+  log('Exporting collection', { data: collection.name });
 
   const fragments = await api.getFragmentEntries(
     groupId,
