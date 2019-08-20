@@ -1,7 +1,7 @@
 const api = require('./api');
 const CustomGenerator = require('./custom-generator');
 const getSiteGroups = require('./get-site-groups');
-const { log } = require('./log');
+const { log, LOG_LEVEL } = require('./log');
 
 const {
   LIFERAY_COMPANYID_MESSAGE,
@@ -101,13 +101,13 @@ module.exports = class AuthGenerator extends CustomGenerator {
     try {
       await this._wrapApi();
       await this._checkConnection();
-      log('Connection successful\n', { level: 'success' });
+      log('Connection successful\n', { level: LOG_LEVEL.success });
     } catch (error) {
       log(
         'Connection unsuccessful,\n' +
           'please check your host information.\n\n' +
           `${error.toString()}\n`,
-        { level: 'error' }
+        { level: LOG_LEVEL.error }
       );
 
       delete this.options[LIFERAY_HOST_VAR];

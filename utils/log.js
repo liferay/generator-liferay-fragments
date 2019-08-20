@@ -3,24 +3,33 @@
 const chalk = require('chalk');
 
 /**
+ * @type {{ [key: string]: 'LOG_LEVEL_INFO'|'LOG_LEVEL_SUCCESS'|'LOG_LEVEL_ERROR' }}
+ */
+const LOG_LEVEL = {
+  info: 'LOG_LEVEL_INFO',
+  success: 'LOG_LEVEL_SUCCESS',
+  error: 'LOG_LEVEL_ERROR'
+};
+
+/**
  * Logs a simple message to the console
  * @param {string} message Message content
  * @param {object} [options]
  * @param {boolean} [options.newLine=false]
  * @param {boolean} [options.indent=false]
- * @param {'info'|'success'|'error'} [options.level='info']
+ * @param {'LOG_LEVEL_INFO'|'LOG_LEVEL_SUCCESS'|'LOG_LEVEL_ERROR'} [options.level=LOG_LEVEL.info]
  * @param {string} [options.data='']
  * @param {string} [options.description='']
  */
 function log(message, options = {}) {
-  if (process.env.NODE_ENV !== 'test' || options.level === 'error') {
+  if (process.env.NODE_ENV !== 'test' || options.level === LOG_LEVEL.error) {
     let _message = message;
 
     switch (options.level) {
-      case 'success':
+      case LOG_LEVEL.success:
         _message = chalk.green(_message);
         break;
-      case 'error':
+      case LOG_LEVEL.error:
         _message = chalk.bold(chalk.red(_message));
         break;
       default:
@@ -49,5 +58,6 @@ function log(message, options = {}) {
 }
 
 module.exports = {
+  LOG_LEVEL,
   log
 };

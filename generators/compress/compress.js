@@ -2,7 +2,7 @@ const fs = require('fs');
 const JSZip = require('jszip');
 const path = require('path');
 const getProjectContent = require('../../utils/get-project-content');
-const { log } = require('../../utils/log');
+const { log, LOG_LEVEL } = require('../../utils/log');
 
 /**
  * Adds a given collection object to the given zip file.
@@ -18,7 +18,7 @@ function _addCollectionToZip(collection, zip) {
 
   log('Collection', {
     newLine: true,
-    level: 'success',
+    level: LOG_LEVEL.success,
     data: collection.metadata.name
   });
 
@@ -61,7 +61,7 @@ function _addFragmentToZip(collection, fragment, zip) {
   );
 
   log('fragment', {
-    level: 'success',
+    level: LOG_LEVEL.success,
     indent: true,
     data: fragment.metadata.name
   });
@@ -101,14 +101,17 @@ const compress = basePath =>
       .on('finish', () => {
         log('build/liferay-fragments.zip file created', {
           newLine: true,
-          level: 'success'
+          level: LOG_LEVEL.success
         });
+
         log('Import them to your liferay-portal to start using them:', {
-          level: 'success'
+          level: LOG_LEVEL.success
         });
+
         log(
           'https://dev.liferay.com/discover/portal/-/knowledge_base/7-1/exporting-and-importing-fragments#importing-collections'
         );
+
         resolve(zip);
       });
   });

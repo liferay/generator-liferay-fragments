@@ -1,5 +1,5 @@
 const api = require('../../utils/api');
-const { log } = require('../../utils/log');
+const { log, LOG_LEVEL } = require('../../utils/log');
 
 /**
  * Fragment types
@@ -31,9 +31,12 @@ async function importProject(groupId, project) {
       })
     );
 
-    log('Project sent successfully', { newLine: true, level: 'success' });
+    log('Project sent successfully', {
+      newLine: true,
+      level: LOG_LEVEL.success
+    });
   } catch (error) {
-    log('Project sent with errors', { newLine: true, level: 'error' });
+    log('Project sent with errors', { newLine: true, level: LOG_LEVEL.error });
   }
 }
 
@@ -151,13 +154,13 @@ async function _importFragment(groupId, existingCollection, fragment) {
         }
       );
 
-      log('Added', { data: fragment.metadata.name, level: 'success' });
+      log('Added', { data: fragment.metadata.name, level: LOG_LEVEL.success });
     }
   } catch (error) {
     log('Error', {
       data: fragment.metadata.name,
       description: error.toString(),
-      level: 'error'
+      level: LOG_LEVEL.error
     });
 
     throw error;

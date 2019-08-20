@@ -1,5 +1,5 @@
 const CustomGenerator = require('../../utils/custom-generator');
-const { log } = require('../../utils/log');
+const { log, LOG_LEVEL } = require('../../utils/log');
 const voca = require('voca');
 
 const {
@@ -104,7 +104,7 @@ class AppGenerator extends CustomGenerator {
     }
 
     setTimeout(() => {
-      log('Done!', { newLine: true, level: 'success' });
+      log('Done!', { newLine: true, level: LOG_LEVEL.success });
       log("You're ready to create fragments.");
     }, 100);
   }
