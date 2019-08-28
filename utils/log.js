@@ -42,7 +42,10 @@ function log(message, options = {}) {
     }
 
     if (options.indent) {
-      _message = `  ${_message}`;
+      _message = _message
+        .split('\n')
+        .map(line => `  ${line}`)
+        .join('\n');
     }
 
     if (options.data) {
