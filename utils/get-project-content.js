@@ -1,6 +1,7 @@
 const fs = require('fs');
 const glob = require('glob');
 const path = require('path');
+const { log, LOG_LEVEL } = require('../utils/log');
 
 /**
  * @param {string} jsonPath
@@ -61,24 +62,32 @@ function _getCollectionFragments(collectionDirectory) {
           path.resolve(directory, 'fragment.json')
         );
 
+        /**
+         * @param {string} filePath
+         * @return {string}
+         */
+        const readFile = filePath => {
+          try {
+            return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
+          } catch (error) {
+            log(`✘ Fragment ${metadata.name || directory}`, {
+              level: LOG_LEVEL.error,
+              newLine: true
+            });
+
+            log(`File ${filePath} was not found`);
+
+            return '';
+          }
+        };
+
         return {
           slug: path.basename(directory),
           metadata,
 
-          html: fs.readFileSync(
-            path.resolve(directory, metadata.htmlPath),
-            'utf-8'
-          ),
-
-          css: fs.readFileSync(
-            path.resolve(directory, metadata.cssPath),
-            'utf-8'
-          ),
-
-          js: fs.readFileSync(
-            path.resolve(directory, metadata.jsPath),
-            'utf-8'
-          ),
+          html: readFile(metadata.htmlPath),
+          css: readFile(metadata.cssPath),
+          js: readFile(metadata.jsPath),
 
           configuration: _getFramentConfiguration(
             directory,
