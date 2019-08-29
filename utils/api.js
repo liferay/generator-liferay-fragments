@@ -407,6 +407,7 @@ const api = {
    * @param {string} js
    * @param {string} configuration
    */
+  // eslint-disable-next-line max-params
   async renderFragmentPreview(groupId, html, css, js, configuration) {
     await this.refreshOAuthToken();
 
