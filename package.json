@@ -80,7 +80,9 @@
     "typecheck": "tsc --allowJs true --checkJs true --esModuleInterop true --module esnext --moduleResolution node --noEmit true --pretty true --resolveJsonModule true --strict true --target esnext types/*",
     "typecheck:all": "npm run typecheck -- $(git ls-files | grep \"\\.\\(js\\)$\")",
     "lint": "eslint ./generators/ ./utils/",
-    "test": "jest"
+    "test": "jest",
+    "preversion": "git ch -b new-version && npm run typecheck:all && npm run lint",
+    "postversion": "git push && git push --tags && git ch master && git br -D new-version"
   },
   "repository": "p2kmgcl/generator-liferay-fragments",
   "license": "MIT"
