@@ -205,7 +205,7 @@ function _logImportErrors(collectionRequests, fragmentRequests) {
       log(`✘ Collection ${name} was not imported`, { level: LOG_LEVEL.error });
 
       if (collectionRequest.error) {
-        log(collectionRequest.error.toString());
+        log(collectionRequest.error.message);
       }
     }
 
@@ -224,7 +224,7 @@ function _logImportErrors(collectionRequests, fragmentRequests) {
           );
 
           if (fragmentRequest.error) {
-            log(fragmentRequest.error.toString(), { indent: true });
+            log(fragmentRequest.error.message, { indent: true });
           }
         } else if (fragmentRequest.status === 'ignored') {
           log(

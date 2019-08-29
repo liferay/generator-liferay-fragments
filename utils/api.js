@@ -82,6 +82,34 @@ const api = {
     }
 
     if (typeof responseBody === 'object') {
+      if (responseBody.error && responseBody.error.type) {
+        const errorMessage = responseBody.error.message;
+        let message = '';
+
+        switch (responseBody.error.type) {
+          case 'com.liferay.fragment.exception.FragmentEntryNameException':
+            message = `Error in fragment.json: ${errorMessage}`;
+            break;
+          case 'com.liferay.fragment.exception.FragmentCollectionNameException':
+            message = `Error in collection.json: ${errorMessage}`;
+            break;
+          case 'com.liferay.fragment.exception.FragmentEntryConfigurationException':
+            message = `Error in fragment configuration:\n${errorMessage}`;
+            break;
+          case 'com.liferay.fragment.exception.DuplicateFragmentEntryKeyException':
+            message =
+              'Error in fragment.json: There is already a fragment with the same name';
+            break;
+          default:
+            message = errorMessage;
+            break;
+        }
+
+        if (message) {
+          throw new Error(message);
+        }
+      }
+
       if ('exception' in responseBody) {
         throw new Error(responseBody.exception);
       }
