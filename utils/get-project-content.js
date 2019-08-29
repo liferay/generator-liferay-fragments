@@ -23,8 +23,23 @@ function _getProjectCollections(basePath) {
       /** @param {string} collectionJSON */
       collectionJSON => path.resolve(collectionJSON, '..')
     )
+    .filter(directory => {
+      try {
+        _readJSONSync(path.resolve(directory, 'collection.json'));
+        return true;
+      } catch (error) {
+        log(`✘ Invalid ${directory}/collection.json, collection ignored`, {
+          level: 'LOG_LEVEL_ERROR'
+        });
+
+        return false;
+      }
+    })
     .map(
-      /** @param {string} directory */
+      /**
+       * @param {string} directory
+       * @return {import('../types/index').ICollection}
+       */
       directory => {
         const metadata = _readJSONSync(
           path.resolve(directory, 'collection.json')
@@ -35,7 +50,6 @@ function _getProjectCollections(basePath) {
         return {
           slug,
           fragmentCollectionId: slug,
-          fragmentCollectionKey: slug,
           metadata,
           fragments
         };
@@ -55,6 +69,18 @@ function _getCollectionFragments(collectionDirectory) {
       /** @param {string} fragmentJSON */
       fragmentJSON => path.resolve(fragmentJSON, '..')
     )
+    .filter(directory => {
+      try {
+        _readJSONSync(path.resolve(directory, 'fragment.json'));
+        return true;
+      } catch (error) {
+        log(`✘ Invalid ${directory}/fragment.json, fragment ignored`, {
+          level: 'LOG_LEVEL_ERROR'
+        });
+
+        return false;
+      }
+    })
     .map(
       /** @param {string} directory */
       directory => {
