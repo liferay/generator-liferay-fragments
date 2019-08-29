@@ -161,14 +161,11 @@ function _logImportSummary(collectionRequests, fragmentRequests) {
   statusLog(addedCount, 'added successfully');
   statusLog(updatedCount, 'updated successfully');
   statusLog(upToDateCount, 'already up to date');
-
   statusLog(
-    ignoredCount,
-    'ignored due to collection errors',
+    ignoredCount + errorCount,
+    'not imported due to errors',
     'LOG_LEVEL_ERROR'
   );
-
-  statusLog(errorCount, 'ignored due to fragment errors', 'LOG_LEVEL_ERROR');
 }
 
 /**
@@ -221,7 +218,8 @@ function _logImportErrors(collectionRequests, fragmentRequests) {
         if (fragmentRequest.status === 'error') {
           log(
             `✘ Fragment ${fragmentRequest.fragment.metadata.name ||
-              fragmentRequest.fragment.slug} was not imported`,
+              fragmentRequest.fragment
+                .slug} was not imported due to fragment errors`,
             { level: LOG_LEVEL.error, indent: true }
           );
 
@@ -229,10 +227,13 @@ function _logImportErrors(collectionRequests, fragmentRequests) {
             log(fragmentRequest.error.toString(), { indent: true });
           }
         } else if (fragmentRequest.status === 'ignored') {
-          log(`↷ Fragment ${fragmentRequest.fragment.metadata.name} ignored`, {
-            level: LOG_LEVEL.error,
-            indent: true
-          });
+          log(
+            `↷ Fragment ${fragmentRequest.fragment.metadata.name} was not imported due to collection errors`,
+            {
+              level: LOG_LEVEL.error,
+              indent: true
+            }
+          );
         } else if (fragmentRequest.status === 'added') {
           log(`🞧 Fragment ${fragmentRequest.fragment.metadata.name} added`, {
             level: LOG_LEVEL.success,
