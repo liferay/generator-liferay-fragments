@@ -2,7 +2,6 @@
   {
     "slug": "sample-collection",
     "fragmentCollectionId": "sample-collection",
-    "fragmentCollectionKey": "sample-collection",
     "metadata": {
       "description": "Sample collection description",
       "name": "Sample collection name"
