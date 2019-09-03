@@ -1,12 +1,6 @@
 const api = require('./api');
 
 /**
- * Global site descriptiveName
- * @type {string}
- */
-const GLOBAL_SITE_DESCRIPTIVE_NAME = 'Global';
-
-/**
  * @param {import('../types/index').ISiteGroup} group Site group
  * @return {boolean} True if the give group is a staging group
  */
@@ -50,9 +44,7 @@ const getSiteGroups = async companyId => {
   const stagingGroups = await api.getStagingCompanies(companyId);
   const siteGroups = await api.getSiteGroups(companyId);
 
-  return mergeStagingGroups(siteGroups, stagingGroups).filter(
-    group => group.descriptiveName !== GLOBAL_SITE_DESCRIPTIVE_NAME
-  );
+  return mergeStagingGroups(siteGroups, stagingGroups);
 };
 
 module.exports = getSiteGroups;
