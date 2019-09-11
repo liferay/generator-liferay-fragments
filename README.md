@@ -28,6 +28,12 @@ npm install -g yo
 npm install -g generator-liferay-fragments
 ```
 
+When connecting to **Liferay DXP 7.2.0**, **Liferay Portal CE 7.2.0** or a previous version, please use version **1.1.0**. Newer versions depend on a new authentication mechanism that was not ready when those were released.
+
+```bash
+npm install -g generator-liferay-fragments@1.1.0
+```
+
 The first step is always to generate a new project. You must do this even if you
 will be exporting the fragments from a Liferay instance:
 
@@ -41,6 +47,8 @@ simple questions. Then you can just cd to this new project and start working.
 ```bash
 cd my-new-fragments-project
 ```
+
+
 
 ## Usage
 
