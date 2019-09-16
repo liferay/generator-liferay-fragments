@@ -211,13 +211,15 @@ const api = {
       }
     );
 
-    await this.postFormData(
-      '/api/jsonws/user/get-current-user',
-      {},
-      {
-        headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
-      }
-    );
+    if (this._oauthToken.accessToken) {
+      await this.postFormData(
+        '/api/jsonws/user/get-current-user',
+        {},
+        {
+          headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
+        }
+      );
+    }
   },
 
   /**
