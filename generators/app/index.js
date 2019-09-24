@@ -76,19 +76,6 @@ class AppGenerator extends CustomGenerator {
   /**
    * @inheritdoc
    */
-  install() {
-    log('Installing dependencies', { newLine: true });
-
-    this.npmInstall(['yo', 'generator-liferay-fragments'], {
-      loglevel: 'silent',
-      progress: false,
-      saveDev: true
-    });
-  }
-
-  /**
-   * @inheritdoc
-   */
   end() {
     if (this._getValue(ADD_SAMPLE_CONTENT_VAR)) {
       log('Adding sample content', { newLine: true });

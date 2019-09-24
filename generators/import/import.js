@@ -235,12 +235,12 @@ function _logImportErrors(collectionRequests, fragmentRequests) {
             }
           );
         } else if (fragmentRequest.status === 'added') {
-          log(`🞧 Fragment ${fragmentRequest.fragment.metadata.name} added`, {
+          log(`✚ Fragment ${fragmentRequest.fragment.metadata.name} added`, {
             level: LOG_LEVEL.success,
             indent: true
           });
         } else if (fragmentRequest.status === 'updated') {
-          log(`⭮ Fragment ${fragmentRequest.fragment.metadata.name} updated`, {
+          log(`✎ Fragment ${fragmentRequest.fragment.metadata.name} updated`, {
             level: LOG_LEVEL.success,
             indent: true
           });
