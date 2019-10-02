@@ -1,6 +1,6 @@
 {
   "name": "generator-liferay-fragments",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Yeoman generator for creating and maintaining Liferay Fragment projects",
   "homepage": "https://www.npmjs.com/package/generator-liferay-fragments",
   "author": {
@@ -81,8 +81,8 @@
     "typecheck:all": "npm run typecheck -- $(git ls-files | grep \"\\.\\(js\\)$\")",
     "lint": "eslint ./generators/ ./utils/",
     "test": "jest",
-    "preversion": "git ch -b new-version && npm run typecheck:all && npm run lint",
-    "postversion": "git push && git push --tags && git ch master && git br -D new-version"
+    "preversion": "git checkout -b new-version && npm run typecheck:all && npm run lint",
+    "postversion": "git push && git push --tags && git checkout master && git branch -D new-version"
   },
   "repository": "p2kmgcl/generator-liferay-fragments",
   "license": "MIT"
