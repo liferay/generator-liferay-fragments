@@ -152,4 +152,4 @@ npm run compress
 [4]: https://github.com/lerna
 [5]: https://badge.fury.io/js/generator-liferay-fragments.svg?style=flat
 [6]: https://www.npmjs.com/package/generator-liferay-fragments
-[7]: https://web.liferay.com/marketplace/-/mp/application/109571986
+[7]: https://web.liferay.com/es/marketplace/-/mp/application/109572023
