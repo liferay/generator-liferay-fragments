@@ -57,6 +57,8 @@ module.exports = class extends AuthGenerator {
       log(
         '\nYour Liferay Server cannot generate fragment previews.' +
           '\nUpdate it to a more recent version to use this feature.' +
+          '\nCheck your OAuth2 plugin version too, it should be >= 2.0.0.' +
+          '\nDownload a new version here: https://web.liferay.com/es/marketplace/-/mp/application/109571986.' +
           '\n\nIf this an error, please report an issue at' +
           '\nhttps://www.npmjs.com/package/generator-liferay-fragments',
         { level: LOG_LEVEL.error }
