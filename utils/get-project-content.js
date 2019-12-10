@@ -107,7 +107,7 @@ function _getCollectionFragments(collectionDirectory) {
           }
         };
 
-        return {
+        const fragment = {
           slug: path.basename(directory),
           metadata,
 
@@ -120,6 +120,19 @@ function _getCollectionFragments(collectionDirectory) {
             metadata.configurationPath
           )
         };
+
+        if (
+          metadata.thumbnailPath &&
+          fs.existsSync(path.resolve(directory, metadata.thumbnailPath))
+        ) {
+          return Object.assign(fragment, {
+            thumbnail: fs.createReadStream(
+              path.resolve(directory, metadata.thumbnailPath)
+            )
+          });
+        }
+
+        return fragment;
       }
     );
 }
