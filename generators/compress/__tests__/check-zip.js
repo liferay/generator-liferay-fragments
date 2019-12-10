@@ -4,8 +4,9 @@ const JSZip = require('jszip');
 
 /**
  * @param {string} tmpDirName
+ * @param {string[]} ignoredFiles
  */
-module.exports = async function(tmpDirName) {
+module.exports = async function(tmpDirName, ignoredFiles = []) {
   const data = fs.readFileSync(
     path.join(tmpDirName, 'build', 'liferay-fragments.zip')
   );
@@ -16,6 +17,13 @@ module.exports = async function(tmpDirName) {
   const promises = [];
 
   zip.forEach((relativePath, file) => {
+    if (
+      !file.dir &&
+      ignoredFiles.some(ignoredFile => file.name.endsWith(ignoredFile))
+    ) {
+      return;
+    }
+
     const readable = file.nodeStream();
     let fileContent = '';
 
