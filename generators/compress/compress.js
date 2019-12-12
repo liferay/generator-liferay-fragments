@@ -60,6 +60,13 @@ function _addFragmentToZip(collection, fragment, zip) {
     fragment.configuration
   );
 
+  if (fragment.thumbnail) {
+    zip.file(
+      `${collection.slug}/${fragment.slug}/${fragment.metadata.thumbnailPath}`,
+      fragment.thumbnail
+    );
+  }
+
   log('fragment', {
     level: LOG_LEVEL.success,
     indent: true,

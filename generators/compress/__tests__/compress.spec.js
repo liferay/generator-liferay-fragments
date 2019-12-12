@@ -24,7 +24,7 @@ describe('compress-generator/compress', () => {
   });
 
   afterEach(() => {
-    tmpDir.removeCallback();
+    // TmpDir.removeCallback();
   });
 
   it('generates a zip file', async () => {
@@ -42,7 +42,7 @@ describe('compress-generator/compress', () => {
     );
 
     await compress(tmpDirName);
-    await checkZip(tmpDirName);
+    await checkZip(tmpDirName, ['thumbnail.png']);
   });
 
   it('appends existing fragments', async () => {
@@ -112,7 +112,18 @@ describe('compress-generator/compress', () => {
       )
     );
 
+    fs.copyFileSync(
+      path.join(__dirname, 'assets', 'thumbnail.png'),
+      path.join(
+        tmpDirName,
+        'src',
+        'sample-collection',
+        'sample-fragment',
+        'thumbnail.png'
+      )
+    );
+
     await compress(tmpDirName);
-    await checkZip(tmpDirName);
+    await checkZip(tmpDirName, ['thumbnail.png']);
   });
 });

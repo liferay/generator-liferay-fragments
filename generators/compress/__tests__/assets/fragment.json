@@ -3,5 +3,6 @@
   "htmlPath": "index.html",
   "jsPath": "main.js",
   "configurationPath": "configuration.json",
-  "name": "Sample Fragment"
+  "name": "Sample Fragment",
+  "thumbnailPath": "thumbnail.png"
 }

@@ -62,6 +62,7 @@ export interface IFragment {
     htmlPath: string;
     jsPath: string;
     configurationPath: string;
+    thumbnailPath?: string;
     name: string;
     type: string;
   };
@@ -69,6 +70,7 @@ export interface IFragment {
   html: string;
   js: string;
   configuration: string;
+  thumbnail?: NodeJS.ReadableStream;
 }
 
 export interface ICompany {
