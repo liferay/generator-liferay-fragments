@@ -1,3 +1,7 @@
+module.exports.ADD_DEPLOYMENT_DESCRIPTOR_DEFAULT = true;
+module.exports.ADD_DEPLOYMENT_DESCRIPTOR_MESSAGE = 'Add deployment descriptor?';
+module.exports.ADD_DEPLOYMENT_DESCRIPTOR_VAR = 'addDeploymentDescriptor';
+
 module.exports.ADD_SAMPLE_CONTENT_DEFAULT = true;
 module.exports.ADD_SAMPLE_CONTENT_MESSAGE = 'Add sample content?';
 module.exports.ADD_SAMPLE_CONTENT_VAR = 'addSampleContent';
@@ -17,6 +21,16 @@ module.exports.COLLECTION_NAME_VAR = 'collectionName';
 
 module.exports.COLLECTION_SLUG_SAMPLE = 'sample-collection';
 module.exports.COLLECTION_SLUG_VAR = 'collectionSlug';
+
+module.exports.DEPLOYMENT_DESCRIPTOR_COMPANY_DEFAULT = 'liferay.com';
+module.exports.DEPLOYMENT_DESCRIPTOR_COMPANY_MESSAGE =
+  'Deployment descriptor company Web ID?';
+module.exports.DEPLOYMENT_DESCRIPTOR_COMPANY_VAR = 'companyWebId';
+
+module.exports.DEPLOYMENT_DESCRIPTOR_GROUP_DEFAULT = 'Guest';
+module.exports.DEPLOYMENT_DESCRIPTOR_GROUP_MESSAGE =
+  'Deployment descriptor group key?';
+module.exports.DEPLOYMENT_DESCRIPTOR_GROUP_VAR = 'groupKey';
 
 module.exports.FRAGMENT_COLLECTION_SLUG_MESSAGE = 'Choose a collection';
 module.exports.FRAGMENT_COLLECTION_SLUG_VAR = 'fragmentCollectionSlug';
