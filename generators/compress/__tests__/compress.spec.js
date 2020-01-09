@@ -28,7 +28,7 @@ describe('compress-generator/compress', () => {
   });
 
   it('generates a zip file', async () => {
-    await compress(tmpDirName);
+    await compress(tmpDirName, {});
     await checkZip(tmpDirName);
   });
 
@@ -41,7 +41,7 @@ describe('compress-generator/compress', () => {
       path.join(tmpDirName, 'src', 'sample-collection', 'collection.json')
     );
 
-    await compress(tmpDirName);
+    await compress(tmpDirName, {});
     await checkZip(tmpDirName, ['thumbnail.png']);
   });
 
@@ -123,7 +123,7 @@ describe('compress-generator/compress', () => {
       )
     );
 
-    await compress(tmpDirName);
+    await compress(tmpDirName, {});
     await checkZip(tmpDirName, ['thumbnail.png']);
   });
 });
