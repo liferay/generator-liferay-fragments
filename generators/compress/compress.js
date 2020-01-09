@@ -1,6 +1,11 @@
 const fs = require('fs');
 const JSZip = require('jszip');
 const path = require('path');
+const {
+  ADD_DEPLOYMENT_DESCRIPTOR_VAR,
+  DEPLOYMENT_DESCRIPTOR_COMPANY_VAR,
+  DEPLOYMENT_DESCRIPTOR_GROUP_VAR
+} = require('../../utils/constants');
 const getProjectContent = require('../../utils/get-project-content');
 const { log, LOG_LEVEL } = require('../../utils/log');
 
@@ -25,6 +30,41 @@ function _addCollectionToZip(collection, zip) {
   collection.fragments.forEach(fragment => {
     _addFragmentToZip(collection, fragment, zip);
   });
+}
+
+/**
+ * Adds a deployment descriptor object to the given zip file.
+ * The zip file will be modified
+ * @param {object} options Generator parameters
+ * @param {JSZip} zip Zip file to be modified
+ */
+function _addDeploymentDescriptor(options, zip) {
+  const deploymentDescriptorCompany =
+    options[DEPLOYMENT_DESCRIPTOR_COMPANY_VAR];
+  const deploymentDescriptorGroup = options[DEPLOYMENT_DESCRIPTOR_GROUP_VAR];
+
+  const deploymentDescriptor = Object.assign({});
+
+  if (
+    deploymentDescriptorCompany &&
+    deploymentDescriptorCompany.length > 0 &&
+    deploymentDescriptorCompany !== '*'
+  ) {
+    deploymentDescriptor[
+      DEPLOYMENT_DESCRIPTOR_COMPANY_VAR
+    ] = deploymentDescriptorCompany;
+
+    if (deploymentDescriptorGroup && deploymentDescriptorGroup.length > 0) {
+      deploymentDescriptor[
+        DEPLOYMENT_DESCRIPTOR_GROUP_VAR
+      ] = deploymentDescriptorGroup;
+    }
+  }
+
+  zip.file(
+    'liferay-deploy-fragments.json',
+    JSON.stringify(deploymentDescriptor)
+  );
 }
 
 /**
@@ -78,9 +118,10 @@ function _addFragmentToZip(collection, fragment, zip) {
  * Compress a whole project from a basePath with all it's
  * fragments and collections.
  * @param {string} basePath Base path to use as project
+ * @param {object} options Generator parameters
  * @return {Promise<JSZip>} Promise with the generated zip
  */
-const compress = basePath =>
+const compress = (basePath, options) =>
   new Promise(resolve => {
     const zip = new JSZip();
     const project = getProjectContent(basePath);
@@ -90,6 +131,10 @@ const compress = basePath =>
     project.collections.forEach(collection => {
       _addCollectionToZip(collection, zip);
     });
+
+    if (options[ADD_DEPLOYMENT_DESCRIPTOR_VAR]) {
+      _addDeploymentDescriptor(options, zip);
+    }
 
     try {
       fs.mkdirSync(path.join(basePath, 'build'));
