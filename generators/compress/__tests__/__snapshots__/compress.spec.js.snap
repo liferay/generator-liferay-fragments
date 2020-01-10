@@ -90,3 +90,11 @@ Object {
   "relativePath": "sample-collection/sample-fragment/configuration.json",
 }
 `;
+
+exports[`compress-generator/compress generates a zip file 1`] = `
+Object {
+  "dir": false,
+  "fileContent": "{\\"companyWebId\\":\\"liferay.com\\",\\"groupKey\\":\\"Guest\\"}",
+  "relativePath": "liferay-deploy-fragments.json",
+}
+`;
