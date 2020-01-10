@@ -4,6 +4,11 @@ const path = require('path');
 // @ts-ignore
 const tmp = require('tmp');
 const checkZip = require('./check-zip');
+const {
+  ADD_DEPLOYMENT_DESCRIPTOR_VAR,
+  DEPLOYMENT_DESCRIPTOR_COMPANY_VAR,
+  DEPLOYMENT_DESCRIPTOR_GROUP_VAR
+} = require('../../../utils/constants');
 
 describe('compress-generator/compress', () => {
   // @ts-ignore
@@ -28,7 +33,19 @@ describe('compress-generator/compress', () => {
   });
 
   it('generates a zip file', async () => {
-    await compress(tmpDirName, {});
+    await compress(tmpDirName, {
+      [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: 'true',
+      [DEPLOYMENT_DESCRIPTOR_COMPANY_VAR]: 'liferay.com',
+      [DEPLOYMENT_DESCRIPTOR_GROUP_VAR]: 'Guest'
+    });
+    await checkZip(tmpDirName);
+  });
+
+  it('appends deployment descriptor', async () => {
+    await compress(tmpDirName, {
+      companyWebId: 'liferay.com',
+      groupKey: 'Guest'
+    });
     await checkZip(tmpDirName);
   });
 
