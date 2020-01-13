@@ -326,6 +326,7 @@ async function _importFragment(groupId, existingCollection, fragment) {
   const type = _getFragmentTypeId(fragment.metadata.type);
   const fragmentEntryKey = fragment.slug;
   const status = 0;
+  let previewFileEntryId = 0;
 
   try {
     let existingFragment = await _getExistingFragment(
@@ -334,6 +335,15 @@ async function _importFragment(groupId, existingCollection, fragment) {
       fragment
     );
 
+    if (fragment.metadata.thumbnailPath) {
+      previewFileEntryId = await api.uploadThumbnail(
+        groupId,
+        fragmentEntryKey,
+        fragment.metadata.thumbnailPath,
+        existingFragment ? existingFragment.previewFileEntryId : '0'
+      );
+    }
+
     if (existingFragment && _fragmentHasChanges(existingFragment, fragment)) {
       await api.updateFragmentEntry(existingFragment.fragmentEntryId, {
         status,
@@ -341,7 +351,8 @@ async function _importFragment(groupId, existingCollection, fragment) {
         html,
         css,
         js,
-        configuration
+        configuration,
+        previewFileEntryId
       });
 
       return ['updated', existingFragment];
@@ -362,7 +373,8 @@ async function _importFragment(groupId, existingCollection, fragment) {
         html,
         css,
         js,
-        configuration
+        configuration,
+        previewFileEntryId
       }
     );
 
