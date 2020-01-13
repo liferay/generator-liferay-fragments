@@ -1,5 +1,12 @@
 const util = require('util');
+const path = require('path');
 const request = require('request');
+const mime = require('mime-types');
+const fs = require('fs');
+const {
+  FRAGMENTS_PORTLET_ID,
+  PORTLET_FILE_REPOSITORY
+} = require('./constants');
 
 const api = {
   _host: '',
@@ -395,6 +402,104 @@ const api = {
         headers: { Authorization: `Basic ${this._basicAuthToken}` }
       }
     );
+  },
+
+  /**
+   * @param {string} groupId
+   * @param {string} fragmentEntryKey
+   * @param {string} thumbnailPath
+   * @param {string} previewFileEntryId
+   */
+  async uploadThumbnail(
+    groupId,
+    fragmentEntryKey,
+    thumbnailPath,
+    previewFileEntryId = '0'
+  ) {
+    const bytes = JSON.stringify([...fs.readFileSync(thumbnailPath)]);
+
+    const filename = `${groupId}_${fragmentEntryKey}_${path.basename(
+      thumbnailPath
+    )}`;
+
+    let fileEntry;
+
+    const repository = await this.postFormData(
+      '/api/jsonws/repository/get-repository',
+      {
+        groupId,
+        portletId: FRAGMENTS_PORTLET_ID
+      },
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
+    )
+      .then(response => response)
+      .catch(async () => {
+        const classNameId = await this.postFormData(
+          '/api/jsonws/classname/fetch-class-name',
+          {
+            value: PORTLET_FILE_REPOSITORY
+          },
+          {
+            headers: { Authorization: `Basic ${this._basicAuthToken}` }
+          }
+        ).then(response => response.classNameId);
+
+        return this.postFormData(
+          '/api/jsonws/repository/add-repository',
+          {
+            groupId,
+            classNameId: classNameId,
+            parentFolderId: 0,
+            name: FRAGMENTS_PORTLET_ID,
+            description: '',
+            portletId: FRAGMENTS_PORTLET_ID,
+            typeSettingsProperties: JSON.stringify({})
+          },
+          {
+            headers: { Authorization: `Basic ${this._basicAuthToken}` }
+          }
+        ).then(response => response);
+      });
+
+    if (Number(previewFileEntryId) > 0) {
+      fileEntry = this.postFormData(
+        '/api/jsonws/dlapp/update-file-entry',
+        {
+          fileEntryId: previewFileEntryId,
+          sourceFileName: filename,
+          mimeType: mime.lookup(filename),
+          title: filename,
+          description: '',
+          changeLog: '',
+          dlVersionNumberIncrease: 'NONE',
+          bytes
+        },
+        {
+          headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        }
+      ).then(response => response);
+    } else {
+      fileEntry = this.postFormData(
+        '/api/jsonws/dlapp/add-file-entry',
+        {
+          repositoryId: repository.repositoryId,
+          folderId: repository.dlFolderId,
+          sourceFileName: filename,
+          mimeType: mime.lookup(filename),
+          title: filename,
+          description: '',
+          changeLog: '',
+          bytes
+        },
+        {
+          headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        }
+      ).then(response => response.fileEntryId);
+    }
+
+    return fileEntry;
   },
 
   /**
