@@ -99,6 +99,7 @@ export interface IServerFragment {
   css: string;
   js: string;
   configuration: string;
+  previewFileEntryId: string;
 }
 
 export interface IGetFragmentEntriesOptions {
