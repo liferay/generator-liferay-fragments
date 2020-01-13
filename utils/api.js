@@ -1,5 +1,8 @@
 const util = require('util');
+const path = require('path');
 const request = require('request');
+const mime = require('mime-types');
+const fs = require('fs');
 
 const api = {
   _host: '',
@@ -395,6 +398,65 @@ const api = {
         headers: { Authorization: `Basic ${this._basicAuthToken}` }
       }
     );
+  },
+
+  /**
+   * @param {string} groupId
+   * @param {string} fragmentEntryKey
+   * @param {string} thumbnailPath
+   * @param {string} previewFileEntryId
+   */
+  uploadThumbnail(
+    groupId,
+    fragmentEntryKey,
+    thumbnailPath,
+    previewFileEntryId = '0'
+  ) {
+    const bytes = JSON.stringify([...fs.readFileSync(thumbnailPath)]);
+
+    const filename = `${groupId}_${fragmentEntryKey}_${path.basename(
+      thumbnailPath
+    )}`;
+
+    let fileEntry;
+
+    if (Number(previewFileEntryId) > 0) {
+      fileEntry = this.postFormData(
+        '/api/jsonws/dlapp/update-file-entry',
+        {
+          fileEntryId: previewFileEntryId,
+          sourceFileName: filename,
+          mimeType: mime.lookup(filename),
+          title: filename,
+          description: '',
+          changeLog: '',
+          dlVersionNumberIncrease: 'NONE',
+          bytes
+        },
+        {
+          headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        }
+      ).then(response => response.fileEntryId);
+    } else {
+      fileEntry = this.postFormData(
+        '/api/jsonws/dlapp/add-file-entry',
+        {
+          repositoryId: groupId,
+          folderId: 0,
+          sourceFileName: filename,
+          mimeType: mime.lookup(filename),
+          title: filename,
+          description: '',
+          changeLog: '',
+          bytes
+        },
+        {
+          headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        }
+      ).then(response => response.fileEntryId);
+    }
+
+    return fileEntry;
   },
 
   /**
