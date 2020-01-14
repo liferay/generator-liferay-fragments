@@ -46,6 +46,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample component fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 1,
   },
@@ -71,6 +72,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
@@ -96,6 +98,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample section fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
@@ -121,6 +124,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
@@ -143,6 +147,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
@@ -192,6 +197,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample component fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 1,
   },
@@ -217,6 +223,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
@@ -242,6 +249,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample section fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
@@ -267,6 +275,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
@@ -289,6 +298,7 @@ Array [
 fragmentElement.style.color = 'inherit';
 ",
     "name": "Sample fragment name",
+    "previewFileEntryId": 0,
     "status": 0,
     "type": 0,
   },
