@@ -2,7 +2,9 @@ const util = require('util');
 const path = require('path');
 const request = require('request');
 const mime = require('mime-types');
+const FormData = require('form-data');
 const fs = require('fs');
+const parseUrl = require('url').parse;
 const {
   FRAGMENTS_PORTLET_ID,
   PORTLET_FILE_REPOSITORY
@@ -533,6 +535,76 @@ const api = {
         headers: { Authorization: `Basic ${this._basicAuthToken}` }
       }
     );
+  },
+
+  /**
+   * @param {string} basePath
+   * @param {string} groupId
+   */
+  // eslint-disable-next-line max-params
+  async importZip(basePath, groupId) {
+    await this.refreshOAuthToken();
+
+    const formData = new FormData();
+
+    formData.append(
+      'file',
+      fs.createReadStream(
+        path.resolve(basePath, 'build', 'liferay-fragments.zip')
+      )
+    );
+
+    formData.append('groupId', groupId);
+
+    const params = parseUrl(
+      `${this._host}/c/portal/fragment/import_fragment_entries`
+    );
+
+    const options = Object.assign(
+      {},
+      {
+        host: params.hostname,
+        path: params.pathname,
+        port: params.port,
+        protocol: params.protocol
+      },
+      {
+        headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` },
+        method: 'POST'
+      }
+    );
+
+    return new Promise(function(resolve, reject) {
+      formData.submit(options, function(error, response) {
+        if (error) {
+          reject(error);
+        } else if (
+          !response.statusCode ||
+          response.statusCode < 200 ||
+          response.statusCode >= 300
+        ) {
+          reject(new Error('statusCode=' + response.statusCode));
+        } else {
+          /** @type {any[]} */
+          let body = [];
+
+          response.on('data', function(chunk) {
+            body.push(chunk);
+          });
+
+          response.on('end', function() {
+            try {
+              body = JSON.parse(Buffer.concat(body).toString());
+            } catch (e) {
+              reject(e);
+              return;
+            }
+
+            resolve(body);
+          });
+        }
+      });
+    });
   },
 
   /**
