@@ -1,5 +1,8 @@
 const api = require('../../utils/api');
 const { log, LOG_LEVEL } = require('../../utils/log');
+const compress = require('../compress/compress');
+
+const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../utils/constants');
 
 /**
  * Fragment types
@@ -36,80 +39,133 @@ async function importProject(groupId, project) {
    */
   let fragmentRequests = [];
 
-  collectionRequests = project.collections.map(collection => {
-    /**
-     * @type {import('../../types/index').ICollectionRequest}
-     */
-    const collectionRequest = {
-      collection,
-      existingCollection: undefined,
-      error: undefined,
-      status: 'pending',
-      promise: undefined
-    };
+  // Try to import using Struts action first
 
-    collectionRequest.promise = _importCollection(groupId, collection)
-      .then(existingCollection => {
-        collectionRequest.existingCollection = existingCollection;
-        collectionRequest.status = 'success';
-      })
-      .catch(error => {
-        collectionRequest.error = error;
-        collectionRequest.status = 'error';
-      });
+  /** @type {any} */
+  const compressOptions = {};
 
-    return collectionRequest;
-  });
+  compressOptions[ADD_DEPLOYMENT_DESCRIPTOR_VAR] = false;
 
-  await Promise.all(
-    collectionRequests.map(collectionRequest => collectionRequest.promise)
-  );
+  compress(project.basePath, compressOptions)
+    .then(zip => {
+      if (Object.keys(zip.files).length > 0) {
+        api.importZip(project.basePath, groupId).then(response => {
+          if (
+            response.error ||
+            (response.invalidFragmentEntryNames &&
+              response.invalidFragmentEntryNames.length > 0)
+          ) {
+            throw new Error();
+          }
+        });
 
-  fragmentRequests = collectionRequests
-    .map(collectionRequest =>
-      collectionRequest.collection.fragments.map(fragment => {
+        collectionRequests = project.collections.map(collection => {
+          return {
+            collection,
+            existingCollection: undefined,
+            error: undefined,
+            status: 'success',
+            promise: undefined
+          };
+        });
+
+        fragmentRequests = collectionRequests
+          .map(collectionRequest =>
+            collectionRequest.collection.fragments.map(fragment => {
+              /**
+               * @type {import('../../types/index').IFragmentRequest}
+               */
+              const fragmentRequest = {
+                collection: collectionRequest.collection,
+                fragment,
+                existingFragment: undefined,
+                promise: undefined,
+                error: undefined,
+                status: 'updated'
+              };
+
+              return fragmentRequest;
+            })
+          )
+          .reduce((a, b) => [...a, ...b], []);
+      }
+    })
+    .catch(async () => {
+      collectionRequests = project.collections.map(collection => {
         /**
-         * @type {import('../../types/index').IFragmentRequest}
+         * @type {import('../../types/index').ICollectionRequest}
          */
-        const fragmentRequest = {
-          collection: collectionRequest.collection,
-          fragment,
-          existingFragment: undefined,
-          promise: undefined,
+        const collectionRequest = {
+          collection,
+          existingCollection: undefined,
           error: undefined,
-          status: 'pending'
+          status: 'pending',
+          promise: undefined
         };
 
-        if (
-          collectionRequest.status === 'success' &&
-          collectionRequest.existingCollection
-        ) {
-          fragmentRequest.promise = _importFragment(
-            groupId,
-            collectionRequest.existingCollection,
-            fragment
-          )
-            .then(([status, existingFragment]) => {
-              fragmentRequest.status = status;
-              fragmentRequest.existingFragment = existingFragment;
-            })
-            .catch(error => {
-              fragmentRequest.status = 'error';
-              fragmentRequest.error = error;
-            });
-        } else {
-          fragmentRequest.promise = Promise.resolve();
-          fragmentRequest.status = 'ignored';
-        }
+        collectionRequest.promise = _importCollection(groupId, collection)
+          .then(existingCollection => {
+            collectionRequest.existingCollection = existingCollection;
+            collectionRequest.status = 'success';
+          })
+          .catch(error => {
+            collectionRequest.error = error;
+            collectionRequest.status = 'error';
+          });
 
-        return fragmentRequest;
-      })
-    )
-    .reduce((a, b) => [...a, ...b], []);
+        return collectionRequest;
+      });
 
-  await Promise.all(
-    fragmentRequests.map(fragmentRequest => fragmentRequest.promise)
-  );
+      await Promise.all(
+        collectionRequests.map(collectionRequest => collectionRequest.promise)
+      );
+
+      fragmentRequests = collectionRequests
+        .map(collectionRequest =>
+          collectionRequest.collection.fragments.map(fragment => {
+            /**
+             * @type {import('../../types/index').IFragmentRequest}
+             */
+            const fragmentRequest = {
+              collection: collectionRequest.collection,
+              fragment,
+              existingFragment: undefined,
+              promise: undefined,
+              error: undefined,
+              status: 'pending'
+            };
+
+            if (
+              collectionRequest.status === 'success' &&
+              collectionRequest.existingCollection
+            ) {
+              fragmentRequest.promise = _importFragment(
+                groupId,
+                collectionRequest.existingCollection,
+                fragment
+              )
+                .then(([status, existingFragment]) => {
+                  fragmentRequest.status = status;
+                  fragmentRequest.existingFragment = existingFragment;
+                })
+                .catch(error => {
+                  fragmentRequest.status = 'error';
+                  fragmentRequest.error = error;
+                });
+            } else {
+              fragmentRequest.promise = Promise.resolve();
+              fragmentRequest.status = 'ignored';
+            }
+
+            return fragmentRequest;
+          })
+        )
+        .reduce((a, b) => [...a, ...b], []);
+
+      await Promise.all(
+        fragmentRequests.map(fragmentRequest => fragmentRequest.promise)
+      );
+    });
 
   _logImportSummary(collectionRequests, fragmentRequests);
   _logImportErrors(collectionRequests, fragmentRequests);
