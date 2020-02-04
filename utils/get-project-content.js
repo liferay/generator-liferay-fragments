@@ -107,13 +107,6 @@ function _getCollectionFragments(collectionDirectory) {
           }
         };
 
-        if (metadata.thumbnailPath && fs.existsSync(metadata.thumbnailPath)) {
-          metadata.thumbnailPath = path.resolve(
-            directory,
-            metadata.thumbnailPath
-          );
-        }
-
         const fragment = {
           slug: path.basename(directory),
           metadata,
@@ -127,12 +120,6 @@ function _getCollectionFragments(collectionDirectory) {
             metadata.configurationPath
           )
         };
-
-        if (metadata.thumbnailPath && fs.existsSync(metadata.thumbnailPath)) {
-          return Object.assign(fragment, {
-            thumbnail: fs.createReadStream(metadata.thumbnailPath)
-          });
-        }
 
         return fragment;
       }

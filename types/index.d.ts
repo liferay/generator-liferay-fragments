@@ -70,7 +70,6 @@ export interface IFragment {
   html: string;
   js: string;
   configuration: string;
-  thumbnail?: NodeJS.ReadableStream;
 }
 
 export interface ICompany {

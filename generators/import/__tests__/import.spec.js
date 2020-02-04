@@ -12,19 +12,22 @@ const JSZip = require('jszip');
 
 const GROUP_ID = '1234';
 
-getTestFixtures().forEach(projectPath => {
+[getTestFixtures()[0]].forEach(projectPath => {
   describe(`import ${projectPath}`, () => {
+    const legacyMock = jest.spyOn(importProject, 'legacy');
     const zip = new JSZip();
     zip.file('sample.txt', 'sample');
 
     afterEach(() => {
-      compress.mockReset();
       api.importZip.mockReset();
+      compress.mockReset();
+      legacyMock.mockReset();
     });
 
     beforeEach(() => {
       compress.mockImplementation(() => Promise.resolve(zip));
       api.importZip.mockImplementation(() => Promise.resolve({}));
+      legacyMock.mockImplementation(() => {});
     });
 
     it('tries to generate a zip file from the given project', async () => {
@@ -40,13 +43,15 @@ getTestFixtures().forEach(projectPath => {
       expect(api.importZip).toHaveBeenCalledWith(projectPath, GROUP_ID);
     });
 
+    it('does not call legacy APIs if not necesary', async () => {
+      await importProject(GROUP_ID, projectPath);
+      expect(legacyMock).not.toHaveBeenCalled();
+    });
+
     it('imports the project using old APIs if compress error', async () => {
       compress.mockImplementation(() => {
         throw new Error('error');
       });
-
-      const legacyMock = jest.spyOn(importProject, 'legacy');
-      legacyMock.mockImplementation(() => {});
 
       await importProject(GROUP_ID, projectPath);
       expect(legacyMock).toHaveBeenCalled();
@@ -56,9 +61,6 @@ getTestFixtures().forEach(projectPath => {
       api.importZip.mockImplementation(() => {
         throw new Error('error');
       });
-
-      const legacyMock = jest.spyOn(importProject, 'legacy');
-      legacyMock.mockImplementation(() => {});
 
       await importProject(GROUP_ID, projectPath);
       expect(legacyMock).toHaveBeenCalled();

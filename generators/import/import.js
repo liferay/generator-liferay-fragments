@@ -2,7 +2,6 @@ const api = require('../../utils/api');
 const { log, LOG_LEVEL } = require('../../utils/log');
 const getProjectContent = require('../../utils/get-project-content');
 const compress = require('../compress/compress');
-
 const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../utils/constants');
 
 /**
@@ -26,7 +25,7 @@ const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
  * @param {string} projectPath Project absolute path
  */
 async function importProject(groupId, projectPath) {
-  log('Importing project', { newLine: true });
+  log('Importing project...', { newLine: true });
 
   // Try to import using Struts action first
   try {
@@ -45,11 +44,14 @@ async function importProject(groupId, projectPath) {
         throw new Error('Zip import error');
       }
 
-      log('Full project imported');
+      log('Project imported', { level: 'LOG_LEVEL_SUCCESS' });
     } else {
       throw new Error('zip file not generated');
     }
   } catch (error) {
+    log('Zip file not generated, using legacy APIs', {
+      level: 'LOG_LEVEL_ERROR'
+    });
     await importProject.legacy(groupId, projectPath);
   }
 }
