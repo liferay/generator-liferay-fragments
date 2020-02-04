@@ -1,164 +1,72 @@
-const api = require('../../../utils/api');
-const getProjectContent = require('../../../utils/get-project-content');
-const getTestFixtures = require('../../../utils/get-test-fixtures');
-const importProject = require('../import');
+// @ts-nocheck
 
-/**
- * @type string
- */
+jest.mock('../../compress/compress');
+jest.mock('../../../utils/api');
+
+const api = require('../../../utils/api');
+const compress = require('../../compress/compress');
+const getTestFixtures = require('../../../utils/get-test-fixtures');
+const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../../utils/constants');
+const importProject = require('../import');
+const JSZip = require('jszip');
+
 const GROUP_ID = '1234';
 
-describe('import-generator/import', () => {
-  afterEach(() => {
-    jest.resetAllMocks();
-    jest.restoreAllMocks();
-  });
+getTestFixtures().forEach(projectPath => {
+  describe(`import ${projectPath}`, () => {
+    const zip = new JSZip();
+    zip.file('sample.txt', 'sample');
 
-  beforeEach(() => {
-    jest
-      .spyOn(api, 'addFragmentCollection')
-      .mockImplementation(async (...args) => {
-        expect(args).toMatchSnapshot('addFragmentCollection');
-        return '';
-      });
-
-    jest
-      .spyOn(api, 'updateFragmentCollection')
-      .mockImplementation(async (...args) => {
-        expect(args).toMatchSnapshot('updateFragmentCollection');
-        return '';
-      });
-
-    jest.spyOn(api, 'addFragmentEntry').mockImplementation(async (...args) => {
-      expect(args).toMatchSnapshot('addFragmentEntry');
-      return '';
+    afterEach(() => {
+      compress.mockReset();
+      api.importZip.mockReset();
     });
 
-    jest
-      .spyOn(api, 'updateFragmentEntry')
-      .mockImplementation(async (...args) => {
-        expect(args).toMatchSnapshot('updateFragmentEntry');
-        return '';
-      });
-  });
+    beforeEach(() => {
+      compress.mockImplementation(() => Promise.resolve(zip));
+      api.importZip.mockImplementation(() => Promise.resolve({}));
+    });
 
-  getTestFixtures()
-    .map(projectPath => getProjectContent(projectPath))
-    .forEach(projectContent => {
-      const apiCollections = projectContent.collections.map(collection => ({
-        name: collection.metadata.name,
-        fragmentCollectionId: collection.slug,
-        fragmentCollectionKey: collection.slug,
-        description: collection.metadata.description
-      }));
+    it('tries to generate a zip file from the given project', async () => {
+      await importProject(GROUP_ID, projectPath);
 
-      const apiFragments = projectContent.collections
-        .map(collection =>
-          collection.fragments.map(fragment => ({
-            name: fragment.metadata.name,
-            fragmentEntryId: fragment.slug,
-            fragmentEntryKey: fragment.slug,
-            type: fragment.metadata.type,
-            html: fragment.html,
-            css: fragment.css,
-            js: fragment.js,
-            configuration: fragment.configuration
-          }))
-        )
-        .reduce((a, b) => [...a, ...b], []);
-
-      it('imports collections to a Liferay Site', async () => {
-        jest
-          .spyOn(api, 'getFragmentCollections')
-          .mockImplementation(async () => []);
-
-        jest
-          .spyOn(api, 'addFragmentCollection')
-          .mockImplementation(async (...args) => {
-            expect(args).toMatchSnapshot('addFragmentCollection');
-            return '';
-          });
-
-        jest
-          .spyOn(api, 'updateFragmentCollection')
-          .mockImplementation(async () => {
-            throw new Error(
-              'updateFragmentCollection should not be called here'
-            );
-          });
-
-        await importProject(GROUP_ID, projectContent);
-      });
-
-      it('updates collections if they already exist', async () => {
-        jest
-          .spyOn(api, 'getFragmentCollections')
-          .mockImplementation(async () => apiCollections);
-
-        jest
-          .spyOn(api, 'addFragmentCollection')
-          .mockImplementation(async () => {
-            throw new Error('addFragmentCollection should not be called here');
-          });
-
-        jest
-          .spyOn(api, 'updateFragmentCollection')
-          .mockImplementation(async (...args) => {
-            expect(args).toMatchSnapshot('updateFragmentCollection');
-            return '';
-          });
-
-        jest
-          .spyOn(api, 'getFragmentEntries')
-          .mockImplementation(async () => []);
-
-        await importProject(GROUP_ID, projectContent);
-      });
-
-      it('imports fragments to a Liferay site', async () => {
-        jest
-          .spyOn(api, 'getFragmentCollections')
-          .mockImplementation(async () => apiCollections);
-
-        jest
-          .spyOn(api, 'getFragmentEntries')
-          .mockImplementation(async () => []);
-
-        jest
-          .spyOn(api, 'addFragmentEntry')
-          .mockImplementation(async (...args) => {
-            expect(args).toMatchSnapshot('addFragmentEntry');
-            return '';
-          });
-
-        jest.spyOn(api, 'updateFragmentEntry').mockImplementation(async () => {
-          throw new Error('updateFragmentEntry should not be called here');
-        });
-
-        await importProject(GROUP_ID, projectContent);
-      });
-
-      it('updates fragments if they already exist', async () => {
-        jest
-          .spyOn(api, 'getFragmentCollections')
-          .mockImplementation(async () => apiCollections);
-
-        jest
-          .spyOn(api, 'getFragmentEntries')
-          .mockImplementation(async () => apiFragments);
-
-        jest.spyOn(api, 'addFragmentEntry').mockImplementation(async () => {
-          throw new Error('addFragmentEntry should not be called here');
-        });
-
-        jest
-          .spyOn(api, 'updateFragmentEntry')
-          .mockImplementation(async (...args) => {
-            expect(args).toMatchSnapshot('updateFragmentEntry');
-            return '';
-          });
-
-        await importProject(GROUP_ID, projectContent);
+      expect(compress).toHaveBeenCalledWith(projectPath, {
+        [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false
       });
     });
+
+    it('sends the given zip to backend', async () => {
+      await importProject(GROUP_ID, projectPath);
+      expect(api.importZip).toHaveBeenCalledWith(projectPath, GROUP_ID);
+    });
+
+    it('imports the project using old APIs if compress error', async () => {
+      compress.mockImplementation(() => {
+        throw new Error('error');
+      });
+
+      const legacyMock = jest.spyOn(importProject, 'legacy');
+      legacyMock.mockImplementation(() => {});
+
+      await importProject(GROUP_ID, projectPath);
+      expect(legacyMock).toHaveBeenCalled();
+    });
+
+    it('imports the project using old APIs if api error', async () => {
+      api.importZip.mockImplementation(() => {
+        throw new Error('error');
+      });
+
+      const legacyMock = jest.spyOn(importProject, 'legacy');
+      legacyMock.mockImplementation(() => {});
+
+      await importProject(GROUP_ID, projectPath);
+      expect(legacyMock).toHaveBeenCalled();
+    });
+
+    test.todo('[DEPRECATED] creates every collection in local project');
+    test.todo('[DEPRECATED] updates existing collections');
+    test.todo('[DEPRECATED] imports every fragment in local project');
+    test.todo('[DEPRECATED] updates existing fragments');
+  });
 });
