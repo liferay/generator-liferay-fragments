@@ -541,7 +541,6 @@ const api = {
    * @param {string} basePath
    * @param {string} groupId
    */
-  // eslint-disable-next-line max-params
   async importZip(basePath, groupId) {
     await this.refreshOAuthToken();
 
