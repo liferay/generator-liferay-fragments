@@ -51,6 +51,9 @@ module.exports.FRAGMENT_TYPE_OPTIONS = [
 ];
 module.exports.FRAGMENT_TYPE_VAR = 'fragmentType';
 
+module.exports.FRAGMENTS_PORTLET_ID =
+  'com_liferay_fragment_web_portlet_FragmentPortlet';
+
 module.exports.IMPORT_WATCH_VAR = 'watch';
 
 module.exports.LIFERAY_COMPANYID_MESSAGE = 'Company ID';
@@ -74,6 +77,9 @@ module.exports.LIFERAY_USERNAME_VAR = 'username';
 module.exports.NEW_COLLECTION_MESSAGE = '+ New collection';
 module.exports.NEW_COLLECTION_SHORT = '(new)';
 module.exports.NEW_COLLECTION_VALUE = '__NEW_COLLECTION_VALUE__';
+
+module.exports.PORTLET_FILE_REPOSITORY =
+  'com.liferay.portal.repository.portletrepository.PortletRepository';
 
 module.exports.PROJECT_NAME_DEFAULT = 'Sample Liferay Fragments';
 module.exports.PROJECT_NAME_MESSAGE = 'Project name';

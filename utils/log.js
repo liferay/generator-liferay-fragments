@@ -22,7 +22,7 @@ const LOG_LEVEL = {
  * @param {string} [options.description='']
  */
 function log(message, options = {}) {
-  if (process.env.NODE_ENV !== 'test' || options.level === LOG_LEVEL.error) {
+  if (process.env.NODE_ENV !== 'test') {
     let _message = message;
 
     switch (options.level) {

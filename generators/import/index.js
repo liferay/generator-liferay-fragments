@@ -2,7 +2,6 @@
 const chokidar = require('chokidar');
 const path = require('path');
 const AuthGenerator = require('../../utils/auth-generator');
-const getProjectContent = require('../../utils/get-project-content');
 const importProject = require('./import');
 const { log } = require('../../utils/log');
 
@@ -45,7 +44,7 @@ module.exports = class extends AuthGenerator {
     const groupId = this._getValue(LIFERAY_GROUPID_VAR);
 
     if (groupId) {
-      return importProject(groupId, getProjectContent(this.destinationPath()));
+      return importProject(groupId, this.destinationPath());
     }
 
     return Promise.reject(new Error('GroupId not found'));

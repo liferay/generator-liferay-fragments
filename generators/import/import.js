@@ -1,5 +1,8 @@
 const api = require('../../utils/api');
 const { log, LOG_LEVEL } = require('../../utils/log');
+const getProjectContent = require('../../utils/get-project-content');
+const compress = require('../compress/compress');
+const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../utils/constants');
 
 /**
  * Fragment types
@@ -19,27 +22,56 @@ const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
 /**
  * Imports current project to Liferay server
  * @param {string} groupId Group ID
- * @param {import('../../types/index').IProject} project
+ * @param {string} projectPath Project absolute path
  */
-async function importProject(groupId, project) {
-  log('Importing project', { data: project.project.name, newLine: true });
+async function importProject(groupId, projectPath) {
+  log('Importing project...', { newLine: true });
 
-  // Show loading
+  // Try to import using Struts action first
+  try {
+    const zip = await compress(projectPath, {
+      [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false
+    });
 
-  /**
-   * @type {Array<import('../../types/index').ICollectionRequest>}
-   */
+    if (Object.keys(zip.files).length) {
+      const response = await api.importZip(projectPath, groupId);
+
+      if (
+        response.error ||
+        (response.invalidFragmentEntryNames &&
+          response.invalidFragmentEntryNames.length > 0)
+      ) {
+        throw new Error('Zip import error');
+      }
+
+      log('Project imported', { level: 'LOG_LEVEL_SUCCESS' });
+    } else {
+      throw new Error('zip file not generated');
+    }
+  } catch (error) {
+    log('Zip file not generated, using legacy APIs', {
+      level: 'LOG_LEVEL_ERROR'
+    });
+    await importProject.legacy(groupId, projectPath);
+  }
+}
+
+/**
+ * Imports current project to Liferay server
+ * @deprecated
+ * @param {string} groupId Group ID
+ * @param {string} projectPath Project absolute path
+ */
+importProject.legacy = async function(groupId, projectPath) {
+  const project = getProjectContent(projectPath);
+
+  /** @type {Array<import('../../types/index').ICollectionRequest>} */
   let collectionRequests = [];
-
-  /**
-   * @type {Array<import('../../types/index').IFragmentRequest>}
-   */
+  /** @type {Array<import('../../types/index').IFragmentRequest>} */
   let fragmentRequests = [];
 
   collectionRequests = project.collections.map(collection => {
-    /**
-     * @type {import('../../types/index').ICollectionRequest}
-     */
+    /** @type {import('../../types/index').ICollectionRequest} */
     const collectionRequest = {
       collection,
       existingCollection: undefined,
@@ -68,9 +100,7 @@ async function importProject(groupId, project) {
   fragmentRequests = collectionRequests
     .map(collectionRequest =>
       collectionRequest.collection.fragments.map(fragment => {
-        /**
-         * @type {import('../../types/index').IFragmentRequest}
-         */
+        /** @type {import('../../types/index').IFragmentRequest} */
         const fragmentRequest = {
           collection: collectionRequest.collection,
           fragment,
@@ -113,7 +143,7 @@ async function importProject(groupId, project) {
 
   _logImportSummary(collectionRequests, fragmentRequests);
   _logImportErrors(collectionRequests, fragmentRequests);
-}
+};
 
 /**
  * @param {Array<import('../../types/index').ICollectionRequest>} collectionRequests
@@ -326,6 +356,7 @@ async function _importFragment(groupId, existingCollection, fragment) {
   const type = _getFragmentTypeId(fragment.metadata.type);
   const fragmentEntryKey = fragment.slug;
   const status = 0;
+  let previewFileEntryId = 0;
 
   try {
     let existingFragment = await _getExistingFragment(
@@ -334,6 +365,15 @@ async function _importFragment(groupId, existingCollection, fragment) {
       fragment
     );
 
+    if (fragment.metadata.thumbnailPath) {
+      previewFileEntryId = await api.uploadThumbnail(
+        groupId,
+        fragmentEntryKey,
+        fragment.metadata.thumbnailPath,
+        existingFragment ? existingFragment.previewFileEntryId : '0'
+      );
+    }
+
     if (existingFragment && _fragmentHasChanges(existingFragment, fragment)) {
       await api.updateFragmentEntry(existingFragment.fragmentEntryId, {
         status,
@@ -341,7 +381,8 @@ async function _importFragment(groupId, existingCollection, fragment) {
         html,
         css,
         js,
-        configuration
+        configuration,
+        previewFileEntryId
       });
 
       return ['updated', existingFragment];
@@ -362,7 +403,8 @@ async function _importFragment(groupId, existingCollection, fragment) {
         html,
         css,
         js,
-        configuration
+        configuration,
+        previewFileEntryId
       }
     );
 

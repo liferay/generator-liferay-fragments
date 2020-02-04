@@ -121,17 +121,6 @@ function _getCollectionFragments(collectionDirectory) {
           )
         };
 
-        if (
-          metadata.thumbnailPath &&
-          fs.existsSync(path.resolve(directory, metadata.thumbnailPath))
-        ) {
-          return Object.assign(fragment, {
-            thumbnail: fs.createReadStream(
-              path.resolve(directory, metadata.thumbnailPath)
-            )
-          });
-        }
-
         return fragment;
       }
     );
