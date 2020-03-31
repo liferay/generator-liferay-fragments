@@ -56,6 +56,7 @@ Object {
   \\"scripts\\": {
     \\"add-collection\\": \\"yo liferay-fragments:collection\\",
     \\"add-fragment\\": \\"yo liferay-fragments:fragment\\",
+    \\"add-fragment-composition\\": \\"yo liferay-fragments:fragment-composition\\",
     \\"compress\\": \\"yo liferay-fragments:compress\\",
     \\"export\\": \\"yo liferay-fragments:export\\",
     \\"import\\": \\"yo liferay-fragments:import\\",
@@ -152,6 +153,7 @@ Object {
   \\"scripts\\": {
     \\"add-collection\\": \\"yo liferay-fragments:collection\\",
     \\"add-fragment\\": \\"yo liferay-fragments:fragment\\",
+    \\"add-fragment-composition\\": \\"yo liferay-fragments:fragment-composition\\",
     \\"compress\\": \\"yo liferay-fragments:compress\\",
     \\"export\\": \\"yo liferay-fragments:export\\",
     \\"import\\": \\"yo liferay-fragments:import\\",
@@ -291,6 +293,7 @@ Object {
   \\"scripts\\": {
     \\"add-collection\\": \\"yo liferay-fragments:collection\\",
     \\"add-fragment\\": \\"yo liferay-fragments:fragment\\",
+    \\"add-fragment-composition\\": \\"yo liferay-fragments:fragment-composition\\",
     \\"compress\\": \\"yo liferay-fragments:compress\\",
     \\"export\\": \\"yo liferay-fragments:export\\",
     \\"import\\": \\"yo liferay-fragments:import\\",
