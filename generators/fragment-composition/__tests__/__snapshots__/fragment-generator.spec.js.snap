@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fragment-generator generates a new fragment 1`] = `
+"{
+  \\"name\\": \\"Sample Fragment Composition\\",
+  \\"definitionDataPath\\": \\"definition.json\\"
+}
+"
+`;
+
+exports[`fragment-generator generates a new fragment 2`] = `
+"{
+  \\"definition\\": {
+    \\"layout\\": {
+      \\"containerType\\": \\"Fixed\\",
+      \\"paddingBottom\\": 1,
+      \\"paddingHorizontal\\": 1,
+      \\"paddingTop\\": 1
+    }
+  },
+  \\"pageElements\\": [
+    {
+      \\"definition\\": {
+        \\"fragment\\": {
+          \\"collectionName\\": \\"Basic Components\\",
+          \\"key\\": \\"BASIC_COMPONENT-heading\\",
+          \\"name\\": \\"Heading\\"
+        },
+        \\"fragmentConfig\\": {
+          \\"textAlign\\": \\"left\\",
+          \\"bottomSpacing\\": \\"3\\",
+          \\"headingLevel\\": \\"h1\\",
+          \\"textColor\\": \\"\\"
+        },
+        \\"fragmentFields\\": [
+          {
+            \\"id\\": \\"element-text\\",
+            \\"value\\": {
+              \\"text\\": {
+                \\"value_i18n\\": {
+                  \\"en_US\\": \\"Fragment composition content\\"
+                }
+              }
+            }
+          }
+        ]
+      },
+      \\"type\\": \\"Fragment\\"
+    }
+  ],
+  \\"type\\": \\"Section\\"
+}
+
+"
+`;
