@@ -6,6 +6,7 @@ Object {
   "collections": Array [
     Object {
       "fragmentCollectionId": "sample-collection",
+      "fragmentCompositions": Array [],
       "fragments": Array [
         Object {
           "configuration": "{
@@ -95,6 +96,7 @@ Object {
   "collections": Array [
     Object {
       "fragmentCollectionId": "sample-collection",
+      "fragmentCompositions": Array [],
       "fragments": Array [
         Object {
           "configuration": "{
@@ -138,6 +140,7 @@ Object {
   "collections": Array [
     Object {
       "fragmentCollectionId": "sample-collection",
+      "fragmentCompositions": Array [],
       "fragments": Array [
         Object {
           "configuration": "",
