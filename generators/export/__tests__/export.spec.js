@@ -44,7 +44,8 @@ describe('export-generator/export', () => {
             name: 'Fragment A',
             html: '<fragment-a></fragment-a>',
             css: '.fragment {}',
-            js: 'console.log("fragment")'
+            js: 'console.log("fragment")',
+            previewFileEntryId: '0'
           }
         ]);
 
