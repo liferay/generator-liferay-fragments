@@ -41,6 +41,13 @@ module.exports.FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE =
 module.exports.FRAGMENT_NAME_SAMPLE = 'Sample fragment';
 module.exports.FRAGMENT_NAME_VAR = 'fragmentName';
 
+module.exports.FRAGMENT_COMPOSITION_NAME_MESSAGE =
+  'Fragment composition name (required)';
+module.exports.FRAGMENT_COMPOSITION_NAME_NON_EMPTY_ERROR_MESSAGE =
+  'Fragment name must not be empty';
+module.exports.FRAGMENT_COMPOSITION_NAME_SAMPLE = 'Sample fragment composition';
+module.exports.FRAGMENT_COMPOSITION_NAME_VAR = 'fragmentCompositionName';
+
 module.exports.FRAGMENT_SLUG_VAR = 'fragmentSlug';
 
 module.exports.FRAGMENT_TYPE_DEFAULT = 'section';
