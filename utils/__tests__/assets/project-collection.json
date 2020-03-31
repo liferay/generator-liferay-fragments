@@ -6,6 +6,16 @@
       "description": "Sample collection description",
       "name": "Sample collection name"
     },
+    "fragmentCompositions": [
+      {
+        "slug": "sample-fragment-composition",
+        "metadata": {
+          "name": "Sample fragment composition",
+          "definitionDataPath": "definition.json"
+        },
+        "definitionData": "{\n  \"definition\": {}\n}"
+      }
+    ],
     "fragments": [
       {
         "slug": "sample-component-fragment",
