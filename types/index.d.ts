@@ -13,7 +13,17 @@ export interface ICollection {
     name: string;
     description: string;
   };
+  fragmentCompositions?: IFragmentComposition[];
   fragments: IFragment[];
+}
+
+export interface IFragmentComposition {
+  slug: string;
+  metadata: {
+    definitionDataPath: string;
+    name: string;
+  };
+  definitionData: string;
 }
 
 export interface ICollectionRequest {
@@ -99,6 +109,12 @@ export interface IServerFragment {
   js: string;
   configuration: string;
   previewFileEntryId: string;
+}
+
+export interface IServerFragmentComposition {
+  fragmentCompositionKey: string;
+  data: string;
+  name: string;
 }
 
 export interface IGetFragmentEntriesOptions {
