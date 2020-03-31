@@ -305,6 +305,30 @@ const api = {
 
   /**
    * @param {string} groupId
+   * @param {string} fragmentCollectionId
+   * @return {Promise<import('../types/index').IServerFragmentComposition[]>}
+   */
+  getFragmentCompositions(groupId, fragmentCollectionId) {
+    const options = {
+      groupId,
+      fragmentCollectionId,
+      start: -1,
+      end: -1
+    };
+
+    return this.postFormData(
+      '/api/jsonws/fragment.fragmentcomposition/get-fragment-compositions',
+      options,
+      {
+        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+      }
+    ).catch(() => {
+      return [];
+    });
+  },
+
+  /**
+   * @param {string} groupId
    * @param {string} [name]
    * @return {Promise<import('../types/index').IServerCollection[]>}
    */

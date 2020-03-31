@@ -34,6 +34,11 @@ async function _exportCollection(groupId, collection) {
     collection.fragmentCollectionId
   );
 
+  const fragmentCompositions = await api.getFragmentCompositions(
+    groupId,
+    collection.fragmentCollectionId
+  );
+
   return {
     slug: collection.fragmentCollectionKey,
     fragmentCollectionId: collection.fragmentCollectionId,
@@ -41,6 +46,14 @@ async function _exportCollection(groupId, collection) {
       name: collection.name,
       description: collection.description
     },
+    fragmentCompositions: fragmentCompositions.map(fragmentComposition => ({
+      slug: fragmentComposition.fragmentCompositionKey,
+      metadata: {
+        definitionDataPath: 'definition.json',
+        name: fragmentComposition.name
+      },
+      definitionData: fragmentComposition.data
+    })),
     fragments: fragments.map(fragment => ({
       slug: fragment.fragmentEntryKey,
       metadata: {

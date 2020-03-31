@@ -44,6 +44,9 @@ function _getProjectCollections(basePath) {
         const metadata = _readJSONSync(
           path.resolve(directory, 'collection.json')
         );
+        const fragmentCompositions = _getCollectionFragmentCompositions(
+          directory
+        );
         const fragments = _getCollectionFragments(directory);
         const slug = path.basename(directory);
 
@@ -51,6 +54,7 @@ function _getProjectCollections(basePath) {
           slug,
           fragmentCollectionId: slug,
           metadata,
+          fragmentCompositions,
           fragments
         };
       }
@@ -122,6 +126,70 @@ function _getCollectionFragments(collectionDirectory) {
         };
 
         return fragment;
+      }
+    );
+}
+
+/**
+ * Get a list of fragments from a given collection directory
+ * @param {string} collectionDirectory
+ * @return {import('../types/index').IFragmentComposition[]}
+ */
+function _getCollectionFragmentCompositions(collectionDirectory) {
+  return glob
+    .sync(path.join(collectionDirectory, '*', 'composition.json'))
+    .map(
+      /** @param {string} fragmentJSON */
+      compositionJSON => path.resolve(compositionJSON, '..')
+    )
+    .filter(directory => {
+      try {
+        _readJSONSync(path.resolve(directory, 'composition.json'));
+        return true;
+      } catch (error) {
+        log(
+          `✘ Invalid ${directory}/composition.json, fragment composition ignored`,
+          {
+            level: 'LOG_LEVEL_ERROR'
+          }
+        );
+
+        return false;
+      }
+    })
+    .map(
+      /** @param {string} directory */
+      directory => {
+        const metadata = _readJSONSync(
+          path.resolve(directory, 'composition.json')
+        );
+
+        /**
+         * @param {string} filePath
+         * @return {string}
+         */
+        const readFile = filePath => {
+          try {
+            return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
+          } catch (error) {
+            log(`✘ Fragment composition ${metadata.name || directory}`, {
+              level: LOG_LEVEL.error,
+              newLine: true
+            });
+
+            log(`File ${filePath} was not found`);
+
+            return '';
+          }
+        };
+
+        const fragmentComposition = {
+          slug: path.basename(directory),
+          metadata,
+          definitionData: readFile(metadata.definitionDataPath)
+        };
+
+        return fragmentComposition;
       }
     );
 }

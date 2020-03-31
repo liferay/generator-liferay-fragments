@@ -69,6 +69,34 @@ const _writeProjectFragment = async (
 };
 
 /**
+ * @param {string} fragmentBasePath Fragment base path
+ * @param {import('../types/index').ICollection} collection
+ * @param {import('../types/index').IFragmentComposition} fragmentComposition
+ */
+const _writeProjectFragmentComposition = async (
+  fragmentBasePath,
+  collection,
+  fragmentComposition
+) => {
+  mkdirp.sync(fragmentBasePath);
+
+  await _updateJSON(
+    path.resolve(fragmentBasePath, 'composition.json'),
+    fragmentComposition.metadata
+  );
+
+  const definition = JSON.parse(fragmentComposition.definitionData);
+
+  await _updateFile(
+    path.resolve(
+      fragmentBasePath,
+      fragmentComposition.metadata.definitionDataPath
+    ),
+    JSON.stringify(definition, null, 2)
+  );
+};
+
+/**
  * @param {string} collectionBasePath Collection base path
  * @param {import('../types/index').ICollection} collection
  */
@@ -80,15 +108,30 @@ const _writeProjectCollection = async (collectionBasePath, collection) => {
     collection.metadata
   );
 
-  await Promise.all(
-    collection.fragments.map(fragment =>
+  /** @type {Promise<void>[]} */
+  let fragmentCompositions = [];
+
+  if (collection.fragmentCompositions) {
+    fragmentCompositions = collection.fragmentCompositions.map(
+      fragmentComposition =>
+        _writeProjectFragmentComposition(
+          path.resolve(collectionBasePath, fragmentComposition.slug),
+          collection,
+          fragmentComposition
+        )
+    );
+  }
+
+  await Promise.all([
+    ...collection.fragments.map(fragment =>
       _writeProjectFragment(
         path.resolve(collectionBasePath, fragment.slug),
         collection,
         fragment
       )
-    )
-  );
+    ),
+    ...fragmentCompositions
+  ]);
 };
 
 /**
