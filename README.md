@@ -1,14 +1,14 @@
 [![NPM Publish Version][5]][6]
 
-# Liferay Fragments CLI
+# Liferay Fragments Toolkit
 
-This is a CLI for developing fragments for Liferay DXP. It allows
+This is a Toolkit for developing fragments for Liferay DXP. It allows
 
 - generating fragments from scratch
 - exporting them from a Liferay instance
 - importing them into a Liferay instance
 
-It also supports developing with your preferred desktop tools, while the CLI
+It also supports developing with your preferred desktop tools, while the Toolkit
 watches your changes and sends them to a Liferay instance, so that you can try
 them in your browser immediately.
 
@@ -113,7 +113,7 @@ exported fragments, you can import them into a Liferay instance by running:
 npm run import
 ```
 
-You can also ask the Fragments CLI to watch for further changes and import them
+You can also ask the Fragments Toolkit to watch for further changes and import them
 automatically. This is very useful during development time, so that you can work
 with your preferred editor and the browser to check the changes automatically
 imported into Liferay.
