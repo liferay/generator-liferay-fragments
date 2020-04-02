@@ -214,7 +214,13 @@ Object {
 exports[`app-generator allows adding sample content 9`] = `
 Object {
   "content": "<div class=\\"sample-fragment\\">
-  Sample fragment
+  <h1
+    class=\\"[#if configuration.textColor.color?has_content]text-\${configuration.textColor.color}[/#if]\\"
+    data-lfr-editable-id=\\"title\\"
+    data-lfr-editable-type=\\"text\\"
+  >
+    Sample fragment
+  </h1>
 </div>
 ",
   "filePath": "index.html",
@@ -225,6 +231,10 @@ exports[`app-generator allows adding sample content 10`] = `
 Object {
   "content": ".sample-fragment {
   color: inherit;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
 }
 ",
   "filePath": "styles.css",
@@ -233,7 +243,10 @@ Object {
 
 exports[`app-generator allows adding sample content 11`] = `
 Object {
-  "content": "const content = fragmentElement.querySelector('.sample-fragment');
+  "content": "console.group('Sample fragment');
+console.log('fragmentElement', fragmentElement);
+console.log('configuration', configuration);
+console.groupEnd();
 ",
   "filePath": "main.js",
 }
