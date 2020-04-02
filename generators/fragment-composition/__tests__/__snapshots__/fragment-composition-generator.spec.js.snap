@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`fragment-generator generates a new fragment 1`] = `
+exports[`fragment-composition-generator generates a new fragment composition 1`] = `
 "{
   \\"name\\": \\"Sample Fragment Composition\\",
   \\"definitionDataPath\\": \\"definition.json\\"
@@ -8,7 +8,7 @@ exports[`fragment-generator generates a new fragment 1`] = `
 "
 `;
 
-exports[`fragment-generator generates a new fragment 2`] = `
+exports[`fragment-composition-generator generates a new fragment composition 2`] = `
 "{
   \\"definition\\": {
     \\"layout\\": {
