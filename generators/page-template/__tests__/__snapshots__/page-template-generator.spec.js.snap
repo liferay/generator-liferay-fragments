@@ -1,0 +1,80 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`page-template-generator Generates a new page template 1`] = `
+"{
+  \\"name\\" : \\"Sample Page Template\\"
+}
+"
+`;
+
+exports[`page-template-generator Generates a new page template 2`] = `
+"{
+  \\"pageElement\\" : {
+    \\"pageElements\\" : [ {
+      \\"definition\\" : {
+        \\"fragment\\" : {
+          \\"collectionName\\" : \\"Basic Components\\",
+          \\"key\\" : \\"BASIC_COMPONENT-heading\\",
+          \\"name\\" : \\"Heading\\"
+        },
+        \\"fragmentConfig\\" : {
+          \\"textAlign\\" : \\"left\\",
+          \\"bottomSpacing\\" : \\"3\\",
+          \\"headingLevel\\" : \\"h1\\",
+          \\"textColor\\" : \\"\\"
+        },
+        \\"fragmentFields\\" : [ {
+          \\"id\\" : \\"element-text\\",
+          \\"value\\" : {
+            \\"text\\" : {
+              \\"value_i18n\\" : {
+                \\"en_US\\" : \\"This is a page template\\"
+              }
+            }
+          }
+        } ]
+      },
+      \\"type\\" : \\"Fragment\\"
+    } ],
+    \\"type\\" : \\"Root\\"
+  },
+  \\"settings\\" : {
+    \\"colorSchemeName\\" : \\"01\\",
+    \\"themeName\\" : \\"Classic\\"
+  }
+}"
+`;
+
+exports[`page-template-generator generates a new master page 1`] = `
+"{
+  \\"name\\" : \\"Sample Master Page\\"
+}
+"
+`;
+
+exports[`page-template-generator generates a new master page 2`] = `
+"{
+  \\"pageElement\\" : {
+    \\"pageElements\\" : [ {
+      \\"definition\\" : {
+        \\"fragmentSettings\\" : {
+          \\"unallowedFragments\\" : [ ]
+        }
+      },
+      \\"type\\" : \\"DropZone\\"
+    } ],
+    \\"type\\" : \\"Root\\"
+  },
+  \\"settings\\" : {
+    \\"colorSchemeName\\" : \\"01\\",
+    \\"themeName\\" : \\"Classic\\",
+    \\"themeSettings\\" : {
+      \\"lfr-theme:regular:show-header\\" : \\"false\\",
+      \\"lfr-theme:regular:wrap-widget-page-content\\" : \\"false\\",
+      \\"lfr-theme:regular:show-header-search\\" : \\"false\\",
+      \\"lfr-theme:regular:show-footer\\" : \\"false\\"
+    }
+  }
+}
+"
+`;
