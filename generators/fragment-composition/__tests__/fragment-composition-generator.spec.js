@@ -19,8 +19,8 @@ function expectFiles(base, paths) {
   return paths.map(_path => expectFile(path.join(base, _path)));
 }
 
-describe('fragment-generator', () => {
-  it('generates a new fragment', () =>
+describe('fragment-composition-generator', () => {
+  it('generates a new fragment composition', () =>
     YeomanTest.run(path.join(__dirname, '..'))
       .withOptions({ fragmentCompositionName: 'Sample Fragment Composition' })
       .withOptions({ fragmentCollectionSlug: 'sample-collection' })
