@@ -1,3 +1,9 @@
 <div class="<%= fragmentSlug %>">
-  <%= fragmentName %>
+  <h1
+    class="[#if configuration.textColor.color?has_content]text-${configuration.textColor.color}[/#if]"
+    data-lfr-editable-id="title"
+    data-lfr-editable-type="text"
+  >
+    <%= fragmentName %>
+  </h1>
 </div>
