@@ -41,13 +41,6 @@ module.exports.FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE =
 module.exports.FRAGMENT_NAME_SAMPLE = 'Sample fragment';
 module.exports.FRAGMENT_NAME_VAR = 'fragmentName';
 
-module.exports.FRAGMENT_COMPOSITION_NAME_MESSAGE =
-  'Fragment composition name (required)';
-module.exports.FRAGMENT_COMPOSITION_NAME_NON_EMPTY_ERROR_MESSAGE =
-  'Fragment name must not be empty';
-module.exports.FRAGMENT_COMPOSITION_NAME_SAMPLE = 'Sample fragment composition';
-module.exports.FRAGMENT_COMPOSITION_NAME_VAR = 'fragmentCompositionName';
-
 module.exports.FRAGMENT_SLUG_VAR = 'fragmentSlug';
 
 module.exports.FRAGMENT_TYPE_DEFAULT = 'section';
@@ -57,6 +50,13 @@ module.exports.FRAGMENT_TYPE_OPTIONS = [
   { name: 'Component', value: 'component' }
 ];
 module.exports.FRAGMENT_TYPE_VAR = 'fragmentType';
+
+module.exports.FRAGMENT_COMPOSITION_NAME_MESSAGE =
+  'Fragment composition name (required)';
+module.exports.FRAGMENT_COMPOSITION_NAME_NON_EMPTY_ERROR_MESSAGE =
+  'Fragment name must not be empty';
+module.exports.FRAGMENT_COMPOSITION_NAME_SAMPLE = 'Sample fragment composition';
+module.exports.FRAGMENT_COMPOSITION_NAME_VAR = 'fragmentCompositionName';
 
 module.exports.FRAGMENTS_PORTLET_ID =
   'com_liferay_fragment_web_portlet_FragmentPortlet';
@@ -84,6 +84,27 @@ module.exports.LIFERAY_USERNAME_VAR = 'username';
 module.exports.NEW_COLLECTION_MESSAGE = '+ New collection';
 module.exports.NEW_COLLECTION_SHORT = '(new)';
 module.exports.NEW_COLLECTION_VALUE = '__NEW_COLLECTION_VALUE__';
+
+module.exports.PAGE_TEMPLATE_NAME_MESSAGE = 'Page Template name (required)';
+module.exports.PAGE_TEMPLATE_NAME_NON_EMPTY_ERROR_MESSAGE =
+  'Page Template name must not be empty';
+module.exports.PAGE_TEMPLATE_NAME_SAMPLE = 'Sample page template';
+module.exports.PAGE_TEMPLATE_NAME_VAR = 'pageTemplateName';
+
+module.exports.PAGE_TEMPLATE_SLUG_VAR = 'pageTemplateSlug';
+
+module.exports.PAGE_TEMPLATE_TYPE_DEFAULT = 'page-template';
+module.exports.PAGE_TEMPLATE_TYPE_MESSAGE = 'Page Template type';
+module.exports.PAGE_TEMPLATE_TYPE_OPTIONS = [
+  { name: 'Page Template', value: 'page-template' },
+  { name: 'Master Page', value: 'master-page' }
+];
+module.exports.PAGE_TEMPLATE_TYPE_VAR = 'pageTemplateType';
+
+module.exports.PAGE_TEMPLATE_IMPORT_STATUS = {
+  IGNORED: 'ignored',
+  INVALID: 'invalid'
+};
 
 module.exports.PORTLET_FILE_REPOSITORY =
   'com.liferay.portal.repository.portletrepository.PortletRepository';
