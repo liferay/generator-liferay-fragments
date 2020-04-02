@@ -2,7 +2,10 @@ const api = require('../../utils/api');
 const { log, LOG_LEVEL } = require('../../utils/log');
 const getProjectContent = require('../../utils/get-project-content');
 const compress = require('../compress/compress');
-const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../utils/constants');
+const {
+  ADD_DEPLOYMENT_DESCRIPTOR_VAR,
+  PAGE_TEMPLATE_IMPORT_STATUS
+} = require('../../utils/constants');
 
 /**
  * Fragment types
@@ -36,15 +39,23 @@ async function importProject(groupId, projectPath) {
     if (Object.keys(zip.files).length) {
       const response = await api.importZip(projectPath, groupId);
 
-      if (
-        response.error ||
-        (response.invalidFragmentEntryNames &&
-          response.invalidFragmentEntryNames.length > 0)
-      ) {
+      if (response.error) {
         throw new Error('Zip import error');
       }
 
-      log('Project imported', { level: 'LOG_LEVEL_SUCCESS' });
+      if (
+        (response.invalidFragmentEntryNames &&
+          response.invalidFragmentEntryNames.length > 0) ||
+        (response.invalidPageTemplates &&
+          response.invalidPageTemplates.length > 0)
+      ) {
+        _logImportErrors(
+          response.invalidFragmentEntryNames || [],
+          response.invalidPageTemplates || []
+        );
+      } else {
+        log('Project imported', { level: 'LOG_LEVEL_SUCCESS' });
+      }
     } else {
       throw new Error('zip file not generated');
     }
@@ -142,7 +153,7 @@ importProject.legacy = async function(groupId, projectPath) {
   );
 
   _logImportSummary(collectionRequests, fragmentRequests);
-  _logImportErrors(collectionRequests, fragmentRequests);
+  _logImportErrorsLegacy(collectionRequests, fragmentRequests);
 };
 
 /**
@@ -199,10 +210,36 @@ function _logImportSummary(collectionRequests, fragmentRequests) {
 }
 
 /**
+ * @param {string[]} invalidFragmentEntryNames
+ * @param {{name: string, errorMessage: string, status: string}[]} invalidPageTemplates
+ */
+function _logImportErrors(invalidFragmentEntryNames, invalidPageTemplates) {
+  invalidFragmentEntryNames.forEach(invalidFragmentEntryName => {
+    log(`${invalidFragmentEntryName} not imported due to errors`, {
+      level: LOG_LEVEL.error
+    });
+  });
+
+  invalidPageTemplates.forEach(invalidPageTemplate => {
+    const logLevel =
+      invalidPageTemplate.status === PAGE_TEMPLATE_IMPORT_STATUS.INVALID
+        ? LOG_LEVEL.error
+        : LOG_LEVEL.info;
+
+    log(`${invalidPageTemplate.name} not imported`, {
+      level: logLevel
+    });
+    log(`Error: ${invalidPageTemplate.errorMessage}`, {
+      level: logLevel
+    });
+  });
+}
+
+/**
  * @param {Array<import('../../types/index').ICollectionRequest>} collectionRequests
  * @param {Array<import('../../types/index').IFragmentRequest>} fragmentRequests
  */
-function _logImportErrors(collectionRequests, fragmentRequests) {
+function _logImportErrorsLegacy(collectionRequests, fragmentRequests) {
   const sortedFragmentRequests = [...fragmentRequests].sort((a, b) => {
     if (a.collection.slug < b.collection.slug) {
       return -1;
