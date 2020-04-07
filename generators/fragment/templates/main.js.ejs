@@ -1,4 +1,6 @@
 console.group('<%= fragmentName %>');
 console.log('fragmentElement', fragmentElement);
+<%_ if (dataLfrSupported) { _%>
 console.log('configuration', configuration);
+<%_ } _%>
 console.groupEnd();

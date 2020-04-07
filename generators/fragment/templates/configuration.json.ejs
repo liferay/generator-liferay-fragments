@@ -2,12 +2,14 @@
   "fieldSets": [
     {
       "fields": [
+      <%_ if (dataLfrSupported) { _%>
         {
           "dataType": "object",
           "label": "text-color",
           "name": "textColor",
           "type": "colorPalette"
         }
+        <%_ } _%>
       ]
     }
   ]
