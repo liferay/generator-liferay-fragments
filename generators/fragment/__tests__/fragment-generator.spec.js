@@ -22,6 +22,7 @@ function expectFiles(base, paths) {
 describe('fragment-generator', () => {
   it('generates a new fragment', () =>
     YeomanTest.run(path.join(__dirname, '..'))
+      .withOptions({ minLiferayVersion: '7.2.0' })
       .withOptions({ fragmentName: 'Sample Fragment' })
       .withOptions({ fragmentType: 'section' })
       .withOptions({ fragmentCollectionSlug: 'sample-collection' })
@@ -35,6 +36,7 @@ describe('fragment-generator', () => {
   it('needs a name', () =>
     new Promise((resolve, reject) =>
       YeomanTest.run(path.join(__dirname, '..'))
+        .withOptions({ minLiferayVersion: '7.2.0' })
         .withOptions({ fragmentType: 'section' })
         .withOptions({ fragmentCollectionSlug: 'sample-collection' })
         .then(reject)
@@ -44,9 +46,23 @@ describe('fragment-generator', () => {
   it('needs a collection', () =>
     new Promise((resolve, reject) =>
       YeomanTest.run(path.join(__dirname, '..'))
+        .withOptions({ minLiferayVersion: '7.2.0' })
         .withOptions({ fragmentName: 'Sample Fragment' })
         .withOptions({ fragmentType: 'section' })
         .then(reject)
         .catch(resolve)
     ));
+
+  it('generates new features if supported', () =>
+    YeomanTest.run(path.join(__dirname, '..'))
+      .withOptions({ minLiferayVersion: '7.3.3' })
+      .withOptions({ fragmentName: 'Sample Fragment' })
+      .withOptions({ fragmentType: 'section' })
+      .withOptions({ fragmentCollectionSlug: 'sample-collection' })
+      .then(projectPath => {
+        expectFiles(
+          path.join(projectPath, 'src', 'sample-collection', 'sample-fragment'),
+          ['fragment.json', 'index.html', 'styles.css', 'main.js']
+        );
+      }));
 });
