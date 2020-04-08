@@ -214,13 +214,7 @@ Object {
 exports[`app-generator allows adding sample content 9`] = `
 Object {
   "content": "<div class=\\"sample-fragment\\">
-  <h1
-    class=\\"[#if configuration.textColor.color?has_content]text-\${configuration.textColor.color}[/#if]\\"
-    data-lfr-editable-id=\\"title\\"
-    data-lfr-editable-type=\\"text\\"
-  >
-    Sample fragment
-  </h1>
+  Sample fragment
 </div>
 ",
   "filePath": "index.html",
@@ -245,7 +239,6 @@ exports[`app-generator allows adding sample content 11`] = `
 Object {
   "content": "console.group('Sample fragment');
 console.log('fragmentElement', fragmentElement);
-console.log('configuration', configuration);
 console.groupEnd();
 ",
   "filePath": "main.js",
