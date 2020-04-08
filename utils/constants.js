@@ -88,6 +88,8 @@ module.exports.MIN_LIFERAY_VERSION_MESSAGE =
   'Minimum liferay version you want fragments to be compatible with (e.g. 7.3.0)';
 module.exports.MIN_LIFERAY_VERSION_MESSAGE_ERROR_MESSAGE =
   'Introduce a valid version';
+
+module.exports.MIN_LIFERAY_VERSION_SAMPLE = '7.2.0';
 module.exports.MIN_LIFERAY_VERSION_VAR = 'minLiferayVersion';
 
 module.exports.NEW_COLLECTION_MESSAGE = '+ New collection';
