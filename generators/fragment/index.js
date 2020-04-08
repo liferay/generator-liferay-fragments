@@ -42,7 +42,8 @@ module.exports = class extends CustomGenerator {
   writing() {
     if (this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
       this.composeWith(require.resolve('../collection'), {
-        [FRAGMENT_NAME_VAR]: this._getValue(FRAGMENT_NAME_VAR)
+        [FRAGMENT_NAME_VAR]: this._getValue(FRAGMENT_NAME_VAR),
+        [MIN_LIFERAY_VERSION_VAR]: this._getValue(MIN_LIFERAY_VERSION_VAR)
       });
     } else {
       this._isRequired(FRAGMENT_COLLECTION_SLUG_VAR);

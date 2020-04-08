@@ -62,13 +62,15 @@ module.exports = class extends CustomGenerator {
    */
   end() {
     const fragmentName = this._getValue(FRAGMENT_NAME_VAR);
+    const minLiferayVersion = this._getValue(MIN_LIFERAY_VERSION_VAR);
 
     if (fragmentName) {
       this.composeWith(require.resolve('../fragment'), {
         [FRAGMENT_NAME_VAR]: fragmentName,
         [FRAGMENT_TYPE_VAR]: this._getValue(FRAGMENT_TYPE_VAR),
         [FRAGMENT_COLLECTION_SLUG_VAR]: this._getValue(COLLECTION_SLUG_VAR),
-        [MIN_LIFERAY_VERSION_VAR]: MIN_LIFERAY_VERSION_SAMPLE
+        [MIN_LIFERAY_VERSION_VAR]:
+          minLiferayVersion || MIN_LIFERAY_VERSION_SAMPLE
       });
     }
   }
