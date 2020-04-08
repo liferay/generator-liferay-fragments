@@ -10,8 +10,11 @@ const {
   COLLECTION_NAME_VAR,
   COLLECTION_SLUG_VAR,
   FRAGMENT_COLLECTION_SLUG_VAR,
+  FRAGMENT_COMPOSITION_NAME_VAR,
   FRAGMENT_NAME_VAR,
-  FRAGMENT_TYPE_VAR
+  FRAGMENT_TYPE_VAR,
+  MIN_LIFERAY_VERSION_SAMPLE,
+  MIN_LIFERAY_VERSION_VAR
 } = require('../../utils/constants');
 
 module.exports = class extends CustomGenerator {
@@ -60,11 +63,24 @@ module.exports = class extends CustomGenerator {
    */
   end() {
     const fragmentName = this._getValue(FRAGMENT_NAME_VAR);
+    const minLiferayVersion = this._getValue(MIN_LIFERAY_VERSION_VAR);
+    const fragmentCompositionName = this._getValue(
+      FRAGMENT_COMPOSITION_NAME_VAR
+    );
 
     if (fragmentName) {
       this.composeWith(require.resolve('../fragment'), {
         [FRAGMENT_NAME_VAR]: fragmentName,
         [FRAGMENT_TYPE_VAR]: this._getValue(FRAGMENT_TYPE_VAR),
+        [FRAGMENT_COLLECTION_SLUG_VAR]: this._getValue(COLLECTION_SLUG_VAR),
+        [MIN_LIFERAY_VERSION_VAR]:
+          minLiferayVersion || MIN_LIFERAY_VERSION_SAMPLE
+      });
+    }
+
+    if (fragmentCompositionName) {
+      this.composeWith(require.resolve('../fragment-composition'), {
+        [FRAGMENT_COMPOSITION_NAME_VAR]: fragmentCompositionName,
         [FRAGMENT_COLLECTION_SLUG_VAR]: this._getValue(COLLECTION_SLUG_VAR)
       });
     }

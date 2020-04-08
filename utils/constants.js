@@ -22,6 +22,9 @@ module.exports.COLLECTION_NAME_VAR = 'collectionName';
 module.exports.COLLECTION_SLUG_SAMPLE = 'sample-collection';
 module.exports.COLLECTION_SLUG_VAR = 'collectionSlug';
 
+module.exports.DATA_LFR_SUPPORTED = 'dataLfrSupported';
+module.exports.DATA_LFR_SUPPORTED_MIN_VERSION = '7.3.3';
+
 module.exports.DEPLOYMENT_DESCRIPTOR_COMPANY_DEFAULT = 'liferay.com';
 module.exports.DEPLOYMENT_DESCRIPTOR_COMPANY_MESSAGE =
   'Deployment descriptor company Web ID?';
@@ -80,6 +83,14 @@ module.exports.LIFERAY_PASSWORD_VAR = 'password';
 module.exports.LIFERAY_USERNAME_DEFAULT = 'test@liferay.com';
 module.exports.LIFERAY_USERNAME_MESSAGE = 'Username';
 module.exports.LIFERAY_USERNAME_VAR = 'username';
+
+module.exports.MIN_LIFERAY_VERSION_MESSAGE =
+  'Minimum liferay version you want fragments to be compatible with (e.g. 7.3.0)';
+module.exports.MIN_LIFERAY_VERSION_MESSAGE_ERROR_MESSAGE =
+  'Introduce a valid version';
+
+module.exports.MIN_LIFERAY_VERSION_SAMPLE = '7.2.0';
+module.exports.MIN_LIFERAY_VERSION_VAR = 'minLiferayVersion';
 
 module.exports.NEW_COLLECTION_MESSAGE = '+ New collection';
 module.exports.NEW_COLLECTION_SHORT = '(new)';

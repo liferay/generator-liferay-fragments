@@ -22,11 +22,61 @@ exports[`fragment-generator generates a new fragment 2`] = `
 exports[`fragment-generator generates a new fragment 3`] = `
 ".sample-fragment {
   color: inherit;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
 }
 "
 `;
 
 exports[`fragment-generator generates a new fragment 4`] = `
-"const content = fragmentElement.querySelector('.sample-fragment');
+"console.group('Sample Fragment');
+console.log('fragmentElement', fragmentElement);
+console.groupEnd();
+"
+`;
+
+exports[`fragment-generator generates new features if supported 1`] = `
+"{
+  \\"cssPath\\": \\"styles.css\\",
+  \\"configurationPath\\": \\"configuration.json\\",
+  \\"htmlPath\\": \\"index.html\\",
+  \\"jsPath\\": \\"main.js\\",
+  \\"name\\": \\"Sample Fragment\\",
+  \\"type\\": \\"section\\"
+}
+"
+`;
+
+exports[`fragment-generator generates new features if supported 2`] = `
+"<div class=\\"sample-fragment\\">
+  <h1
+    class=\\"[#if configuration.textColor.color?has_content]text-\${configuration.textColor.color}[/#if]\\"
+    data-lfr-editable-id=\\"title\\"
+    data-lfr-editable-type=\\"text\\"
+  >
+    Sample Fragment
+  </h1>
+</div>
+"
+`;
+
+exports[`fragment-generator generates new features if supported 3`] = `
+".sample-fragment {
+  color: inherit;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+}
+"
+`;
+
+exports[`fragment-generator generates new features if supported 4`] = `
+"console.group('Sample Fragment');
+console.log('fragmentElement', fragmentElement);
+console.log('configuration', configuration);
+console.groupEnd();
 "
 `;
