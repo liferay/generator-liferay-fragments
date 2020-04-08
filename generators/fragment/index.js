@@ -114,7 +114,7 @@ module.exports = class extends CustomGenerator {
   }
 
   async _askLiferayVersion() {
-    const minLiferayVersion = this.config.get(MIN_LIFERAY_VERSION_VAR);
+    const previousMinLiferayVersion = this._getValue(MIN_LIFERAY_VERSION_VAR);
 
     await this._ask({
       type: 'input',
@@ -125,19 +125,21 @@ module.exports = class extends CustomGenerator {
         semver.valid(version)
           ? true
           : MIN_LIFERAY_VERSION_MESSAGE_ERROR_MESSAGE,
-      when: !minLiferayVersion
+      when: !this._hasValue(MIN_LIFERAY_VERSION_VAR)
     });
 
-    this.config.set(
-      MIN_LIFERAY_VERSION_VAR,
-      `${this._getValue(MIN_LIFERAY_VERSION_VAR) || minLiferayVersion}`
-    );
+    if (!previousMinLiferayVersion) {
+      this.config.set(
+        MIN_LIFERAY_VERSION_VAR,
+        `${this._getValue(MIN_LIFERAY_VERSION_VAR)}`
+      );
+    }
 
     this._setValue(
       DATA_LFR_SUPPORTED,
       // @ts-ignore
       semver.gte(
-        `${this._getValue(MIN_LIFERAY_VERSION_VAR) || minLiferayVersion}`,
+        `${this._getValue(MIN_LIFERAY_VERSION_VAR)}`,
         DATA_LFR_SUPPORTED_MIN_VERSION
       )
     );
