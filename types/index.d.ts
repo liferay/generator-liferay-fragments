@@ -20,7 +20,7 @@ export interface ICollection {
 export interface IFragmentComposition {
   slug: string;
   metadata: {
-    definitionDataPath: string;
+    fragmentCompositionDefinitionPath: string;
     name: string;
   };
   definitionData: string;

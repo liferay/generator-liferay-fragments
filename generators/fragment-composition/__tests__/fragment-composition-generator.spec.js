@@ -32,7 +32,7 @@ describe('fragment-composition-generator', () => {
             'sample-collection',
             'sample-fragment-composition'
           ),
-          ['composition.json', 'definition.json']
+          ['fragment-composition.json', 'definition.json']
         );
       }));
 

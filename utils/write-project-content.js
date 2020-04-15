@@ -81,7 +81,7 @@ const _writeProjectFragmentComposition = async (
   mkdirp.sync(fragmentBasePath);
 
   await _updateJSON(
-    path.resolve(fragmentBasePath, 'composition.json'),
+    path.resolve(fragmentBasePath, 'fragment-composition.json'),
     fragmentComposition.metadata
   );
 
@@ -90,7 +90,7 @@ const _writeProjectFragmentComposition = async (
   await _updateFile(
     path.resolve(
       fragmentBasePath,
-      fragmentComposition.metadata.definitionDataPath
+      fragmentComposition.metadata.fragmentCompositionDefinitionPath
     ),
     JSON.stringify(definition, null, 2)
   );

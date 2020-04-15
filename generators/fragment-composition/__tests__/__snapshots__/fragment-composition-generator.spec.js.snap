@@ -3,7 +3,7 @@
 exports[`fragment-composition-generator generates a new fragment composition 1`] = `
 "{
   \\"name\\": \\"Sample Fragment Composition\\",
-  \\"definitionDataPath\\": \\"definition.json\\"
+  \\"fragmentCompositionDefinitionPath\\": \\"definition.json\\"
 }
 "
 `;
