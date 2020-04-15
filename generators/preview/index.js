@@ -177,11 +177,11 @@ module.exports = class extends AuthGenerator {
             fragment.js,
             fragment.configuration
           ).then(preview => {
-            response.send(preview);
+            response.send(this._replaceLinks(preview));
           });
         } else if (fragment && type === 'composition') {
           this._getCompositionPreview(fragment.definition).then(preview => {
-            response.send(preview);
+            response.send(this._replaceLinks(preview));
           });
         }
       } else {
@@ -221,7 +221,18 @@ module.exports = class extends AuthGenerator {
   }
 
   /**
-   * Runks a socket server
+   * Replaces relative links in the preview HTML
+   * @param {string} html HTML to replace the links
+   */
+  _replaceLinks(html) {
+    return html.replace(
+      /(src|href)=["']\/([^"']+)["']/gi,
+      `$1="${this._getValue(LIFERAY_HOST_VAR)}/$2"`
+    );
+  }
+
+  /**
+   * Runs a socket server
    */
   _runSocketServer() {
     const socketServer = new ws.Server({ port: SOCKET_SERVER_PORT });
