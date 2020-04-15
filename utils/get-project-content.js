@@ -45,14 +45,76 @@ function _getProjectCollections(basePath) {
           path.resolve(directory, 'collection.json')
         );
         const fragments = _getCollectionFragments(directory);
+        const compositions = _getCollectionCompositions(directory);
         const slug = path.basename(directory);
 
         return {
           slug,
           fragmentCollectionId: slug,
           metadata,
+          compositions,
           fragments
         };
+      }
+    );
+}
+
+/**
+ * Get a list of fragments from a given collection directory
+ * @param {string} collectionDirectory
+ * @return {import('../types/index').IComposition[]}
+ */
+function _getCollectionCompositions(collectionDirectory) {
+  return glob
+    .sync(path.join(collectionDirectory, '*', 'fragment-composition.json'))
+    .map(
+      /** @param {string} fragmentJSON */
+      fragmentJSON => path.resolve(fragmentJSON, '..')
+    )
+    .filter(directory => {
+      try {
+        _readJSONSync(path.resolve(directory, 'fragment-composition.json'));
+        return true;
+      } catch (error) {
+        log(
+          `✘ Invalid ${directory}/fragment-composition.json, fragment ignored`,
+          {
+            level: 'LOG_LEVEL_ERROR'
+          }
+        );
+
+        return false;
+      }
+    })
+    .map(
+      /** @param {string} directory */
+      directory => {
+        const metadata = _readJSONSync(
+          path.resolve(directory, 'fragment-composition.json')
+        );
+
+        if (metadata.thumbnailPath) {
+          metadata.thumbnailPath = path.resolve(
+            directory,
+            metadata.thumbnailPath
+          );
+        }
+
+        const composition = {
+          slug: path.basename(directory),
+          metadata,
+          definition: _readJSONSync(
+            path.resolve(directory, metadata.fragmentCompositionDefinitionPath)
+          )
+        };
+
+        if (metadata.thumbnailPath && fs.existsSync(metadata.thumbnailPath)) {
+          return Object.assign(composition, {
+            thumbnail: fs.createReadStream(metadata.thumbnailPath)
+          });
+        }
+
+        return composition;
       }
     );
 }
