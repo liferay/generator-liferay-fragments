@@ -35,10 +35,19 @@ collectionSelect.addEventListener('change', () => {
 
     renderSelect(
       fragmentSelect,
-      collection.fragments.map(fragment => ({
-        value: fragment.slug,
-        label: fragment.metadata.name
-      }))
+      collection.fragments
+        .map(fragment => ({
+          value: fragment.slug,
+          label: fragment.metadata.name,
+          type: 'fragment'
+        }))
+        .concat(
+          collection.compositions.map(composition => ({
+            value: composition.slug,
+            label: composition.metadata.name,
+            type: 'composition'
+          }))
+        )
     );
   }
 });
@@ -46,7 +55,10 @@ collectionSelect.addEventListener('change', () => {
 fragmentSelect.addEventListener('change', () => {
   if (fragmentSelect.value) {
     syncSelectFieldURL(fragmentSelect);
-    preview.src = `/fragment-preview?collection=${collectionSelect.value}&fragment=${fragmentSelect.value}`;
+
+    const type = fragmentSelect.selectedOptions[0].dataset.type;
+
+    preview.src = `/fragment-preview?collection=${collectionSelect.value}&fragment=${fragmentSelect.value}&type=${type}`;
   }
 });
 
@@ -62,6 +74,7 @@ function renderSelect(selectElement, options) {
 
     optionElement.value = option.value;
     optionElement.innerHTML = option.label;
+    optionElement.setAttribute('data-type', option.type);
 
     selectElement.appendChild(optionElement);
   });
