@@ -13,6 +13,7 @@ export interface ICollection {
     name: string;
     description: string;
   };
+  compositions: IComposition[];
   fragments: IFragment[];
 }
 
@@ -53,6 +54,17 @@ export interface IOauthToken {
   accessToken: string;
   refreshToken: string;
   expirationDate: Date;
+}
+
+export interface IComposition {
+  slug: string;
+  metadata: {
+    fragmentCompositionDefinitionPath: string;
+    thumbnailPath?: string;
+    name: string;
+  };
+  definition: object;
+  thumbnail?: NodeJS.ReadableStream;
 }
 
 export interface IFragment {
