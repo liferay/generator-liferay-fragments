@@ -49,7 +49,7 @@ async function _exportCollection(groupId, collection) {
     fragmentCompositions: fragmentCompositions.map(fragmentComposition => ({
       slug: fragmentComposition.fragmentCompositionKey,
       metadata: {
-        definitionDataPath: 'definition.json',
+        fragmentCompositionDefinitionPath: 'definition.json',
         name: fragmentComposition.name
       },
       definitionData: fragmentComposition.data

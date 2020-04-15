@@ -11,7 +11,7 @@
         "slug": "sample-fragment-composition",
         "metadata": {
           "name": "Sample fragment composition",
-          "definitionDataPath": "definition.json"
+          "fragmentCompositionDefinitionPath": "definition.json"
         },
         "definitionData": "{\n  \"definition\": {}\n}"
       }

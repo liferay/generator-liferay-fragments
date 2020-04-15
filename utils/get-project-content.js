@@ -137,18 +137,18 @@ function _getCollectionFragments(collectionDirectory) {
  */
 function _getCollectionFragmentCompositions(collectionDirectory) {
   return glob
-    .sync(path.join(collectionDirectory, '*', 'composition.json'))
+    .sync(path.join(collectionDirectory, '*', 'fragment-composition.json'))
     .map(
       /** @param {string} fragmentJSON */
       compositionJSON => path.resolve(compositionJSON, '..')
     )
     .filter(directory => {
       try {
-        _readJSONSync(path.resolve(directory, 'composition.json'));
+        _readJSONSync(path.resolve(directory, 'fragment-composition.json'));
         return true;
       } catch (error) {
         log(
-          `✘ Invalid ${directory}/composition.json, fragment composition ignored`,
+          `✘ Invalid ${directory}/fragment-composition.json, fragment composition ignored`,
           {
             level: 'LOG_LEVEL_ERROR'
           }
@@ -161,7 +161,7 @@ function _getCollectionFragmentCompositions(collectionDirectory) {
       /** @param {string} directory */
       directory => {
         const metadata = _readJSONSync(
-          path.resolve(directory, 'composition.json')
+          path.resolve(directory, 'fragment-composition.json')
         );
 
         /**
@@ -186,7 +186,7 @@ function _getCollectionFragmentCompositions(collectionDirectory) {
         const fragmentComposition = {
           slug: path.basename(directory),
           metadata,
-          definitionData: readFile(metadata.definitionDataPath)
+          definitionData: readFile(metadata.fragmentCompositionDefinitionPath)
         };
 
         return fragmentComposition;

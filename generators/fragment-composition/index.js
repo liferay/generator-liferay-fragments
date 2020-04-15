@@ -45,7 +45,10 @@ module.exports = class extends CustomGenerator {
         this._getValue(FRAGMENT_SLUG_VAR) || ''
       );
 
-      this._copyTemplates(basePath, ['composition.json', 'definition.json']);
+      this._copyTemplates(basePath, [
+        'fragment-composition.json',
+        'definition.json'
+      ]);
     }
   }
 
