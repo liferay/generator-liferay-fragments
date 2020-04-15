@@ -632,6 +632,16 @@ const api = {
 
   /**
    * @param {string} groupId
+   * @param {object} definition
+   */
+  async renderCompositionPreview(groupId, definition) {
+    return this.renderPageDefinitionPreview(groupId, {
+      pageElement: definition
+    });
+  },
+
+  /**
+   * @param {string} groupId
    * @param {string} html
    * @param {string} css
    * @param {string} js
@@ -652,6 +662,25 @@ const api = {
       },
       {
         headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
+      }
+    );
+  },
+
+  /**
+   * @param {string} groupId
+   * @param {object} definition
+   */
+  async renderPageDefinitionPreview(groupId, definition) {
+    return this.request(
+      'POST',
+      `/o/headless-delivery/v1.0/sites/${groupId}/page-definitions/preview`,
+      {
+        body: definition,
+        headers: {
+          Accept: 'text/html',
+          Authorization: `Basic ${this._basicAuthToken}`
+        },
+        json: true
       }
     );
   }
