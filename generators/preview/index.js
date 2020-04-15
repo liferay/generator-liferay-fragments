@@ -1,3 +1,4 @@
+// @ts-nocheck
 const chokidar = require('chokidar');
 const express = require('express');
 const request = require('request');
@@ -72,7 +73,7 @@ module.exports = class extends AuthGenerator {
    */
   async _checkPreviewCompatibility() {
     try {
-      const preview = await this._getPreview(
+      const preview = await this._getFragmentPreview(
         '.test {}',
         '<test></test>',
         'test();',
@@ -93,14 +94,29 @@ module.exports = class extends AuthGenerator {
   }
 
   /**
+   * Get's a preview of the given composition using configured GroupID
+   * @param {object} definition Composition's definition
+   * @return {Promise<string | object>} Composition's generated preview
+   */
+  _getCompositionPreview(definition) {
+    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+
+    if (groupId) {
+      return api.renderCompositionPreview(groupId, definition);
+    }
+
+    return Promise.reject(new Error('GroupId not found'));
+  }
+
+  /**
    * Get's a preview of the given fragment using configured GroupID
    * @param {string} css Fragment's CSS
    * @param {string} html Fragment's HTML
    * @param {string} js Fragments's JS
    * @param {string} configuration Fragments's configuration
-   * @return {Promise<string>} Fragment's generated preview
+   * @return {Promise<string | object>} Fragment's generated preview
    */
-  _getPreview(css, html, js, configuration) {
+  _getFragmentPreview(css, html, js, configuration) {
     const groupId = this._getValue(LIFERAY_GROUPID_VAR);
 
     if (groupId) {
@@ -136,6 +152,8 @@ module.exports = class extends AuthGenerator {
     app.get('/fragment-preview', (request, response) => {
       collectionId = request.query.collection;
       fragmentId = request.query.fragment;
+      const type = request.query.type;
+
       const projectContent = this._getProjectContent();
 
       const collection = projectContent.collections.find(
@@ -143,17 +161,26 @@ module.exports = class extends AuthGenerator {
       );
 
       if (collection) {
-        const fragment = collection.fragments.find(
-          fragment => fragment.slug === fragmentId
-        );
+        const fragment =
+          type === 'fragment'
+            ? collection.fragments.find(
+                fragment => fragment.slug === fragmentId
+              )
+            : collection.fragmentCompositions.find(
+                composition => composition.slug === fragmentId
+              );
 
-        if (fragment) {
-          this._getPreview(
+        if (fragment && type === 'fragment') {
+          this._getFragmentPreview(
             fragment.css,
             fragment.html,
             fragment.js,
             fragment.configuration
           ).then(preview => {
+            response.send(preview);
+          });
+        } else if (fragment && type === 'composition') {
+          this._getCompositionPreview(fragment.definition).then(preview => {
             response.send(preview);
           });
         }
