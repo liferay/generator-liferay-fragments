@@ -10,6 +10,8 @@ const {
   PORTLET_FILE_REPOSITORY
 } = require('./constants');
 
+const HOST_AUTH_PATTERN = /^https?:\/\/([a-z0-9-_]+):([a-z0-9-_]+)@/i;
+
 const api = {
   _host: '',
   _basicAuthToken: '',
@@ -21,6 +23,29 @@ const api = {
     accessToken: '',
     refreshToken: '',
     expirationDate: new Date('1991-1-1')
+  },
+
+  /**
+   * @param {'basic'|'oauth'} type
+   */
+  _getAuthorizationHeader(type) {
+    const headers = [];
+
+    if (HOST_AUTH_PATTERN.test(this._host)) {
+      const [, user = '', pass = ''] = HOST_AUTH_PATTERN.exec(this._host) || [];
+
+      headers.push(
+        `Basic ${Buffer.from(`${user}:${pass}`).toString('base64')}`
+      );
+    }
+
+    if (type === 'basic') {
+      headers.push(`Basic ${this._basicAuthToken}`);
+    } else if (type === 'oauth') {
+      headers.push(`Bearer ${this._oauthToken.accessToken}`);
+    }
+
+    return headers.join(',');
   },
 
   /**
@@ -216,7 +241,7 @@ const api = {
       '/api/jsonws/user/get-current-user',
       {},
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
 
@@ -225,7 +250,7 @@ const api = {
         '/api/jsonws/user/get-current-user',
         {},
         {
-          headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
+          headers: { Authorization: this._getAuthorizationHeader('oauth') }
         }
       );
     }
@@ -239,7 +264,7 @@ const api = {
       '/api/jsonws/company/get-companies',
       {},
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
   },
@@ -253,7 +278,7 @@ const api = {
       `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`,
       {},
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
   },
@@ -267,7 +292,7 @@ const api = {
       `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`,
       {},
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
   },
@@ -298,7 +323,7 @@ const api = {
       '/api/jsonws/fragment.fragmententry/get-fragment-entries',
       options,
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
   },
@@ -320,7 +345,7 @@ const api = {
       '/api/jsonws/fragment.fragmentcomposition/get-fragment-compositions',
       options,
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     ).catch(() => {
       return [];
@@ -348,7 +373,7 @@ const api = {
       '/api/jsonws/fragment.fragmentcollection/get-fragment-collections',
       options,
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
   },
@@ -369,7 +394,7 @@ const api = {
       },
       {
         headers: {
-          Authorization: `Basic ${this._basicAuthToken}`
+          Authorization: this._getAuthorizationHeader('basic')
         }
       }
     );
@@ -398,7 +423,7 @@ const api = {
       },
       {
         headers: {
-          Authorization: `Basic ${this._basicAuthToken}`
+          Authorization: this._getAuthorizationHeader('basic')
         }
       }
     );
@@ -425,7 +450,7 @@ const api = {
         previewFileEntryId
       },
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
   },
@@ -457,7 +482,7 @@ const api = {
         portletId: FRAGMENTS_PORTLET_ID
       },
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     )
       .then(response => response)
@@ -468,7 +493,7 @@ const api = {
             value: PORTLET_FILE_REPOSITORY
           },
           {
-            headers: { Authorization: `Basic ${this._basicAuthToken}` }
+            headers: { Authorization: this._getAuthorizationHeader('basic') }
           }
         ).then(response => response.classNameId);
 
@@ -484,7 +509,7 @@ const api = {
             typeSettingsProperties: JSON.stringify({})
           },
           {
-            headers: { Authorization: `Basic ${this._basicAuthToken}` }
+            headers: { Authorization: this._getAuthorizationHeader('basic') }
           }
         ).then(response => response);
       });
@@ -503,7 +528,7 @@ const api = {
           bytes
         },
         {
-          headers: { Authorization: `Basic ${this._basicAuthToken}` }
+          headers: { Authorization: this._getAuthorizationHeader('basic') }
         }
       ).then(response => response);
     } else {
@@ -520,7 +545,7 @@ const api = {
           bytes
         },
         {
-          headers: { Authorization: `Basic ${this._basicAuthToken}` }
+          headers: { Authorization: this._getAuthorizationHeader('basic') }
         }
       ).then(response => response.fileEntryId);
     }
@@ -556,7 +581,7 @@ const api = {
         previewFileEntryId
       },
       {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('basic') }
       }
     );
   },
@@ -592,7 +617,7 @@ const api = {
         protocol: params.protocol
       },
       {
-        headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` },
+        headers: { Authorization: this._getAuthorizationHeader('oauth') },
         method: 'POST'
       }
     );
@@ -651,7 +676,7 @@ const api = {
         configuration
       },
       {
-        headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` }
+        headers: { Authorization: this._getAuthorizationHeader('oauth') }
       }
     );
   }
