@@ -7,6 +7,12 @@ const collectionSelect = document.getElementById('collection');
 /** @type {HTMLSelectElement} */
 const fragmentSelect = document.getElementById('fragment');
 
+/** @type {HTMLSelectElement} */
+const pageTemplateSelect = document.getElementById('pageTemplate');
+
+/** @type {HTMLSelectElement} */
+const previewTypeSelect = document.getElementById('previewType');
+
 /** @type {HTMLIFrameElement} */
 const preview = document.getElementById('preview');
 
@@ -62,6 +68,46 @@ fragmentSelect.addEventListener('change', () => {
   }
 });
 
+pageTemplateSelect.addEventListener('change', () => {
+  if (pageTemplateSelect.value) {
+    syncSelectFieldURL(pageTemplateSelect);
+
+    const type = 'page-template';
+
+    preview.src = `/fragment-preview?pageTemplate=${pageTemplateSelect.value}&type=${type}`;
+  }
+});
+
+previewTypeSelect.addEventListener('change', () => {
+  const changeEvent = new Event('change');
+
+  togglePreviewOption();
+
+  if (previewTypeSelect.value === 'page-template') {
+    renderSelect(
+      pageTemplateSelect,
+      projectContent.pageTemplates.map(pageTemplate => ({
+        value: pageTemplate.slug,
+        label: pageTemplate.metadata.name
+      }))
+    );
+
+    pageTemplateSelect.dispatchEvent(changeEvent);
+  } else {
+    renderSelect(fragmentSelect, []);
+
+    renderSelect(
+      collectionSelect,
+      projectContent.collections.map(collection => ({
+        value: collection.slug,
+        label: collection.metadata.name
+      }))
+    );
+
+    collectionSelect.dispatchEvent(changeEvent);
+  }
+});
+
 function renderSelect(selectElement, options) {
   const selectedOption = new URL(location.href).searchParams.get(
     selectElement.id
@@ -100,13 +146,38 @@ socket.addEventListener('message', event => {
 
   preview.src = '/fragment-preview';
 
-  renderSelect(fragmentSelect, []);
+  if (previewTypeSelect.value === 'fragment') {
+    renderSelect(fragmentSelect, []);
 
-  renderSelect(
-    collectionSelect,
-    projectContent.collections.map(collection => ({
-      value: collection.slug,
-      label: collection.metadata.name
-    }))
-  );
+    renderSelect(
+      collectionSelect,
+      projectContent.collections.map(collection => ({
+        value: collection.slug,
+        label: collection.metadata.name
+      }))
+    );
+  } else {
+    renderSelect(
+      pageTemplateSelect,
+      projectContent.pageTemplates.map(pageTemplate => ({
+        value: pageTemplate.slug,
+        label: pageTemplate.metadata.name
+      }))
+    );
+  }
 });
+
+function togglePreviewOption() {
+  const previewType = document.getElementById('previewType').value;
+
+  const fragmentsPreview = document.getElementById('fragmentsPreview');
+  const pageTemplatesPreview = document.getElementById('pageTemplatesPreview');
+
+  if (previewType === 'fragment') {
+    fragmentsPreview.className = '';
+    pageTemplatesPreview.className = 'hide';
+  } else {
+    fragmentsPreview.className = 'hide';
+    pageTemplatesPreview.className = '';
+  }
+}
