@@ -213,6 +213,61 @@ function _getFramentConfiguration(directory, configurationPath) {
 }
 
 /**
+ * Get a list of project page templates from a given basePath
+ * @param {string} basePath Base path
+ * @return {import('../types/index').IPageTemplate[]}
+ */
+function _getPageTemplates(basePath) {
+  return glob
+    .sync(path.join(basePath, 'src', '*', 'page-template.json'))
+    .map(
+      /** @param {string} collectionJSON */
+      collectionJSON => path.resolve(collectionJSON, '..')
+    )
+    .filter(directory => {
+      try {
+        _readJSONSync(path.resolve(directory, 'page-template.json'));
+        return true;
+      } catch (error) {
+        log(
+          `✘ Invalid ${directory}/page-template.json, page template ignored`,
+          {
+            level: 'LOG_LEVEL_ERROR'
+          }
+        );
+
+        return false;
+      }
+    })
+    .map(
+      /**
+       * @param {string} directory
+       * @return {import('../types/index').IPageTemplate}
+       */
+      directory => {
+        const metadata = _readJSONSync(
+          path.resolve(directory, 'page-template.json')
+        );
+        const slug = path.basename(directory);
+
+        return {
+          slug,
+          metadata: {
+            name: metadata.name,
+            pageTemplateDefinitionPath: path.resolve(
+              directory,
+              'page-definition.json'
+            )
+          },
+          definitionData: JSON.stringify(
+            _readJSONSync(path.resolve(directory, 'page-definition.json'))
+          )
+        };
+      }
+    );
+}
+
+/**
  * Gets a project definition from a given basePath
  * @param {string} basePath Base path
  * @return {import('../types/index').IProject} Project
@@ -221,7 +276,8 @@ function getProjectContent(basePath) {
   return {
     basePath,
     project: _readJSONSync(path.resolve(basePath, 'package.json')),
-    collections: _getProjectCollections(basePath)
+    collections: _getProjectCollections(basePath),
+    pageTemplates: _getPageTemplates(basePath)
   };
 }
 
