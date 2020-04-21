@@ -126,6 +126,21 @@ module.exports = class extends AuthGenerator {
     return Promise.reject(new Error('GroupId not found'));
   }
 
+    /**
+   * Get's a preview of the given page template using configured GroupID
+   * @param {object} definition Page Template's definition
+   * @return {Promise<string | object>} Page Template's generated preview
+   */
+  _getPageTemplatePreview(definition) {
+    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+
+    if (groupId) {
+      return api.renderPageDefinitionPreview(groupId, definition);
+    }
+
+    return Promise.reject(new Error('GroupId not found'));
+  }
+
   /**
    * Get's project content for generator's destinationPath
    * @return {import('../../types/index').IProject} Project content
@@ -148,10 +163,13 @@ module.exports = class extends AuthGenerator {
 
     let collectionId = '';
     let fragmentId = '';
+    let pageTemplateId = '';
 
     app.get('/fragment-preview', (request, response) => {
       collectionId = request.query.collection;
       fragmentId = request.query.fragment;
+      pageTemplateId = request.query.pageTemplate;
+
       const type = request.query.type;
 
       const projectContent = this._getProjectContent();
@@ -186,7 +204,21 @@ module.exports = class extends AuthGenerator {
             }
           );
         }
-      } else {
+      } 
+      else if (pageTemplateId && type === 'page-template') {
+        const pageTemplate = projectContent.pageTemplates.find(
+          pageTemplate => pageTemplate.slug === pageTemplateId
+        );
+
+        if (pageTemplate) {
+          this._getPageTemplatePreview(JSON.parse(pageTemplate.definitionData)).then(
+            preview => {
+              response.send(this._replaceLinks(preview));
+            }
+          );
+        }
+      }
+      else {
         response.send('');
       }
     });
