@@ -84,6 +84,7 @@ fragmentElement.style.color = 'inherit';
       "slug": "sample-collection",
     },
   ],
+  "pageTemplates": Array [],
   "project": Object {
     "name": "sample-project-content",
   },
@@ -128,6 +129,7 @@ fragmentElement.style.color = 'inherit';
       "slug": "sample-collection",
     },
   ],
+  "pageTemplates": Array [],
   "project": Object {
     "name": "sample-project-with-custom-paths",
   },
@@ -168,6 +170,7 @@ fragmentElement.style.color = 'inherit';
       "slug": "sample-collection",
     },
   ],
+  "pageTemplates": Array [],
   "project": Object {
     "name": "sample-project-without-fragment-configuration",
   },
