@@ -1,16 +1,16 @@
 jest.mock('../api', () => ({
-  getStagingCompanies: () => [
-    { descriptiveName: 'A (Staging)', groupId: 'sa' },
-    { descriptiveName: 'B (Staging)', groupId: 'sb' },
-    { descriptiveName: 'C', groupId: 'sc' },
-    { descriptiveName: 'D', groupId: 'sd' }
+  getStagingGroups: () => [
+    { descriptiveName: 'A (Staging)', groupId: 'sa', liveGroupId: 'aa' },
+    { descriptiveName: 'B (Staging)', groupId: 'sb', liveGroupId: 'bb' },
+    { descriptiveName: 'C', groupId: 'sc', liveGroupId: 'c' },
+    { descriptiveName: 'D', groupId: 'sd', liveGroupId: 'd' }
   ],
 
   getSiteGroups: () => [
-    { descriptiveName: 'A', groupId: 'a' },
-    { descriptiveName: 'B', groupId: 'b' },
-    { descriptiveName: 'C', groupId: 'c' },
-    { descriptiveName: 'Global', groupId: 'global' }
+    { descriptiveName: 'A', groupId: 'a', liveGroupId: '0' },
+    { descriptiveName: 'B', groupId: 'b', liveGroupId: '0' },
+    { descriptiveName: 'C', groupId: 'c', liveGroupId: '0' },
+    { descriptiveName: 'Global', groupId: 'global', liveGroupId: '0' }
   ]
 }));
 
@@ -50,12 +50,6 @@ describe('getSiteGroups', () => {
       expect.not.arrayContaining([
         expect.objectContaining({ descriptiveName: 'C', groupId: 'c' })
       ])
-    );
-  });
-
-  it('filters staging groups with a name not ending with (Staging)', async () => {
-    expect(await getSiteGroups('')).toEqual(
-      expect.not.arrayContaining([expect.objectContaining({ groupId: 'sd' })])
     );
   });
 
