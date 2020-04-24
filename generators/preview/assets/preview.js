@@ -13,6 +13,12 @@ const pageTemplateSelect = document.getElementById('pageTemplate');
 /** @type {HTMLSelectElement} */
 const previewTypeSelect = document.getElementById('previewType');
 
+/** @type {HTMLElement} */
+const fragmentsPreview = document.getElementById('fragmentsPreview');
+
+/** @type {HTMLElement} */
+const pageTemplatesPreview = document.getElementById('pageTemplatesPreview');
+
 /** @type {HTMLIFrameElement} */
 const preview = document.getElementById('preview');
 
@@ -81,9 +87,10 @@ pageTemplateSelect.addEventListener('change', () => {
 previewTypeSelect.addEventListener('change', () => {
   const changeEvent = new Event('change');
 
-  togglePreviewOption();
-
   if (previewTypeSelect.value === 'page-template') {
+    fragmentsPreview.className = 'hide';
+    pageTemplatesPreview.className = '';
+
     renderSelect(
       pageTemplateSelect,
       projectContent.pageTemplates.map(pageTemplate => ({
@@ -94,6 +101,9 @@ previewTypeSelect.addEventListener('change', () => {
 
     pageTemplateSelect.dispatchEvent(changeEvent);
   } else {
+    fragmentsPreview.className = '';
+    pageTemplatesPreview.className = 'hide';
+
     renderSelect(fragmentSelect, []);
 
     renderSelect(
@@ -166,18 +176,3 @@ socket.addEventListener('message', event => {
     );
   }
 });
-
-function togglePreviewOption() {
-  const previewType = document.getElementById('previewType').value;
-
-  const fragmentsPreview = document.getElementById('fragmentsPreview');
-  const pageTemplatesPreview = document.getElementById('pageTemplatesPreview');
-
-  if (previewType === 'fragment') {
-    fragmentsPreview.className = '';
-    pageTemplatesPreview.className = 'hide';
-  } else {
-    fragmentsPreview.className = 'hide';
-    pageTemplatesPreview.className = '';
-  }
-}
