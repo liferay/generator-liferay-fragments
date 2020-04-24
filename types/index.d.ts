@@ -100,6 +100,7 @@ export interface IPageTemplate {
 export interface ISiteGroup {
   descriptiveName: string;
   groupId: string;
+  liveGroupId: string;
 }
 
 export interface IServerCollection {

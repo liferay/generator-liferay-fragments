@@ -4,20 +4,20 @@ const api = require('./api');
  * @param {import('../types/index').ISiteGroup} group Site group
  * @return {boolean} True if the give group is a staging group
  */
-const isStagingGroup = group => group.descriptiveName.endsWith(' (Staging)');
+const isStagingGroup = group => group.liveGroupId !== '0';
 
 /**
- * Returns a function that matches groups by descriptiveName
- * @param {string} descriptiveName Group descriptiveName matcher
+ * Returns a function that matches groups by live group ID
+ * @param {string} siteGroupId Group life group ID matcher
  * @return {(group: import('../types/index').ISiteGroup) => boolean} Group matcher
  */
-const matchGroupName = descriptiveName => {
+const matchGroupId = siteGroupId => {
   /**
    * @param {Object} group Group
-   * @param {string} group.descriptiveName Group name
-   * @return {boolean} True if the given group has the stored descriptiveName
+   * @param {string} group.liveGroupId Group life group ID
+   * @return {boolean} True if the given group has the stored live group ID
    */
-  return group => descriptiveName === group.descriptiveName;
+  return group => siteGroupId === group.liveGroupId;
 };
 
 /**
@@ -29,7 +29,7 @@ const matchGroupName = descriptiveName => {
 const mergeStagingGroups = (siteGroups, stagingGroups) => [
   ...siteGroups.map(
     siteGroup =>
-      stagingGroups.find(matchGroupName(siteGroup.descriptiveName)) || siteGroup
+      stagingGroups.find(matchGroupId(siteGroup.groupId)) || siteGroup
   ),
 
   ...stagingGroups.filter(isStagingGroup)
@@ -41,7 +41,7 @@ const mergeStagingGroups = (siteGroups, stagingGroups) => [
  * @return {Promise<import('../types/index').ISiteGroup[]>} Site groups
  */
 const getSiteGroups = async companyId => {
-  const stagingGroups = await api.getStagingCompanies(companyId);
+  const stagingGroups = await api.getStagingGroups(companyId);
   const siteGroups = await api.getSiteGroups(companyId);
 
   return mergeStagingGroups(siteGroups, stagingGroups);

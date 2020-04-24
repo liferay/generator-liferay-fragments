@@ -248,7 +248,7 @@ const api = {
    * @param {string} companyId
    * @return {Promise<import('../types/index').ISiteGroup[]>}
    */
-  getStagingCompanies(companyId) {
+  getStagingGroups(companyId) {
     return this.postFormData(
       `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`,
       {},
