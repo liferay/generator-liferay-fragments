@@ -86,6 +86,15 @@ pageTemplateSelect.addEventListener('change', () => {
 
 previewTypeSelect.addEventListener('change', () => {
   const changeEvent = new Event('change');
+  const url = new URL(location.href);
+
+  url.searchParams.forEach((_, key) => {
+    url.searchParams.delete(key);
+  });
+
+  url.searchParams.set(previewTypeSelect.id, previewTypeSelect.value);
+
+  history.pushState(null, null, url.href);
 
   if (previewTypeSelect.value === 'page-template') {
     fragmentsPreview.className = 'hide';
@@ -155,6 +164,11 @@ socket.addEventListener('message', event => {
   projectContent = JSON.parse(event.data);
 
   preview.src = '/fragment-preview';
+
+  renderSelect(previewTypeSelect, [
+    { value: 'fragment', label: 'Fragments' },
+    { value: 'page-template', label: 'Page Templates' }
+  ]);
 
   if (previewTypeSelect.value === 'fragment') {
     renderSelect(fragmentSelect, []);
