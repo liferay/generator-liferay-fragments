@@ -90,6 +90,7 @@ export interface ICompany {
 export interface ISiteGroup {
   descriptiveName: string;
   groupId: string;
+  liveGroupId: string;
 }
 
 export interface IServerCollection {
