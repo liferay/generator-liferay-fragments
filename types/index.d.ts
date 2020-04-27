@@ -4,6 +4,7 @@ export interface IProject {
     name: string;
   };
   collections: ICollection[];
+  pageTemplates: IPageTemplate[];
 }
 
 export interface ICollection {
@@ -85,6 +86,15 @@ export interface IFragment {
 export interface ICompany {
   webId: string;
   companyId: string;
+}
+
+export interface IPageTemplate {
+  slug: string;
+  metadata: {
+    pageTemplateDefinitionPath: string;
+    name: string;
+  };
+  definitionData: string;
 }
 
 export interface ISiteGroup {

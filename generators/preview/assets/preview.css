@@ -10,11 +10,12 @@ body {
 }
 
 form {
-  color: #000;
   background-color: #eee;
   border-bottom: solid thin #aaa;
-  font-size: 12px;
   box-shadow: inset 0 -1em 2em rgba(0, 0, 0, 0.1);
+  color: #000;
+  display: inline-flex;
+  font-size: 12px;
 }
 
 select {
@@ -34,4 +35,8 @@ label {
 iframe {
   border: none;
   flex-grow: 1;
+}
+
+.hide {
+  display: none;
 }
