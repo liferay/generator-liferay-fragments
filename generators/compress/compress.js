@@ -32,7 +32,12 @@ const compress = (basePath, options) =>
 
     glob.sync(path.join(basePath, 'src', '**/*')).forEach(filePath => {
       if (fs.statSync(filePath).isFile()) {
-        const relativePath = filePath.replace(path.join(basePath, 'src'), '');
+        const _basePath = basePath.replace(/\\/g, path.posix.sep);
+
+        const relativePath = filePath.replace(
+          path.posix.join(_basePath, 'src/'),
+          ''
+        );
         zip.file(relativePath, fs.createReadStream(filePath));
       }
     });
