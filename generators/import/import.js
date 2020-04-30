@@ -4,6 +4,7 @@ const getProjectContent = require('../../utils/get-project-content');
 const compress = require('../compress/compress');
 const {
   ADD_DEPLOYMENT_DESCRIPTOR_VAR,
+  FRAGMENT_IMPORT_STATUS,
   PAGE_TEMPLATE_IMPORT_STATUS
 } = require('../../utils/constants');
 
@@ -44,14 +45,14 @@ async function importProject(groupId, projectPath) {
       }
 
       if (
-        (response.invalidFragmentEntryNames &&
-          response.invalidFragmentEntryNames.length > 0) ||
-        (response.invalidPageTemplates &&
-          response.invalidPageTemplates.length > 0)
+        (response.fragmentEntriesImportResult &&
+          response.fragmentEntriesImportResult.length > 0) ||
+        (response.pageTemplatesImportResult &&
+          response.pageTemplatesImportResult.length > 0)
       ) {
-        _logImportErrors(
-          response.invalidFragmentEntryNames || [],
-          response.invalidPageTemplates || []
+        _logImportResults(
+          response.fragmentEntriesImportResult || [],
+          response.pageTemplatesImportResult || []
         );
       } else {
         log('Project imported', { level: 'LOG_LEVEL_SUCCESS' });
@@ -210,28 +211,79 @@ function _logImportSummary(collectionRequests, fragmentRequests) {
 }
 
 /**
- * @param {string[]} invalidFragmentEntryNames
- * @param {{name: string, errorMessage: string, status: string}[]} invalidPageTemplates
+ * @param {{name: string, errorMessage: string, status: string}[]} fragmentEntriesImportResult
+ * @param {{name: string, errorMessage: string, status: string}[]} pageTemplatesImportResult
  */
-function _logImportErrors(invalidFragmentEntryNames, invalidPageTemplates) {
-  invalidFragmentEntryNames.forEach(invalidFragmentEntryName => {
-    log(`${invalidFragmentEntryName} not imported due to errors`, {
-      level: LOG_LEVEL.error
-    });
+function _logImportResults(
+  fragmentEntriesImportResult,
+  pageTemplatesImportResult
+) {
+  fragmentEntriesImportResult.forEach(result => {
+    switch (result.status) {
+      case FRAGMENT_IMPORT_STATUS.IMPORTED: {
+        log(`✔ Fragment ${result.name} imported`, { level: LOG_LEVEL.success });
+
+        break;
+      }
+
+      case FRAGMENT_IMPORT_STATUS.IMPORTED_DRAFT: {
+        log(`↷ Fragment ${result.name} imported as draft`, {
+          level: LOG_LEVEL.info
+        });
+
+        break;
+      }
+
+      case FRAGMENT_IMPORT_STATUS.INVALID: {
+        log(`Fragment ${result.name} not imported`, {
+          level: LOG_LEVEL.error
+        });
+
+        log(`ERROR: ${result.errorMessage}`, {
+          level: LOG_LEVEL.error
+        });
+
+        break;
+      }
+
+      default:
+        break;
+    }
   });
 
-  invalidPageTemplates.forEach(invalidPageTemplate => {
-    const logLevel =
-      invalidPageTemplate.status === PAGE_TEMPLATE_IMPORT_STATUS.INVALID
-        ? LOG_LEVEL.error
-        : LOG_LEVEL.info;
+  pageTemplatesImportResult.forEach(result => {
+    switch (result.status) {
+      case PAGE_TEMPLATE_IMPORT_STATUS.IMPORTED: {
+        log(`✔ Page template ${result.name} imported`, {
+          level: LOG_LEVEL.success
+        });
 
-    log(`${invalidPageTemplate.name} not imported`, {
-      level: logLevel
-    });
-    log(`Error: ${invalidPageTemplate.errorMessage}`, {
-      level: logLevel
-    });
+        break;
+      }
+
+      case PAGE_TEMPLATE_IMPORT_STATUS.IGNORED: {
+        log(`↷ Page template ${result.name} ignored`, {
+          level: LOG_LEVEL.info
+        });
+
+        break;
+      }
+
+      case PAGE_TEMPLATE_IMPORT_STATUS.INVALID: {
+        log(`Page template ${result.name} not imported`, {
+          level: LOG_LEVEL.error
+        });
+
+        log(`ERROR: ${result.errorMessage}`, {
+          level: LOG_LEVEL.error
+        });
+
+        break;
+      }
+
+      default:
+        break;
+    }
   });
 }
 
