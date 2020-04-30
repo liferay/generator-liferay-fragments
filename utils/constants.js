@@ -107,6 +107,7 @@ module.exports.PAGE_TEMPLATE_SLUG_VAR = 'pageTemplateSlug';
 module.exports.PAGE_TEMPLATE_TYPE_DEFAULT = 'page-template';
 module.exports.PAGE_TEMPLATE_TYPE_MESSAGE = 'Page Template type';
 module.exports.PAGE_TEMPLATE_TYPE_OPTIONS = [
+  { name: 'Display Page Template', value: 'display-page-template' },
   { name: 'Page Template', value: 'page-template' },
   { name: 'Master Page', value: 'master-page' }
 ];
