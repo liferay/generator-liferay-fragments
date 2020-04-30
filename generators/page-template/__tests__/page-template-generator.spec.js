@@ -20,6 +20,17 @@ function expectFiles(base, paths) {
 }
 
 describe('page-template-generator', () => {
+  it('generates a new display page template', () =>
+    YeomanTest.run(path.join(__dirname, '..'))
+      .withOptions({ pageTemplateName: 'Sample Display Page Template' })
+      .withOptions({ pageTemplateType: 'display-page-template' })
+      .then(projectPath => {
+        expectFiles(path.join(projectPath, 'src', 'sample-display-page-template'), [
+          'display-page-template.json',
+          'page-definition.json'
+        ]);
+      }));
+
   it('generates a new master page', () =>
     YeomanTest.run(path.join(__dirname, '..'))
       .withOptions({ pageTemplateName: 'Sample Master Page' })
