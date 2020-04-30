@@ -12,18 +12,23 @@ const glob = require('glob');
  * Compress a whole project from a basePath with all it's
  * fragments and collections.
  * @param {string} basePath Base path to use as project
- * @param {object} options Generator parameters
+ * @param {object} options
  * @param {boolean} [options.addDeploymentDescriptor=false]
+ * @param {string} [options.companyWebId]
+ * @param {string} [options.groupKey]
  * @return {Promise<JSZip>} Promise with the generated zip
  */
-const compress = (basePath, options) =>
+const compress = (
+  basePath,
+  { addDeploymentDescriptor, companyWebId, groupKey }
+) =>
   new Promise(resolve => {
     log('Generating zip file', { newLine: true });
 
     const zip = new JSZip();
 
-    if (options.addDeploymentDescriptor) {
-      _addDeploymentDescriptor(options, zip);
+    if (addDeploymentDescriptor) {
+      _addDeploymentDescriptor(companyWebId, groupKey, zip);
     }
 
     try {
@@ -73,13 +78,13 @@ const compress = (basePath, options) =>
 /**
  * Adds a deployment descriptor object to the given zip file.
  * The zip file will be modified
- * @param {object} options Generator parameters
+ * @param {string|undefined} companyWebId
+ * @param {string|undefined} groupKey
  * @param {JSZip} zip Zip file to be modified
  */
-function _addDeploymentDescriptor(options, zip) {
-  const deploymentDescriptorCompany =
-    options[DEPLOYMENT_DESCRIPTOR_COMPANY_VAR];
-  const deploymentDescriptorGroup = options[DEPLOYMENT_DESCRIPTOR_GROUP_VAR];
+function _addDeploymentDescriptor(companyWebId, groupKey, zip) {
+  const deploymentDescriptorCompany = companyWebId;
+  const deploymentDescriptorGroup = groupKey;
 
   const deploymentDescriptor = Object.assign({});
 

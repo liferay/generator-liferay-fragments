@@ -23,7 +23,8 @@ module.exports = class extends CustomGenerator {
         type: 'confirm',
         name: ADD_DEPLOYMENT_DESCRIPTOR_VAR,
         message: ADD_DEPLOYMENT_DESCRIPTOR_MESSAGE,
-        default: ADD_DEPLOYMENT_DESCRIPTOR_DEFAULT
+        default: ADD_DEPLOYMENT_DESCRIPTOR_DEFAULT,
+        when: !this._hasValue(ADD_DEPLOYMENT_DESCRIPTOR_VAR)
       }
     ]);
 
@@ -33,7 +34,8 @@ module.exports = class extends CustomGenerator {
           type: 'input',
           name: DEPLOYMENT_DESCRIPTOR_COMPANY_VAR,
           message: DEPLOYMENT_DESCRIPTOR_COMPANY_MESSAGE,
-          default: DEPLOYMENT_DESCRIPTOR_COMPANY_DEFAULT
+          default: DEPLOYMENT_DESCRIPTOR_COMPANY_DEFAULT,
+          when: !this._hasValue(DEPLOYMENT_DESCRIPTOR_COMPANY_VAR)
         }
       ]);
 
@@ -47,7 +49,8 @@ module.exports = class extends CustomGenerator {
             type: 'input',
             name: DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
             message: DEPLOYMENT_DESCRIPTOR_GROUP_MESSAGE,
-            default: DEPLOYMENT_DESCRIPTOR_GROUP_DEFAULT
+            default: DEPLOYMENT_DESCRIPTOR_GROUP_DEFAULT,
+            when: !this._hasValue(DEPLOYMENT_DESCRIPTOR_GROUP_VAR)
           }
         ]);
       }
@@ -58,6 +61,16 @@ module.exports = class extends CustomGenerator {
    * @inheritdoc
    */
   async writting() {
-    await compress(this.destinationPath(), this.answers);
+    await compress(this.destinationPath(), {
+      [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: this._getValue(
+        ADD_DEPLOYMENT_DESCRIPTOR_VAR
+      ),
+      [DEPLOYMENT_DESCRIPTOR_COMPANY_VAR]: this._getValue(
+        DEPLOYMENT_DESCRIPTOR_COMPANY_VAR
+      ),
+      [DEPLOYMENT_DESCRIPTOR_GROUP_VAR]: this._getValue(
+        DEPLOYMENT_DESCRIPTOR_GROUP_VAR
+      )
+    });
   }
 };
