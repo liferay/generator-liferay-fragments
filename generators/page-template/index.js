@@ -9,7 +9,7 @@ const {
   PAGE_TEMPLATE_TYPE_MESSAGE,
   PAGE_TEMPLATE_TYPE_OPTIONS,
   PAGE_TEMPLATE_TYPE_VAR,
-  PAGE_TEMPLATE_SLUG_VAR
+  PAGE_TEMPLATE_SLUG_VAR,
 } = require('../../utils/constants');
 
 module.exports = class extends CustomGenerator {
@@ -55,18 +55,23 @@ module.exports = class extends CustomGenerator {
         message: PAGE_TEMPLATE_TYPE_MESSAGE,
         choices: PAGE_TEMPLATE_TYPE_OPTIONS,
         default: this._getValue(PAGE_TEMPLATE_TYPE_DEFAULT),
-        when: !this._hasValue(PAGE_TEMPLATE_TYPE_VAR)
+        when: !this._hasValue(PAGE_TEMPLATE_TYPE_VAR),
       },
       {
         type: 'input',
         name: PAGE_TEMPLATE_NAME_VAR,
         message: PAGE_TEMPLATE_NAME_MESSAGE,
         /** @param {string} name */
-        validate: name =>
+        validate: (name) =>
           name ? true : PAGE_TEMPLATE_NAME_NON_EMPTY_ERROR_MESSAGE,
-        when: !this._hasValue(PAGE_TEMPLATE_NAME_VAR)
-      }
+        when: !this._hasValue(PAGE_TEMPLATE_NAME_VAR),
+      },
     ]);
+
+    console.log(
+      'NAMEEMEMEMEMEME',
+      (this._getValue(PAGE_TEMPLATE_NAME_VAR) || '').replace(/\s+/g, '-')
+    );
 
     this._setValue(
       PAGE_TEMPLATE_SLUG_VAR,
