@@ -61,6 +61,12 @@ module.exports.FRAGMENT_COMPOSITION_NAME_NON_EMPTY_ERROR_MESSAGE =
 module.exports.FRAGMENT_COMPOSITION_NAME_SAMPLE = 'Sample fragment composition';
 module.exports.FRAGMENT_COMPOSITION_NAME_VAR = 'fragmentCompositionName';
 
+module.exports.FRAGMENT_IMPORT_STATUS = {
+  IMPORTED: 'imported',
+  IMPORTED_DRAFT: 'imported-draft',
+  INVALID: 'invalid'
+};
+
 module.exports.FRAGMENTS_PORTLET_ID =
   'com_liferay_fragment_web_portlet_FragmentPortlet';
 
@@ -113,6 +119,7 @@ module.exports.PAGE_TEMPLATE_TYPE_OPTIONS = [
 module.exports.PAGE_TEMPLATE_TYPE_VAR = 'pageTemplateType';
 
 module.exports.PAGE_TEMPLATE_IMPORT_STATUS = {
+  IMPORTED: 'imported',
   IGNORED: 'ignored',
   INVALID: 'invalid'
 };

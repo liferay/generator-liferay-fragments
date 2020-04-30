@@ -1,6 +1,5 @@
 const CustomGenerator = require('../../utils/custom-generator');
 const path = require('path');
-const voca = require('voca');
 
 const {
   PAGE_TEMPLATE_NAME_MESSAGE,
@@ -71,7 +70,9 @@ module.exports = class extends CustomGenerator {
 
     this._setValue(
       PAGE_TEMPLATE_SLUG_VAR,
-      voca.slugify(this._getValue(PAGE_TEMPLATE_NAME_VAR))
+      (this._getValue(PAGE_TEMPLATE_NAME_VAR) || '')
+        .replace(/\s+/g, '-')
+        .toLocaleLowerCase()
     );
 
     this._setValue(PAGE_TEMPLATE_TYPE_VAR, PAGE_TEMPLATE_TYPE_DEFAULT);
