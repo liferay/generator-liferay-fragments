@@ -4,7 +4,7 @@ export interface IProject {
     name: string;
   };
   collections: ICollection[];
-  pageTemplates: IPageTemplate[];
+  pageTemplates?: IPageTemplate[];
 }
 
 export interface ICollection {
