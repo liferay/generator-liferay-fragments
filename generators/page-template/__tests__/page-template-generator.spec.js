@@ -25,10 +25,10 @@ describe('page-template-generator', () => {
       .withOptions({ pageTemplateName: 'Sample Display Page Template' })
       .withOptions({ pageTemplateType: 'display-page-template' })
       .then(projectPath => {
-        expectFiles(path.join(projectPath, 'src', 'sample-display-page-template'), [
-          'display-page-template.json',
-          'page-definition.json'
-        ]);
+        expectFiles(
+          path.join(projectPath, 'src', 'sample-display-page-template'),
+          ['display-page-template.json', 'page-definition.json']
+        );
       }));
 
   it('generates a new master page', () =>
