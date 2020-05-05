@@ -47,8 +47,8 @@ exports[`page-template-generator Generates a new page template 2`] = `
 
 exports[`page-template-generator generates a new display page template 1`] = `
 "{
-  \\"contentSubtypeName\\" : \\"Basic Web Content\\",
-  \\"contentTypeClassName\\" : \\"com.liferay.journal.model.JournalArticle\\",
+  \\"contentSubtypeClassTypeId\\" : 0,
+  \\"contentTypeClassName\\" : \\"com.liferay.portal.kernel.repository.model.FileEntry\\",
   \\"name\\" : \\"Sample Display Page Template\\"
 }
 "
