@@ -63,13 +63,9 @@ const compress = (
           level: LOG_LEVEL.success
         });
 
-        log('Import them to your liferay-portal to start using them:', {
+        log('Import them to your liferay-portal to start using them', {
           level: LOG_LEVEL.success
         });
-
-        log(
-          'https://dev.liferay.com/discover/portal/-/knowledge_base/7-1/exporting-and-importing-fragments#importing-collections'
-        );
 
         resolve(zip);
       });
