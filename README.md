@@ -48,6 +48,40 @@ Once you've created your project, there are several npm scripts that allow
 you to create fragments and fragment collections, export fragments from a
 Liferay instance, and manage your existing fragments.
 
+> From v1.7.0 you can create not only fragments, but also templates and
+> compositions. In this documentation file we will refer to all them as
+> "elements", as they are being considered in all CLI commands (preview, import, etc).
+
+### Directory Structure
+
+All elements must follow a specific (although simple) directory structure
+so that they can be imported into a Liferay instance. The information about
+each element is stored inside `JSON` files, and you can change them manually.
+
+This is a sample directory structure with all the elements that can be managed
+with the Toolkit:
+
+- `collection-a/`
+    - `collection.json`
+    - `fragment-1/`
+        - `fragment.json`
+        - `configuration.json`
+        - `index.html`
+        - `styles.css`
+        - `main.js`
+    - `fragment-composition-1/`
+        - `fragment-composition.json`
+        - `definition.json`
+- `master-page-a/`
+    - `master-page.json`
+    - `page-definition.json`
+- `page-template-a/`
+    - `page-template.json`
+    - `page-definition.json`
+- `display-page-template-a/`
+    - `display-page-template.json`
+    - `page-definition.json`
+
 ### Creating New Fragments
 
 Fragments are always grouped inside collections. To create a collection, run
@@ -65,38 +99,33 @@ inside by running
 npm run add-fragment
 ```
 
-### Fragments Directory Structure
+#### Creating fragment compositions
 
-Collections and fragments must follow a specific (although simple) directory
-structure so that they can be imported into a Liferay instance. The information
-about each collection and fragment is stored inside `JSON` files, and you can
-change them manually.
+Fragment compositions are treated as regular fragments, so they need to be grouped
+inside collections too:
 
-This is a sample directory structure with two collections and two fragments
-within the first collection:
+```bash
+npm run add-fragment-composition
+```
 
-- `src/`
-    - `collection-a/`
-        - `collection.json`
-        - `fragment-1/`
-            - `fragment.json`
-            - `index.html`
-            - `styles.css`
-            - `main.js`
-        - `fragment-2/`<br>
-          ...
-    - `collection-b/`<br>
-      ...
+### Creating Page Templates
 
-### Exporting fragments from a Liferay instance
+All Page Templates can be created with a single command, which will ask the kind
+of template you want to create:
 
-Instead of creating fragments from scratch, it's also possible to export them
+```
+npm run add-page-template
+```
+
+### Exporting from a Liferay instance
+
+Instead of creating elements from scratch, it's also possible to export them
 from an existing Liferay instance. This is very useful to continue the
-development of fragments with any desired desktop tool such as VSCode, Atom,
-Sublime, etc. It also facilitates keeping the code of the fragments under version
-control and using any desired development tool (e.g., SaSS, babel, etc.).
+development with any desired desktop tool such as VSCode, Atom, Sublime, etc.
+It also facilitates keeping the code under version control and using any
+desired development tool (e.g., SaSS, babel, etc.).
 
-To export the fragments from an existing Liferay instance, run the `export`
+To export the elements from an existing Liferay instance, run the `export`
 command. It will guide you through the information that you need to connect to
 Liferay and choose among its sites:
 
@@ -104,9 +133,9 @@ Liferay and choose among its sites:
 npm run export
 ```
 
-### Importing fragments into a Liferay instance
+### Importing into a Liferay instance
 
-After you've created your own fragments or after you've made modifications to
+After you've created your own elements or after you've made modifications to
 exported fragments, you can import them into a Liferay instance by running:
 
 ```bash
@@ -122,23 +151,23 @@ imported into Liferay.
 npm run import:watch
 ```
 
-### Previewing fragments with a Liferay Server
+### Previewing with a Liferay Server
 
 > *Warning*: this functionality is only available with Liferay 7.2 Fixpack 1 or later.
 > You also need to include the marketplace [Oauth 2 Plugin][7] in your Liferay Portal.
 
-Sometimes you may want to see how a fragment will look once it has been imported
+Sometimes you may want to see how an element will look once it has been imported
 to Liferay. With the `preview` command, you can specify a Liferay Server and see
-your fragments rendered without importing them. Moreover, this command also
+your elements rendered without importing them. Moreover, this command also
 autoreloads features, so you can make changes in your fragments rapidly.
 
 ```bash
 npm run preview
 ```
 
-### Packaging fragments for distribution
+### Packaging for distribution
 
-After you have finished the development of fragments, they can be distributed as
+After you have finished the development of the project, it can be distributed as
 a ZIP file, which can be imported inside any Liferay site. To prepare the ZIP
 file, run
 
