@@ -673,7 +673,7 @@ const api = {
   async renderPageDefinitionPreview(groupId, definition) {
     return this.request(
       'POST',
-      `/o/headless-delivery/v1.0/sites/${groupId}/page-definitions/preview`,
+      `/o/headless-admin-content/v1.0/sites/${groupId}/page-definitions/preview`,
       {
         body: definition,
         headers: {
