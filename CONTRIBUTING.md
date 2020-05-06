@@ -19,7 +19,7 @@ can use `npm link` feature:
 4. Now you can use _Yeoman_ and _NPM_ commands normally, it will use your
    local toolkit project.
 
-## Release Process
+## Release Cycle
 
 We use semver for every release, but we may publish more requests at once.
 Currently we are trying to publish new versions just before Liferay Portal
@@ -29,6 +29,20 @@ to be available.
 All CLI features must be _compatible_ with all Liferay Portal versions: if
 they depend on some portal feature (API call ,service), they should fail
 gracefully and so a nice error, but never break anything.
+
+### Creating a new release
+
+1. Create a new branch and add changes if needed:
+   - `docs: x` update outdated documentation.
+   - `chore: Update/Remove x` update dependencies (`npm audit`, `npm outdated`).
+   - `fix: x` run all tests and linters.
+   - `chore: Prepare release vX.X.X` update `package.json` and `package-lock.json`.
+2. Create a PR and merge into master.
+3. Create [a new release][4]:
+   - Create `vX.X.X` tag format (same for release title).
+   - Write the changelog in the release description.
+4. `git fetch origin && git checkout vX.X.X` checkout created tag locally.
+5. `npm publish` release to NPM.
 
 ## Pull Request Process
 
@@ -42,10 +56,11 @@ When you create your contribution, please keep this list in mind:
 - Ensure that it passes all tests and linting process and includes JSDocs.
 - Update the README.md with details of changes to the interface, this including
   new parameters, behaviour or even generators.
-- **Do not change the version number manually** (see [Release Process][3]).
+- **Do not change the version number manually** (see [Release Cycle][3]).
 - Create your pull request against master branch and resolve any conflicts if
   necessary.
 
 [1]: https://github.com/liferay/liferay-frontend-guidelines
 [2]: https://github.com/liferay/liferay-frontend-guidelines/blob/master/general/commit_messages.md
-[3]: https://github.com/liferay/generator-liferay-fragments/blob/master/CONTRIBUTING.md#release-process
+[3]: https://github.com/liferay/generator-liferay-fragments/blob/master/CONTRIBUTING.md#release-cycle
+[4]: https://github.com/liferay/generator-liferay-fragments/releases/new
