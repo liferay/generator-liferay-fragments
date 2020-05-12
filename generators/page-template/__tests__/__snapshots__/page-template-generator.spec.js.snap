@@ -48,7 +48,7 @@ exports[`page-template-generator Generates a new page template 2`] = `
 exports[`page-template-generator generates a new display page template 1`] = `
 "{
   \\"contentSubtype\\" : {
-    \\"classTypeId\\" : 0
+    \\"subtypeId\\" : 0
   },
   \\"contentType\\" : {
     \\"className\\" : \\"com.liferay.portal.kernel.repository.model.FileEntry\\"
