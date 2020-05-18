@@ -562,6 +562,31 @@ const api = {
   },
 
   /**
+   * @param {string} groupId
+   * @return {Promise<Buffer>}
+   */
+  async exportZip(groupId) {
+    await this.refreshOAuthToken();
+
+    return new Promise((resolve, reject) => {
+      request(
+        `${this._host}/c/portal/layout_page_template/export_layout_page_template_entries?groupId=${groupId}`,
+        {
+          headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` },
+          encoding: null
+        },
+        (error, response, body) => {
+          if (error) {
+            reject(error);
+          }
+
+          resolve(body);
+        }
+      );
+    });
+  },
+
+  /**
    * @param {string} basePath
    * @param {string} groupId
    */
