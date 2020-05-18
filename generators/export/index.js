@@ -1,8 +1,6 @@
 const AuthGenerator = require('../../utils/auth-generator');
-const getProjectContent = require('../../utils/get-project-content');
-const exportCollections = require('./export');
-const writeProjectContent = require('../../utils/write-project-content');
 const { LIFERAY_GROUPID_VAR } = require('../../utils/constants');
+const exportProject = require('./export');
 
 module.exports = class extends AuthGenerator {
   /**
@@ -10,13 +8,12 @@ module.exports = class extends AuthGenerator {
    */
   async asking() {
     await super.asking();
-    const projectContent = getProjectContent(this.destinationPath());
+    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
 
-    projectContent.collections = await exportCollections(
-      this._getValue(LIFERAY_GROUPID_VAR) || '',
-      projectContent
-    );
+    if (!groupId) {
+      throw new Error('groupId cannot be undefined');
+    }
 
-    writeProjectContent(projectContent.basePath, projectContent);
+    await exportProject(groupId, this.destinationPath());
   }
 };
