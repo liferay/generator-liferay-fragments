@@ -231,6 +231,10 @@ function _logImportResults(
           level: LOG_LEVEL.info
         });
 
+        log(`ERROR: ${result.errorMessage}`, {
+          level: LOG_LEVEL.error
+        });
+
         break;
       }
 
