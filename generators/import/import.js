@@ -227,9 +227,12 @@ function _logImportResults(
       }
 
       case FRAGMENT_IMPORT_STATUS.IMPORTED_DRAFT: {
-        log(`↷ Fragment ${result.name} imported as draft`, {
-          level: LOG_LEVEL.info
-        });
+        log(
+          `↷ Fragment ${result.name} imported as draft due to the following errors`,
+          {
+            level: LOG_LEVEL.info
+          }
+        );
 
         log(`ERROR: ${result.errorMessage}`, {
           level: LOG_LEVEL.error
@@ -239,9 +242,12 @@ function _logImportResults(
       }
 
       case FRAGMENT_IMPORT_STATUS.INVALID: {
-        log(`Fragment ${result.name} not imported`, {
-          level: LOG_LEVEL.error
-        });
+        log(
+          `Fragment ${result.name} not imported due to the following errors`,
+          {
+            level: LOG_LEVEL.error
+          }
+        );
 
         log(`ERROR: ${result.errorMessage}`, {
           level: LOG_LEVEL.error
