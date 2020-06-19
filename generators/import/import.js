@@ -280,9 +280,12 @@ function _logImportResults(
       }
 
       case PAGE_TEMPLATE_IMPORT_STATUS.INVALID: {
-        log(`Page template ${result.name} not imported`, {
-          level: LOG_LEVEL.error
-        });
+        log(
+          `Page template ${result.name} not imported due to the following errors`,
+          {
+            level: LOG_LEVEL.error
+          }
+        );
 
         log(`ERROR: ${result.errorMessage}`, {
           level: LOG_LEVEL.error
