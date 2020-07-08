@@ -60,4 +60,47 @@ describe('compress', () => {
         });
       });
   });
+
+  it('compiles scss files', () => {
+    const fragmentFolderPath = 'collection/fragment';
+    const srcFragmentFile = 'styles.scss';
+    const dstFragmentFile = 'styles.css';
+
+    return YeomanTest.run(path.join(__dirname, '..'))
+      .inTmpDir(function(dir) {
+        fs.mkdirSync(path.join(dir, 'src'));
+        fs.mkdirSync(path.join(dir, 'src/collection'));
+        fs.mkdirSync(path.join(dir, 'src/collection/fragment'));
+        let metaData = {
+          scss: { path: 'styles.scss' },
+          name: 'fragment'
+        };
+        fs.writeFileSync(
+          path.join(dir, 'src/collection/fragment.json'),
+          JSON.stringify(metaData)
+        );
+
+        const composedPath = path.join(dir, 'src', fragmentFolderPath);
+        fs.writeFileSync(
+          path.join(composedPath, srcFragmentFile),
+          'body{a{color:black;}}'
+        );
+      })
+      .then(projectPath => {
+        const zip = new AdmZip(
+          path.join(projectPath, 'build/liferay-fragments.zip')
+        );
+
+        expect(
+          zip
+            .getEntry(path.posix.join(fragmentFolderPath, dstFragmentFile))
+            .getData()
+            .toString('utf8')
+        ).toBe(
+          `body a {
+  color: black; }
+`
+        );
+      });
+  });
 });

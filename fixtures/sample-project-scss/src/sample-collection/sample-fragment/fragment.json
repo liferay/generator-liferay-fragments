@@ -1,0 +1,11 @@
+{
+  "name": "Sample fragment name",
+  "htmlPath": "sample-fragment.html",
+  "cssPath": "sample-fragment.css",
+  "scss": {
+    "path": "sample-fragment.scss",
+    "includePaths": []
+  },
+  "jsPath": "sample-fragment.js",
+  "configurationPath": "configuration.json"
+}

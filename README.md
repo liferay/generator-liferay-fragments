@@ -67,7 +67,7 @@ with the Toolkit:
         - `fragment.json`
         - `configuration.json`
         - `index.html`
-        - `styles.css`
+        - `styles.css` / `styles.scss`
         - `main.js`
     - `fragment-composition-1/`
         - `fragment-composition.json`

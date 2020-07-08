@@ -66,17 +66,23 @@ export interface IOauthToken {
   expirationDate: Date;
 }
 
-export interface IFragment {
-  slug: string;
-  metadata: {
+export interface IFragmentMetadata {
     cssPath: string;
+    scss: {
+      path: string,
+      includePaths: string[]
+    },
     htmlPath: string;
     jsPath: string;
     configurationPath: string;
     thumbnailPath?: string;
     name: string;
     type: string;
-  };
+}
+
+export interface IFragment {
+  slug: string;
+  metadata: IFragmentMetadata;
   css: string;
   html: string;
   js: string;

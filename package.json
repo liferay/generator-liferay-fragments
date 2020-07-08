@@ -51,6 +51,7 @@
     "npm": ">= 6.0.0"
   },
   "dependencies": {
+    "@types/node-sass": "^4.11.1",
     "chalk": "2.4.2",
     "chokidar": "3.0.1",
     "express": "4.17.1",
@@ -60,6 +61,7 @@
     "mime-types": "2.1.26",
     "mkdirp": "0.5.1",
     "ncp": "^2.0.0",
+    "node-sass": "^4.14.1",
     "request": "2.88.0",
     "rimraf": "^3.0.2",
     "semver": "^7.2.1",
@@ -88,7 +90,7 @@
   "scripts": {
     "precommit": "lint-staged",
     "format:all": "eslint --quiet --fix $(git ls-files | grep \"\\.\\(js\\)$\") && prettier --loglevel error --write $(git ls-files | grep \"\\.\\(js\\)$\")",
-    "typecheck": "tsc --allowJs true --checkJs true --esModuleInterop true --module esnext --moduleResolution node --noEmit true --pretty true --resolveJsonModule true --strict true --target esnext types/*",
+    "typecheck": "tsc --allowJs true --checkJs true --esModuleInterop true --module esnext --moduleResolution node --noEmit true --pretty true --resolveJsonModule true --strict true --target esnext types/chalk.d.ts types/index.d.ts types/yeoman-generator.d.ts types/yeoman-test.d.ts",
     "typecheck:all": "npm run typecheck -- $(git ls-files | grep \"\\.\\(js\\)$\")",
     "lint": "eslint ./generators/ ./utils/",
     "test": "jest",

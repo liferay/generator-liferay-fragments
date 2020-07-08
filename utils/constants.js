@@ -6,6 +6,10 @@ module.exports.ADD_SAMPLE_CONTENT_DEFAULT = true;
 module.exports.ADD_SAMPLE_CONTENT_MESSAGE = 'Add sample content?';
 module.exports.ADD_SAMPLE_CONTENT_VAR = 'addSampleContent';
 
+module.exports.USE_SCSS_DEFAULT = true;
+module.exports.USE_SCSS_MESSAGE = 'Use SCSS?';
+module.exports.USE_SCSS_VAR = 'useScss';
+
 module.exports.COLLECTION_DESCRIPTION_DEFAULT = '';
 module.exports.COLLECTION_DESCRIPTION_MESSAGE =
   'Collection description (optional)';

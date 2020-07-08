@@ -1,5 +1,11 @@
 {
   "cssPath": "styles.css",
+  <%_ if (useScss) { _%>
+  "scss": {
+    "path": "styles.scss",
+    "includePaths": []
+  },
+  <%_ } _%>
   "configurationPath": "configuration.json",
   "htmlPath": "index.html",
   "jsPath": "main.js",

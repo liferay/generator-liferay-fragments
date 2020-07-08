@@ -60,6 +60,10 @@ async function _exportCollection(groupId, collection) {
         type: fragment.type,
         name: fragment.name,
         cssPath: 'styles.css',
+        scss: {
+          path: 'styles.css',
+          includePaths: []
+        },
         htmlPath: 'index.html',
         jsPath: 'main.js',
         configurationPath: 'configuration.json'
