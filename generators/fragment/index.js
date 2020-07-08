@@ -54,8 +54,9 @@ module.exports = class extends CustomGenerator {
       this._isRequired(FRAGMENT_SLUG_VAR);
       this._isRequired(MIN_LIFERAY_VERSION_VAR);
 
-      const styleFileName = USE_SCSS_VAR ? 'styles.scss' : 'styles.css';
-
+      const styleFileName = this._getValue(USE_SCSS_VAR)
+        ? 'styles.scss'
+        : 'styles.css';
       const basePath = path.join(
         'src',
         this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
@@ -125,8 +126,6 @@ module.exports = class extends CustomGenerator {
     );
 
     this._setValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
-
-    this._setValue(USE_SCSS_VAR, USE_SCSS_VAR);
   }
 
   async _askLiferayVersion() {

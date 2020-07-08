@@ -200,6 +200,10 @@ exports[`app-generator allows adding sample content 8`] = `
 Object {
   "content": "{
   \\"cssPath\\": \\"styles.css\\",
+  \\"scss\\": {
+    \\"path\\": \\"styles.scss\\",
+    \\"includePaths\\": []
+  },
   \\"configurationPath\\": \\"configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
   \\"jsPath\\": \\"main.js\\",
@@ -224,14 +228,16 @@ Object {
 exports[`app-generator allows adding sample content 10`] = `
 Object {
   "content": ".sample-fragment {
-  color: inherit;
-  font-size: 18px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-    'Helvetica Neue', sans-serif;
+   p {
+      color: inherit;
+      font-size: 18px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;
+   }
 }
 ",
-  "filePath": "styles.css",
+  "filePath": "styles.scss",
 }
 `;
 

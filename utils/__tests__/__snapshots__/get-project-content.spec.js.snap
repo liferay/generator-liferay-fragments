@@ -104,6 +104,54 @@ Object {
   \\"fieldSets\\": []
 }
 ",
+          "css": "",
+          "html": "<div>Fragment</div>
+",
+          "js": "/* global fragmentElement */
+
+fragmentElement.style.color = 'inherit';
+",
+          "metadata": Object {
+            "configurationPath": "configuration.json",
+            "cssPath": "sample-fragment.css",
+            "htmlPath": "sample-fragment.html",
+            "jsPath": "sample-fragment.js",
+            "name": "Sample fragment name",
+            "scss": Object {
+              "includePaths": Array [],
+              "path": "sample-fragment.scss",
+            },
+          },
+          "slug": "sample-fragment",
+        },
+      ],
+      "metadata": Object {
+        "description": "Sample collection description",
+        "name": "Sample collection name",
+      },
+      "slug": "sample-collection",
+    },
+  ],
+  "pageTemplates": Array [],
+  "project": Object {
+    "name": "sample-project-scss",
+  },
+}
+`;
+
+exports[`utils/get-project-content matches a project structure 3`] = `
+Object {
+  "basePath": "",
+  "collections": Array [
+    Object {
+      "fragmentCollectionId": "sample-collection",
+      "fragmentCompositions": Array [],
+      "fragments": Array [
+        Object {
+          "configuration": "{
+  \\"fieldSets\\": []
+}
+",
           "css": ".fragment { color: inherit; }
 ",
           "html": "<div>Fragment</div>
@@ -136,7 +184,7 @@ fragmentElement.style.color = 'inherit';
 }
 `;
 
-exports[`utils/get-project-content matches a project structure 3`] = `
+exports[`utils/get-project-content matches a project structure 4`] = `
 Object {
   "basePath": "",
   "collections": Array [

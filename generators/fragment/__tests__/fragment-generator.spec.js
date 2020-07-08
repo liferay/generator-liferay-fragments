@@ -26,6 +26,7 @@ describe('fragment-generator', () => {
       .withOptions({ fragmentName: 'Sample Fragment' })
       .withOptions({ fragmentType: 'section' })
       .withOptions({ fragmentCollectionSlug: 'sample-collection' })
+      .withPrompts({ useScss: false })
       .then(projectPath => {
         expectFiles(
           path.join(projectPath, 'src', 'sample-collection', 'sample-fragment'),
@@ -59,10 +60,25 @@ describe('fragment-generator', () => {
       .withOptions({ fragmentName: 'Sample Fragment' })
       .withOptions({ fragmentType: 'section' })
       .withOptions({ fragmentCollectionSlug: 'sample-collection' })
+      .withPrompts({ useScss: false })
       .then(projectPath => {
         expectFiles(
           path.join(projectPath, 'src', 'sample-collection', 'sample-fragment'),
           ['fragment.json', 'index.html', 'styles.css', 'main.js']
+        );
+      }));
+
+  it('generates fragment with scss', () =>
+    YeomanTest.run(path.join(__dirname, '..'))
+      .withOptions({ minLiferayVersion: '7.3.3' })
+      .withOptions({ fragmentName: 'Sample Fragment' })
+      .withOptions({ fragmentType: 'section' })
+      .withOptions({ fragmentCollectionSlug: 'sample-collection' })
+      .withPrompts({ useScss: true })
+      .then(projectPath => {
+        expectFiles(
+          path.join(projectPath, 'src', 'sample-collection', 'sample-fragment'),
+          ['fragment.json', 'index.html', 'styles.scss', 'main.js']
         );
       }));
 });

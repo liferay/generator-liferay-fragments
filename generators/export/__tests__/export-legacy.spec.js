@@ -44,6 +44,10 @@ describe('export-generator/export', () => {
             name: 'Fragment A',
             html: '<fragment-a></fragment-a>',
             css: '.fragment {}',
+            scss: {
+              path: 'styles.scss',
+              includePaths: []
+            },
             js: 'console.log("fragment")',
             previewFileEntryId: '0'
           }
