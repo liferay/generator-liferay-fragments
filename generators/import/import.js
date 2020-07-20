@@ -7,6 +7,7 @@ const {
   FRAGMENT_IMPORT_STATUS,
   PAGE_TEMPLATE_IMPORT_STATUS
 } = require('../../utils/constants');
+const path = require('path');
 
 /**
  * Fragment types
@@ -129,7 +130,8 @@ importProject.legacy = async function(groupId, projectPath) {
           fragmentRequest.promise = _importFragment(
             groupId,
             collectionRequest.existingCollection,
-            fragment
+            fragment,
+            projectPath
           )
             .then(([status, existingFragment]) => {
               fragmentRequest.status = status;
@@ -449,9 +451,15 @@ async function _importCollection(groupId, collection) {
  * @param {string} groupId Group ID
  * @param {import('../../types/index').IServerCollection} existingCollection
  * @param {import('../../types/index').IFragment} fragment
+ * @param {string} projectPath Project absolute path
  * @return {Promise<[import('../../types/index').IFragmentRequestStatus, import('../../types/index').IServerFragment | undefined]>}
  */
-async function _importFragment(groupId, existingCollection, fragment) {
+async function _importFragment(
+  groupId,
+  existingCollection,
+  fragment,
+  projectPath
+) {
   const { fragmentCollectionId } = existingCollection;
   const { css, html, js, configuration } = fragment;
   const { name } = fragment.metadata;
@@ -471,7 +479,13 @@ async function _importFragment(groupId, existingCollection, fragment) {
       previewFileEntryId = await api.uploadThumbnail(
         groupId,
         fragmentEntryKey,
-        fragment.metadata.thumbnailPath,
+        path.join(
+          projectPath,
+          'src',
+          existingCollection.fragmentCollectionKey,
+          fragment.slug,
+          fragment.metadata.thumbnailPath
+        ),
         existingFragment ? existingFragment.previewFileEntryId : '0'
       );
     }
