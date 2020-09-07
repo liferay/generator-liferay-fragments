@@ -1,6 +1,8 @@
 const fs = require('fs');
 const JSZip = require('jszip');
 const path = require('path');
+const voca = require('voca');
+
 const {
   DEPLOYMENT_DESCRIPTOR_COMPANY_VAR,
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR
@@ -39,8 +41,9 @@ const compress = (
     const fragmentMetadata = _findAllFragmentMetadata(basePath);
     fragmentMetadata.forEach(fragment => {
       if (fragment.scss && fragment.scss.path) {
+        const fragmentSlugName = voca.slugify(fragment.name);
         glob
-          .sync(path.join(basePath, 'src', '**', fragment.name, '**/*.scss'))
+          .sync(path.join(basePath, 'src', '**', fragmentSlugName, '**/*.scss'))
           .forEach(filePath => {
             let result = _parseScss(fragment, filePath);
             fs.writeFileSync(filePath.replace('.scss', '.css'), result.css);
