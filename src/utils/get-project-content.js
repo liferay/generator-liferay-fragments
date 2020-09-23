@@ -2,7 +2,7 @@ const fs = require('fs');
 const glob = require('glob');
 const path = require('path');
 
-const { LOG_LEVEL, log } = require('./log');
+const { log } = require('./log');
 
 /**
  * @param {string} jsonPath
@@ -32,7 +32,7 @@ function _getProjectCollections(basePath) {
         return true;
       } catch (_) {
         log(`✘ Invalid ${directory}/collection.json, collection ignored`, {
-          level: 'LOG_LEVEL_ERROR',
+          level: 'error',
         });
 
         return false;
@@ -85,7 +85,7 @@ function _getCollectionFragments(collectionDirectory) {
         return true;
       } catch (_) {
         log(`✘ Invalid ${directory}/fragment.json, fragment ignored`, {
-          level: 'LOG_LEVEL_ERROR',
+          level: 'error',
         });
 
         return false;
@@ -108,7 +108,7 @@ function _getCollectionFragments(collectionDirectory) {
             return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
           } catch (_) {
             log(`✘ Fragment ${metadata.name || directory}`, {
-              level: LOG_LEVEL.error,
+              level: 'error',
               newLine: true,
             });
 
@@ -159,7 +159,7 @@ function _getCollectionFragmentCompositions(collectionDirectory) {
         log(
           `✘ Invalid ${directory}/fragment-composition.json, fragment composition ignored`,
           {
-            level: 'LOG_LEVEL_ERROR',
+            level: 'error',
           }
         );
 
@@ -183,7 +183,7 @@ function _getCollectionFragmentCompositions(collectionDirectory) {
             return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
           } catch (_) {
             log(`✘ Fragment composition ${metadata.name || directory}`, {
-              level: LOG_LEVEL.error,
+              level: 'error',
               newLine: true,
             });
 
@@ -244,7 +244,7 @@ function _getPageTemplates(basePath) {
         log(
           `✘ Invalid ${directory}/page-template.json, page template ignored`,
           {
-            level: 'LOG_LEVEL_ERROR',
+            level: 'error',
           }
         );
 
