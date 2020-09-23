@@ -6,6 +6,6 @@ const path = require('path');
  * @return {string[]} Project paths
  */
 const getTestFixtures = () =>
-  glob.sync(`${path.resolve(__dirname, '..', 'fixtures')}${path.sep}*`);
+  glob.sync(`${path.resolve(__dirname, '..', '..', 'fixtures')}${path.sep}*`);
 
 module.exports = getTestFixtures;

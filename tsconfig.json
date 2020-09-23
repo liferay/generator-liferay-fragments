@@ -3,14 +3,14 @@
     "allowJs": true,
     "checkJs": false,
     "esModuleInterop": true,
-    "lib": ["DOM", "es2015"],
+    "lib": ["DOM", "ES2018"],
     "module": "CommonJS",
     "moduleResolution": "node",
     "rootDir": "src",
     "outDir": "generators",
     "sourceMap": false,
     "strict": false,
-    "target": "esnext"
+    "target": "ES2018"
   },
   "compileOnSave": true,
   "include": ["src", "types"],
