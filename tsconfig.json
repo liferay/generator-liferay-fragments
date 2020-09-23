@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false,
     "esModuleInterop": true,
-    "module": "esnext",
+    "lib": ["DOM", "es2015"],
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "noEmit": true,
-    "pretty": true,
-    "resolveJsonModule": true,
-    "strict": true,
-    "target": "esnext",
-    "outDir": "./build/"
-  }
+    "rootDir": "src",
+    "outDir": "generators",
+    "sourceMap": false,
+    "strict": false,
+    "target": "esnext"
+  },
+  "compileOnSave": true,
+  "include": ["src", "types"],
+  "exclude": ["node_modules", "src/**/templates/**", "**/__tests__/**"]
 }
