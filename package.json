@@ -8,10 +8,8 @@
     "email": "pablo.molina@liferay.com"
   },
   "files": [
-    "generators",
-    "utils"
+    "generators"
   ],
-  "main": "generators/index.js",
   "keywords": [
     "liferay",
     "yeoman-generator"
@@ -33,16 +31,15 @@
     "@types/voca": "1.4.0",
     "@types/ws": "6.0.1",
     "adm-zip": "^0.4.14",
-    "eslint": "5.16.0",
-    "eslint-config-prettier": "5.0.0",
-    "eslint-config-xo": "0.26.0",
-    "eslint-plugin-prettier": "3.1.0",
+    "copyfiles": "^2.3.0",
+    "eslint": "^7.9.0",
+    "eslint-config-liferay": "^21.1.0",
     "husky": "2.4.1",
     "jest": "24.8.0",
     "lint-staged": "8.2.1",
-    "prettier": "1.18.2",
+    "prettier": "^2.1.2",
     "tmp": "0.1.0",
-    "typescript": "3.5.2",
+    "typescript": "^4.0.3",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "2.0.0"
   },
@@ -75,26 +72,30 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run test -- --passWithNoTests --onlyChanged",
-      "npm run typecheck --",
       "eslint --fix",
       "git add"
     ],
     "*.json": [
       "prettier --write",
       "git add"
+    ],
+    "*.ts": [
+      "prettier --write",
+      "git add"
     ]
   },
   "scripts": {
+    "build:clean": "rimraf generators/",
+    "build:copy": "copyfiles --up 1 --all --exclude \"**/__tests__/**/*\" --exclude \"**/*.ts\" \"src/**/*\" generators",
+    "build:typescript": "tsc --build tsconfig.json",
+    "build": "npm run build:clean && npm run build:copy && npm run build:typescript",
     "precommit": "lint-staged",
-    "format:all": "eslint --quiet --fix $(git ls-files | grep \"\\.\\(js\\)$\") && prettier --loglevel error --write $(git ls-files | grep \"\\.\\(js\\)$\")",
-    "typecheck": "tsc --allowJs true --checkJs true --esModuleInterop true --module esnext --moduleResolution node --noEmit true --pretty true --resolveJsonModule true --strict true --target esnext types/*",
-    "typecheck:all": "npm run typecheck -- $(git ls-files | grep \"\\.\\(js\\)$\")",
-    "lint": "eslint ./generators/ ./utils/",
-    "test": "jest",
-    "preversion": "git checkout -b new-version && npm run typecheck:all && npm run lint",
+    "lint": "eslint src/",
+    "test": "npm run build && jest",
+    "prepublish": "npm run lint && npm run test",
+    "preversion": "git checkout -b new-version && npm run build && npm run lint",
     "postversion": "git push && git push --tags && git checkout master && git branch -D new-version"
   },
-  "repository": "p2kmgcl/generator-liferay-fragments",
+  "repository": "liferay/generator-liferay-fragments",
   "license": "MIT"
 }
