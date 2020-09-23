@@ -35,10 +35,11 @@
     "eslint": "^7.9.0",
     "eslint-config-liferay": "^21.1.0",
     "husky": "2.4.1",
-    "jest": "24.8.0",
+    "jest": "^26.4.2",
     "lint-staged": "8.2.1",
     "prettier": "^2.1.2",
     "tmp": "0.1.0",
+    "ts-jest": "^26.4.0",
     "typescript": "^4.0.3",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "2.0.0"
@@ -91,7 +92,7 @@
     "build": "npm run build:clean && npm run build:copy && npm run build:typescript",
     "precommit": "lint-staged",
     "lint": "eslint src/",
-    "test": "npm run build && jest",
+    "test": "jest",
     "prepublish": "npm run lint && npm run test",
     "preversion": "git checkout -b new-version && npm run build && npm run lint",
     "postversion": "git push && git push --tags && git checkout master && git branch -D new-version"

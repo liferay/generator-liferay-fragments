@@ -7,7 +7,7 @@ const getTestFixtures = require('../../utils/get-test-fixtures');
 const importProject = require('../import');
 
 jest.mock('../../compress/compress');
-jest.mock('../../../utils/api');
+jest.mock('../../utils/api');
 
 const GROUP_ID = '1234';
 

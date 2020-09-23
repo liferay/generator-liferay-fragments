@@ -1,7 +1,7 @@
+const AdmZip = require('adm-zip');
 const fs = require('fs');
 const path = require('path');
 const YeomanTest = require('yeoman-test');
-const AdmZip = require('adm-zip');
 
 describe('compress', () => {
   it('generates a zip file', () =>
@@ -38,7 +38,7 @@ describe('compress', () => {
     const fragmentFiles = ['index.html', 'main.js', 'styles.css'];
 
     return YeomanTest.run(path.join(__dirname, '..'))
-      .inTmpDir(function (dir) {
+      .inTmpDir((dir) => {
         fs.mkdirSync(path.join(dir, 'src'));
         fs.mkdirSync(path.join(dir, 'src/collection'));
         fs.mkdirSync(path.join(dir, 'src/collection/fragment'));
