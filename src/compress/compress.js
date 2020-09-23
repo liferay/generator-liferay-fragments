@@ -7,7 +7,7 @@ const {
   DEPLOYMENT_DESCRIPTOR_COMPANY_VAR,
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
 } = require('../utils/constants');
-const { LOG_LEVEL, log } = require('../utils/log');
+const { log } = require('../utils/log');
 
 /**
  * Compress a whole project from a basePath with all it's
@@ -61,11 +61,11 @@ const compress = (
       .on('finish', () => {
         log('build/liferay-fragments.zip file created', {
           newLine: true,
-          level: LOG_LEVEL.success,
+          level: 'success',
         });
 
         log('Import them to your liferay-portal to start using them', {
-          level: LOG_LEVEL.success,
+          level: 'success',
         });
 
         resolve(zip);

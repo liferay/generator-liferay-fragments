@@ -8,7 +8,7 @@ const {
   PAGE_TEMPLATE_IMPORT_STATUS,
 } = require('../utils/constants');
 const getProjectContent = require('../utils/get-project-content');
-const { LOG_LEVEL, log } = require('../utils/log');
+const { log } = require('../utils/log');
 
 /**
  * Fragment types
@@ -58,14 +58,14 @@ async function importProject(groupId, projectPath) {
           response.pageTemplatesImportResult || []
         );
       } else {
-        log('Project imported', { level: 'LOG_LEVEL_SUCCESS' });
+        log('Project imported', { level: 'success' });
       }
     } else {
       throw new Error('zip file not generated');
     }
   } catch (_) {
     log('Zip file not generated, using legacy APIs', {
-      level: 'LOG_LEVEL_ERROR',
+      level: 'error',
     });
     await importProject.legacy(groupId, projectPath);
   }
@@ -190,9 +190,9 @@ function _logImportSummary(collectionRequests, fragmentRequests) {
   /**
    * @param {number} count
    * @param {string} message
-   * @param {'LOG_LEVEL_ERROR'|'LOG_LEVEL_SUCCESS'} [level='LOG_LEVEL_SUCCESS']
+   * @param {'error'|'success'} [level='success']
    */
-  const statusLog = (count, message, level = 'LOG_LEVEL_SUCCESS') => {
+  const statusLog = (count, message, level = 'success') => {
     const noun = fragmentRequests.length === 1 ? 'fragment' : 'fragments';
     const verb = count === 1 ? 'was' : 'were';
 
@@ -208,11 +208,7 @@ function _logImportSummary(collectionRequests, fragmentRequests) {
   statusLog(addedCount, 'added successfully');
   statusLog(updatedCount, 'updated successfully');
   statusLog(upToDateCount, 'already up to date');
-  statusLog(
-    ignoredCount + errorCount,
-    'not imported due to errors',
-    'LOG_LEVEL_ERROR'
-  );
+  statusLog(ignoredCount + errorCount, 'not imported due to errors', 'error');
 }
 
 /**
@@ -226,7 +222,7 @@ function _logImportResults(
   fragmentEntriesImportResult.forEach((result) => {
     switch (result.status) {
       case FRAGMENT_IMPORT_STATUS.IMPORTED: {
-        log(`✔ Fragment ${result.name} imported`, { level: LOG_LEVEL.success });
+        log(`✔ Fragment ${result.name} imported`, { level: 'success' });
 
         break;
       }
@@ -235,12 +231,12 @@ function _logImportResults(
         log(
           `↷ Fragment ${result.name} imported as draft due to the following errors`,
           {
-            level: LOG_LEVEL.info,
+            level: 'info',
           }
         );
 
         log(`ERROR: ${result.errorMessage}`, {
-          level: LOG_LEVEL.error,
+          level: 'error',
         });
 
         break;
@@ -250,12 +246,12 @@ function _logImportResults(
         log(
           `Fragment ${result.name} not imported due to the following errors`,
           {
-            level: LOG_LEVEL.error,
+            level: 'error',
           }
         );
 
         log(`ERROR: ${result.errorMessage}`, {
-          level: LOG_LEVEL.error,
+          level: 'error',
         });
 
         break;
@@ -270,7 +266,7 @@ function _logImportResults(
     switch (result.status) {
       case PAGE_TEMPLATE_IMPORT_STATUS.IMPORTED: {
         log(`✔ Page template ${result.name} imported`, {
-          level: LOG_LEVEL.success,
+          level: 'success',
         });
 
         break;
@@ -278,7 +274,7 @@ function _logImportResults(
 
       case PAGE_TEMPLATE_IMPORT_STATUS.IGNORED: {
         log(`↷ Page template ${result.name} ignored`, {
-          level: LOG_LEVEL.info,
+          level: 'info',
         });
 
         break;
@@ -288,12 +284,12 @@ function _logImportResults(
         log(
           `Page template ${result.name} not imported due to the following errors`,
           {
-            level: LOG_LEVEL.error,
+            level: 'error',
           }
         );
 
         log(`ERROR: ${result.errorMessage}`, {
-          level: LOG_LEVEL.error,
+          level: 'error',
         });
 
         break;
@@ -337,9 +333,9 @@ function _logImportErrorsLegacy(collectionRequests, fragmentRequests) {
 
     log('');
     if (collectionRequest.status === 'success') {
-      log(`✔ Collection ${name}`, { level: LOG_LEVEL.success });
+      log(`✔ Collection ${name}`, { level: 'success' });
     } else {
-      log(`✘ Collection ${name} was not imported`, { level: LOG_LEVEL.error });
+      log(`✘ Collection ${name} was not imported`, { level: 'error' });
 
       if (collectionRequest.error) {
         log(collectionRequest.error.message);
@@ -358,7 +354,7 @@ function _logImportErrorsLegacy(collectionRequests, fragmentRequests) {
               fragmentRequest.fragment.metadata.name ||
               fragmentRequest.fragment.slug
             } was not imported due to fragment errors`,
-            { level: LOG_LEVEL.error, indent: true }
+            { level: 'error', indent: true }
           );
 
           if (fragmentRequest.error) {
@@ -368,25 +364,25 @@ function _logImportErrorsLegacy(collectionRequests, fragmentRequests) {
           log(
             `↷ Fragment ${fragmentRequest.fragment.metadata.name} was not imported due to collection errors`,
             {
-              level: LOG_LEVEL.error,
+              level: 'error',
               indent: true,
             }
           );
         } else if (fragmentRequest.status === 'added') {
           log(`✚ Fragment ${fragmentRequest.fragment.metadata.name} added`, {
-            level: LOG_LEVEL.success,
+            level: 'success',
             indent: true,
           });
         } else if (fragmentRequest.status === 'updated') {
           log(`✎ Fragment ${fragmentRequest.fragment.metadata.name} updated`, {
-            level: LOG_LEVEL.success,
+            level: 'success',
             indent: true,
           });
         } else {
           log(
             `✔ Fragment ${fragmentRequest.fragment.metadata.name} up-to-date`,
             {
-              level: LOG_LEVEL.success,
+              level: 'success',
               indent: true,
             }
           );

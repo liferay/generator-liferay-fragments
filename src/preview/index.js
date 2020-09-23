@@ -10,7 +10,7 @@ const api = require('../utils/api');
 const AuthGenerator = require('../utils/auth-generator');
 const { LIFERAY_GROUPID_VAR, LIFERAY_HOST_VAR } = require('../utils/constants');
 const getProjectContent = require('../utils/get-project-content');
-const { LOG_LEVEL, log } = require('../utils/log');
+const { log } = require('../utils/log');
 
 const DEV_SERVER_PORT = 8081;
 const SOCKET_SERVER_PORT = 8082;
@@ -36,7 +36,7 @@ module.exports = class extends AuthGenerator {
     log('Checking site compatibility...', { newLine: true });
 
     if (await this._checkPreviewCompatibility()) {
-      log('Found compatible Liferay Server', { level: LOG_LEVEL.success });
+      log('Found compatible Liferay Server', { level: 'success' });
 
       this._runExpressServer();
       this._runSocketServer();
@@ -60,7 +60,7 @@ module.exports = class extends AuthGenerator {
           '\nDownload a new version here: https://web.liferay.com/es/marketplace/-/mp/application/109571986.' +
           '\n\nIf this an error, please report an issue at' +
           '\nhttps://www.npmjs.com/package/generator-liferay-fragments',
-        { level: LOG_LEVEL.error }
+        { level: 'error' }
       );
     }
   }

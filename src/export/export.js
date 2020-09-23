@@ -83,9 +83,9 @@ async function exportProject(groupId, destinationPath) {
       path.join(destinationPath, 'src')
     );
 
-    log('Site succesfully exported', { level: 'LOG_LEVEL_SUCCESS' });
+    log('Site succesfully exported', { level: 'success' });
   } catch (_) {
-    log('Zip export error, using legacy export', { level: 'LOG_LEVEL_ERROR' });
+    log('Zip export error, using legacy export', { level: 'error' });
 
     projectContent.collections = await exportCollections(
       groupId,

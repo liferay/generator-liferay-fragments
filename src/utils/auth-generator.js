@@ -16,7 +16,7 @@ const {
 } = require('./constants');
 const CustomGenerator = require('./custom-generator');
 const getSiteGroups = require('./get-site-groups');
-const { LOG_LEVEL, log } = require('./log');
+const { log } = require('./log');
 
 module.exports = class AuthGenerator extends CustomGenerator {
   /**
@@ -100,13 +100,13 @@ module.exports = class AuthGenerator extends CustomGenerator {
     try {
       await this._wrapApi();
       await this._checkConnection();
-      log('Connection successful\n', { level: LOG_LEVEL.success });
+      log('Connection successful\n', { level: 'success' });
     } catch (error) {
       log(
         'Connection unsuccessful,\n' +
           'please check your host information.\n\n' +
           `${error.toString()}\n`,
-        { level: LOG_LEVEL.error }
+        { level: 'error' }
       );
 
       delete this.options[LIFERAY_HOST_VAR];
