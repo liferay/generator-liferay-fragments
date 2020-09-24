@@ -1,3 +1,7 @@
+import fs from 'fs';
+import glob from 'glob';
+import path from 'path';
+
 import {
   ICollection,
   ICollectionMetadata,
@@ -9,10 +13,6 @@ import {
   IPageTemplateMetadata,
   IProject,
 } from '../../types';
-
-import fs from 'fs';
-import glob from 'glob';
-import path from 'path';
 import { log } from './log';
 
 function _readJSONSync<T>(jsonPath: string): T {
@@ -59,10 +59,7 @@ function _getProjectCollections(basePath: string): ICollection[] {
 function _getCollectionFragments(collectionDirectory: string): IFragment[] {
   return glob
     .sync(path.join(collectionDirectory, '*', 'fragment.json'))
-    .map(
-      /** @param {string} fragmentJSON */
-      (fragmentJSON) => path.resolve(fragmentJSON, '..')
-    )
+    .map((fragmentJSON) => path.resolve(fragmentJSON, '..'))
     .filter((directory) => {
       try {
         _readJSONSync(path.resolve(directory, 'fragment.json'));
@@ -76,47 +73,40 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         return false;
       }
     })
-    .map(
-      /** @param {string} directory */
-      (directory) => {
-        const metadata = _readJSONSync<IFragmentMetadata>(
-          path.resolve(directory, 'fragment.json')
-        );
+    .map((directory) => {
+      const metadata = _readJSONSync<IFragmentMetadata>(
+        path.resolve(directory, 'fragment.json')
+      );
 
-        /**
-         * @param {string} filePath
-         * @return {string}
-         */
-        const readFile = (filePath) => {
-          try {
-            return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
-          } catch (_) {
-            log(`✘ Fragment ${metadata.name || directory}`, {
-              level: 'error',
-              newLine: true,
-            });
+      const readFile = (filePath: string) => {
+        try {
+          return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
+        } catch (_) {
+          log(`✘ Fragment ${metadata.name || directory}`, {
+            level: 'error',
+            newLine: true,
+          });
 
-            log(`File ${filePath} was not found`);
+          log(`File ${filePath} was not found`);
 
-            return '';
-          }
-        };
+          return '';
+        }
+      };
 
-        return {
-          slug: path.basename(directory),
-          metadata,
+      return {
+        slug: path.basename(directory),
+        metadata,
 
-          html: readFile(metadata.htmlPath),
-          css: readFile(metadata.cssPath),
-          js: readFile(metadata.jsPath),
+        html: readFile(metadata.htmlPath),
+        css: readFile(metadata.cssPath),
+        js: readFile(metadata.jsPath),
 
-          configuration: _getFramentConfiguration(
-            directory,
-            metadata.configurationPath
-          ),
-        };
-      }
-    );
+        configuration: _getFramentConfiguration(
+          directory,
+          metadata.configurationPath
+        ),
+      };
+    });
 }
 
 function _getCollectionFragmentCompositions(
@@ -223,7 +213,7 @@ function _getPageTemplates(basePath: string): IPageTemplate[] {
     });
 }
 
-function getProjectContent(basePath: string): IProject {
+export default function getProjectContent(basePath: string): IProject {
   return {
     basePath,
     project: _readJSONSync(path.resolve(basePath, 'package.json')),
@@ -231,5 +221,3 @@ function getProjectContent(basePath: string): IProject {
     pageTemplates: _getPageTemplates(basePath),
   };
 }
-
-module.exports = getProjectContent;

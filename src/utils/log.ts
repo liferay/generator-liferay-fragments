@@ -1,4 +1,4 @@
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 type LogLevel = 'info' | 'success' | 'error';
 
@@ -10,7 +10,7 @@ interface Options {
   description?: string;
 }
 
-export function log(message: string, options: Options = {}) {
+export function log(message: string, options: Options = {}): void {
   if (process.env.NODE_ENV !== 'test') {
     let _message = message;
 
