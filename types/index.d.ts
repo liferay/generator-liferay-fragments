@@ -7,23 +7,27 @@ export interface IProject {
   pageTemplates?: IPageTemplate[];
 }
 
+export interface ICollectionMetadata {
+  name: string;
+  description: string;
+}
+
 export interface ICollection {
   slug: string;
   fragmentCollectionId: string;
-  metadata: {
-    name: string;
-    description: string;
-  };
+  metadata: ICollectionMetadata;
   fragmentCompositions?: IFragmentComposition[];
   fragments: IFragment[];
 }
 
+export interface IFragmentCompositionMetadata {
+  fragmentCompositionDefinitionPath: string;
+  name: string;
+}
+
 export interface IFragmentComposition {
   slug: string;
-  metadata: {
-    fragmentCompositionDefinitionPath: string;
-    name: string;
-  };
+  metadata: IFragmentCompositionMetadata;
   definitionData: string;
 }
 
@@ -66,17 +70,19 @@ export interface IOauthToken {
   expirationDate: Date;
 }
 
+export interface IFragmentMetadata {
+  cssPath: string;
+  htmlPath: string;
+  jsPath: string;
+  configurationPath: string;
+  thumbnailPath?: string;
+  name: string;
+  type: string;
+}
+
 export interface IFragment {
   slug: string;
-  metadata: {
-    cssPath: string;
-    htmlPath: string;
-    jsPath: string;
-    configurationPath: string;
-    thumbnailPath?: string;
-    name: string;
-    type: string;
-  };
+  metadata: IFragmentMetadata;
   css: string;
   html: string;
   js: string;
@@ -88,12 +94,14 @@ export interface ICompany {
   companyId: string;
 }
 
+export interface IPageTemplateMetadata {
+  pageTemplateDefinitionPath: string;
+  name: string;
+}
+
 export interface IPageTemplate {
   slug: string;
-  metadata: {
-    pageTemplateDefinitionPath: string;
-    name: string;
-  };
+  metadata: IPageTemplateMetadata;
   definitionData: string;
 }
 
