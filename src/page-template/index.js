@@ -24,21 +24,21 @@ module.exports = class extends CustomGenerator {
    * @inheritdoc
    */
   writing() {
-    this._isRequired(PAGE_TEMPLATE_SLUG_VAR);
+    this.throwRequiredError(PAGE_TEMPLATE_SLUG_VAR);
 
     const basePath = path.join(
       'src',
-      this._getValue(PAGE_TEMPLATE_SLUG_VAR) || ''
+      this.getValue(PAGE_TEMPLATE_SLUG_VAR) || ''
     );
 
-    const pageTemplateType = this._getValue(PAGE_TEMPLATE_TYPE_VAR) || '';
+    const pageTemplateType = this.getValue(PAGE_TEMPLATE_TYPE_VAR) || '';
 
-    this._copyTemplate(
+    this.copyTemplate(
       path.join(pageTemplateType, 'page-definition.json.ejs'),
       path.join(basePath, 'page-definition.json')
     );
 
-    this._copyTemplate(
+    this.copyTemplate(
       path.join(pageTemplateType, `${pageTemplateType}.json.ejs`),
       path.join(basePath, `${pageTemplateType}.json`)
     );
@@ -48,14 +48,14 @@ module.exports = class extends CustomGenerator {
    * Requests fragment information and sets the fragment slug.
    */
   async _askPageTemplateData() {
-    await this._ask([
+    await this.ask([
       {
         type: 'list',
         name: PAGE_TEMPLATE_TYPE_VAR,
         message: PAGE_TEMPLATE_TYPE_MESSAGE,
         choices: PAGE_TEMPLATE_TYPE_OPTIONS,
-        default: this._getValue(PAGE_TEMPLATE_TYPE_DEFAULT),
-        when: !this._hasValue(PAGE_TEMPLATE_TYPE_VAR),
+        default: this.getValue(PAGE_TEMPLATE_TYPE_DEFAULT),
+        when: !this.hasValue(PAGE_TEMPLATE_TYPE_VAR),
       },
       {
         type: 'input',
@@ -65,17 +65,17 @@ module.exports = class extends CustomGenerator {
         /** @param {string} name */
         validate: (name) =>
           name ? true : PAGE_TEMPLATE_NAME_NON_EMPTY_ERROR_MESSAGE,
-        when: !this._hasValue(PAGE_TEMPLATE_NAME_VAR),
+        when: !this.hasValue(PAGE_TEMPLATE_NAME_VAR),
       },
     ]);
 
-    this._setValue(
+    this.setValue(
       PAGE_TEMPLATE_SLUG_VAR,
-      (this._getValue(PAGE_TEMPLATE_NAME_VAR) || '')
+      (this.getValue(PAGE_TEMPLATE_NAME_VAR) || '')
         .replace(/\s+/g, '-')
         .toLocaleLowerCase()
     );
 
-    this._setValue(PAGE_TEMPLATE_TYPE_VAR, PAGE_TEMPLATE_TYPE_DEFAULT);
+    this.setValue(PAGE_TEMPLATE_TYPE_VAR, PAGE_TEMPLATE_TYPE_DEFAULT);
   }
 };

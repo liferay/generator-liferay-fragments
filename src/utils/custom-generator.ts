@@ -33,27 +33,27 @@ export default class CustomGenerator extends Generator {
     }
   }
 
-  async _ask(question: IQuestion | IQuestion[]): Promise<IAnswerGroup> {
+  async ask(question: IQuestion | IQuestion[]): Promise<IAnswerGroup> {
     const answers = await this.prompt(question);
     this.answers = { ...this.answers, ...answers };
 
     return this.answers;
   }
 
-  _copyFile(filePath: string, destinationPath: string): void {
+  copyFile(filePath: string, destinationPath: string): void {
     this.fs.copy(
       this.templatePath(filePath),
       this.destinationPath(destinationPath)
     );
   }
 
-  _copyFiles(basePath: string, filePaths: string[]): void {
+  copyFiles(basePath: string, filePaths: string[]): void {
     filePaths.forEach((filePath) =>
-      this._copyFile(filePath, path.join(basePath, filePath))
+      this.copyFile(filePath, path.join(basePath, filePath))
     );
   }
 
-  _copyTemplate(templatePath: string, destinationPath: string): void {
+  copyTemplate(templatePath: string, destinationPath: string): void {
     this.fs.copyTpl(
       this.templatePath(templatePath),
       this.destinationPath(destinationPath),
@@ -61,16 +61,16 @@ export default class CustomGenerator extends Generator {
     );
   }
 
-  _copyTemplates(basePath: string, templatePaths: string[]): void {
+  copyTemplates(basePath: string, templatePaths: string[]): void {
     templatePaths.forEach((templatePath) =>
-      this._copyTemplate(
+      this.copyTemplate(
         `${templatePath}.ejs`,
         path.join(basePath, templatePath)
       )
     );
   }
 
-  _getValue(key: string): string | undefined {
+  getValue(key: string): string | undefined {
     return (
       this.answers[key] ||
       this.options[key] ||
@@ -79,7 +79,7 @@ export default class CustomGenerator extends Generator {
     );
   }
 
-  _hasValue(key: string): boolean {
+  hasValue(key: string): boolean {
     return (
       key in this.answers ||
       key in this.options ||
@@ -88,15 +88,15 @@ export default class CustomGenerator extends Generator {
     );
   }
 
-  _isRequired(variable: string): void {
-    const value = this._getValue(variable) || '';
+  throwRequiredError(variable: string): void {
+    const value = this.getValue(variable) || '';
 
     if (!value || !value.trim()) {
       this.env.error(new Error(`${variable} is required`));
     }
   }
 
-  _setValue(key: string, value: string): void {
+  setValue(key: string, value: string): void {
     this.defaultValues[key] = value;
   }
 }

@@ -29,23 +29,23 @@ module.exports = class extends CustomGenerator {
    * @inheritdoc
    */
   writing() {
-    if (this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
+    if (this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
       this.composeWith(require.resolve('../collection'), {
-        [FRAGMENT_COMPOSITION_NAME_VAR]: this._getValue(
+        [FRAGMENT_COMPOSITION_NAME_VAR]: this.getValue(
           FRAGMENT_COMPOSITION_NAME_VAR
         ),
       });
     } else {
-      this._isRequired(FRAGMENT_COLLECTION_SLUG_VAR);
-      this._isRequired(FRAGMENT_SLUG_VAR);
+      this.throwRequiredError(FRAGMENT_COLLECTION_SLUG_VAR);
+      this.throwRequiredError(FRAGMENT_SLUG_VAR);
 
       const basePath = path.join(
         'src',
-        this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
-        this._getValue(FRAGMENT_SLUG_VAR) || ''
+        this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
+        this.getValue(FRAGMENT_SLUG_VAR) || ''
       );
 
-      this._copyTemplates(basePath, [
+      this.copyTemplates(basePath, [
         'fragment-composition.json',
         'definition.json',
       ]);
@@ -58,12 +58,12 @@ module.exports = class extends CustomGenerator {
    * @see _getCollectionChoices
    */
   async _askCollection() {
-    await this._ask({
+    await this.ask({
       type: 'list',
       name: FRAGMENT_COLLECTION_SLUG_VAR,
       message: FRAGMENT_COLLECTION_SLUG_MESSAGE,
       choices: this._getCollectionChoices(),
-      when: !this._hasValue(FRAGMENT_COLLECTION_SLUG_VAR),
+      when: !this.hasValue(FRAGMENT_COLLECTION_SLUG_VAR),
     });
   }
 
@@ -71,7 +71,7 @@ module.exports = class extends CustomGenerator {
    * Requests fragment information and sets the fragment slug.
    */
   async _askFragmentData() {
-    await this._ask([
+    await this.ask([
       {
         type: 'input',
         name: FRAGMENT_COMPOSITION_NAME_VAR,
@@ -80,13 +80,13 @@ module.exports = class extends CustomGenerator {
         /** @param {string} name */
         validate: (name) =>
           name ? true : FRAGMENT_COMPOSITION_NAME_NON_EMPTY_ERROR_MESSAGE,
-        when: !this._hasValue(FRAGMENT_COMPOSITION_NAME_VAR),
+        when: !this.hasValue(FRAGMENT_COMPOSITION_NAME_VAR),
       },
     ]);
 
-    this._setValue(
+    this.setValue(
       FRAGMENT_SLUG_VAR,
-      voca.slugify(this._getValue(FRAGMENT_COMPOSITION_NAME_VAR))
+      voca.slugify(this.getValue(FRAGMENT_COMPOSITION_NAME_VAR))
     );
   }
 
