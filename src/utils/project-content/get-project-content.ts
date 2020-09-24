@@ -15,6 +15,15 @@ import {
 } from '../../../types';
 import { log } from '../log';
 
+export default function getProjectContent(basePath: string): IProject {
+  return {
+    basePath,
+    project: _readJSONSync(path.resolve(basePath, 'package.json')),
+    collections: _getProjectCollections(basePath),
+    pageTemplates: _getPageTemplates(basePath),
+  };
+}
+
 function _readJSONSync<T>(jsonPath: string): T {
   return JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 }
@@ -211,13 +220,4 @@ function _getPageTemplates(basePath: string): IPageTemplate[] {
         ),
       };
     });
-}
-
-export default function getProjectContent(basePath: string): IProject {
-  return {
-    basePath,
-    project: _readJSONSync(path.resolve(basePath, 'package.json')),
-    collections: _getProjectCollections(basePath),
-    pageTemplates: _getPageTemplates(basePath),
-  };
 }
