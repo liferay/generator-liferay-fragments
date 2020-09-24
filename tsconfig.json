@@ -9,7 +9,7 @@
     "rootDir": "src",
     "outDir": "generators",
     "sourceMap": false,
-    "strict": false,
+    "strict": true,
     "target": "ES2018"
   },
   "compileOnSave": true,
