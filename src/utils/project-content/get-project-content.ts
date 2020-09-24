@@ -12,8 +12,8 @@ import {
   IPageTemplate,
   IPageTemplateMetadata,
   IProject,
-} from '../../types';
-import { log } from './log';
+} from '../../../types';
+import { log } from '../log';
 
 function _readJSONSync<T>(jsonPath: string): T {
   return JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
