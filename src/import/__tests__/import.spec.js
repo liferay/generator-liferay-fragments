@@ -4,16 +4,18 @@ const compress = require('../../compress/compress');
 const api = require('../../utils/api');
 const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../utils/constants');
 const getTestFixtures = require('../../utils/get-test-fixtures');
-const importProject = require('../import');
+const { default: importProject } = require('../import');
+const { default: importLegacy } = require('../import-legacy');
 
 jest.mock('../../compress/compress');
 jest.mock('../../utils/api');
+jest.mock('../import-legacy');
 
 const GROUP_ID = '1234';
 
 [getTestFixtures()[0]].forEach((projectPath) => {
   describe(`import ${projectPath}`, () => {
-    const legacyMock = jest.spyOn(importProject, 'legacy');
+    const legacyMock = importLegacy;
     const zip = new JSZip();
     zip.file('sample.txt', 'sample');
 
