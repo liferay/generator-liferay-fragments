@@ -27,6 +27,7 @@ export default class CustomGenerator extends Generator {
     this.answers = {};
 
     // @ts-ignore
+
     if (!this.options) {
       this.options = {};
     }
@@ -39,20 +40,20 @@ export default class CustomGenerator extends Generator {
     return this.answers;
   }
 
-  _copyFile(filePath: string, destinationPath: string) {
+  _copyFile(filePath: string, destinationPath: string): void {
     this.fs.copy(
       this.templatePath(filePath),
       this.destinationPath(destinationPath)
     );
   }
 
-  _copyFiles(basePath: string, filePaths: string[]) {
+  _copyFiles(basePath: string, filePaths: string[]): void {
     filePaths.forEach((filePath) =>
       this._copyFile(filePath, path.join(basePath, filePath))
     );
   }
 
-  _copyTemplate(templatePath: string, destinationPath: string) {
+  _copyTemplate(templatePath: string, destinationPath: string): void {
     this.fs.copyTpl(
       this.templatePath(templatePath),
       this.destinationPath(destinationPath),
@@ -60,7 +61,7 @@ export default class CustomGenerator extends Generator {
     );
   }
 
-  _copyTemplates(basePath: string, templatePaths: string[]) {
+  _copyTemplates(basePath: string, templatePaths: string[]): void {
     templatePaths.forEach((templatePath) =>
       this._copyTemplate(
         `${templatePath}.ejs`,
@@ -87,7 +88,7 @@ export default class CustomGenerator extends Generator {
     );
   }
 
-  _isRequired(variable: string) {
+  _isRequired(variable: string): void {
     const value = this._getValue(variable) || '';
 
     if (!value || !value.trim()) {
@@ -95,7 +96,7 @@ export default class CustomGenerator extends Generator {
     }
   }
 
-  _setValue(key: string, value: string) {
+  _setValue(key: string, value: string): void {
     this.defaultValues[key] = value;
   }
 }

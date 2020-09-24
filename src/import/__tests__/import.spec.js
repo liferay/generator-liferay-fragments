@@ -26,6 +26,8 @@ const GROUP_ID = '1234';
     beforeEach(() => {
       compress.mockImplementation(() => Promise.resolve(zip));
       api.importZip.mockImplementation(() => Promise.resolve({}));
+
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       legacyMock.mockImplementation(() => {});
     });
 
