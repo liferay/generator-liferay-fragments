@@ -31,7 +31,7 @@ class AppGenerator extends CustomGenerator {
   async prompting() {
     this._logWelcome();
 
-    await this._ask([
+    await this.ask([
       {
         type: 'input',
         name: PROJECT_NAME_VAR,
@@ -46,15 +46,15 @@ class AppGenerator extends CustomGenerator {
       },
     ]);
 
-    this._setValue(
+    this.setValue(
       PROJECT_SLUG_VAR,
-      voca.slugify(this._getValue(PROJECT_NAME_VAR))
+      voca.slugify(this.getValue(PROJECT_NAME_VAR))
     );
 
-    this._isRequired(PROJECT_SLUG_VAR);
+    this.throwRequiredError(PROJECT_SLUG_VAR);
 
     this.destinationRoot(
-      this.destinationPath(this._getValue(PROJECT_SLUG_VAR) || '')
+      this.destinationPath(this.getValue(PROJECT_SLUG_VAR) || '')
     );
   }
 
@@ -64,9 +64,9 @@ class AppGenerator extends CustomGenerator {
   writing() {
     log('Creating directory', { newLine: true });
 
-    this._copyFiles(this.destinationRoot(), ['src/.gitkeep']);
+    this.copyFiles(this.destinationRoot(), ['src/.gitkeep']);
 
-    this._copyTemplates(this.destinationRoot(), [
+    this.copyTemplates(this.destinationRoot(), [
       '.editorconfig',
       '.gitignore',
       '.yo-rc.json',
@@ -79,7 +79,7 @@ class AppGenerator extends CustomGenerator {
    * @inheritdoc
    */
   end() {
-    if (this._getValue(ADD_SAMPLE_CONTENT_VAR)) {
+    if (this.getValue(ADD_SAMPLE_CONTENT_VAR)) {
       log('Adding sample content', { newLine: true });
 
       this.composeWith(require.resolve('../collection'), {

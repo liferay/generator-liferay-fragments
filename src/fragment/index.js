@@ -40,23 +40,23 @@ module.exports = class extends CustomGenerator {
    * @inheritdoc
    */
   writing() {
-    if (this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
+    if (this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
       this.composeWith(require.resolve('../collection'), {
-        [FRAGMENT_NAME_VAR]: this._getValue(FRAGMENT_NAME_VAR),
-        [MIN_LIFERAY_VERSION_VAR]: this._getValue(MIN_LIFERAY_VERSION_VAR),
+        [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
+        [MIN_LIFERAY_VERSION_VAR]: this.getValue(MIN_LIFERAY_VERSION_VAR),
       });
     } else {
-      this._isRequired(FRAGMENT_COLLECTION_SLUG_VAR);
-      this._isRequired(FRAGMENT_SLUG_VAR);
-      this._isRequired(MIN_LIFERAY_VERSION_VAR);
+      this.throwRequiredError(FRAGMENT_COLLECTION_SLUG_VAR);
+      this.throwRequiredError(FRAGMENT_SLUG_VAR);
+      this.throwRequiredError(MIN_LIFERAY_VERSION_VAR);
 
       const basePath = path.join(
         'src',
-        this._getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
-        this._getValue(FRAGMENT_SLUG_VAR) || ''
+        this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) || '',
+        this.getValue(FRAGMENT_SLUG_VAR) || ''
       );
 
-      this._copyTemplates(basePath, [
+      this.copyTemplates(basePath, [
         'index.html',
         'main.js',
         'styles.css',
@@ -72,12 +72,12 @@ module.exports = class extends CustomGenerator {
    * @see _getCollectionChoices
    */
   async _askCollection() {
-    await this._ask({
+    await this.ask({
       type: 'list',
       name: FRAGMENT_COLLECTION_SLUG_VAR,
       message: FRAGMENT_COLLECTION_SLUG_MESSAGE,
       choices: this._getCollectionChoices(),
-      when: !this._hasValue(FRAGMENT_COLLECTION_SLUG_VAR),
+      when: !this.hasValue(FRAGMENT_COLLECTION_SLUG_VAR),
     });
   }
 
@@ -85,7 +85,7 @@ module.exports = class extends CustomGenerator {
    * Requests fragment information and sets the fragment slug.
    */
   async _askFragmentData() {
-    await this._ask([
+    await this.ask([
       {
         type: 'input',
         name: FRAGMENT_NAME_VAR,
@@ -94,32 +94,32 @@ module.exports = class extends CustomGenerator {
         /** @param {string} name */
         validate: (name) =>
           name ? true : FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE,
-        when: !this._hasValue(FRAGMENT_NAME_VAR),
+        when: !this.hasValue(FRAGMENT_NAME_VAR),
       },
       {
         type: 'list',
         name: FRAGMENT_TYPE_VAR,
         message: FRAGMENT_TYPE_MESSAGE,
         choices: FRAGMENT_TYPE_OPTIONS,
-        default: this._getValue(FRAGMENT_TYPE_DEFAULT),
+        default: this.getValue(FRAGMENT_TYPE_DEFAULT),
         when:
-          !this._hasValue(FRAGMENT_TYPE_VAR) &&
-          !this._getValue(DATA_LFR_SUPPORTED),
+          !this.hasValue(FRAGMENT_TYPE_VAR) &&
+          !this.getValue(DATA_LFR_SUPPORTED),
       },
     ]);
 
-    this._setValue(
+    this.setValue(
       FRAGMENT_SLUG_VAR,
-      voca.slugify(this._getValue(FRAGMENT_NAME_VAR))
+      voca.slugify(this.getValue(FRAGMENT_NAME_VAR))
     );
 
-    this._setValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
+    this.setValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
   }
 
   async _askLiferayVersion() {
-    const previousMinLiferayVersion = this._getValue(MIN_LIFERAY_VERSION_VAR);
+    const previousMinLiferayVersion = this.getValue(MIN_LIFERAY_VERSION_VAR);
 
-    await this._ask({
+    await this.ask({
       type: 'input',
       name: MIN_LIFERAY_VERSION_VAR,
       message: MIN_LIFERAY_VERSION_MESSAGE,
@@ -129,23 +129,23 @@ module.exports = class extends CustomGenerator {
         semver.valid(version)
           ? true
           : MIN_LIFERAY_VERSION_MESSAGE_ERROR_MESSAGE,
-      when: !this._hasValue(MIN_LIFERAY_VERSION_VAR),
+      when: !this.hasValue(MIN_LIFERAY_VERSION_VAR),
     });
 
     if (!previousMinLiferayVersion) {
       this.config.set(
         MIN_LIFERAY_VERSION_VAR,
-        `${this._getValue(MIN_LIFERAY_VERSION_VAR)}`
+        `${this.getValue(MIN_LIFERAY_VERSION_VAR)}`
       );
     }
 
-    this._setValue(
+    this.setValue(
       DATA_LFR_SUPPORTED,
 
       // @ts-ignore
 
       semver.gte(
-        `${this._getValue(MIN_LIFERAY_VERSION_VAR)}`,
+        `${this.getValue(MIN_LIFERAY_VERSION_VAR)}`,
         DATA_LFR_SUPPORTED_MIN_VERSION
       )
     );

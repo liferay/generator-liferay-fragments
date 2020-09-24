@@ -33,15 +33,15 @@ export default class AuthGenerator extends CustomGenerator {
   }
 
   getCompanyId(): string | undefined {
-    return this._getValue(LIFERAY_COMPANYID_VAR);
+    return this.getValue(LIFERAY_COMPANYID_VAR);
   }
 
   getGroupId(): string | undefined {
-    return this._getValue(LIFERAY_GROUPID_VAR);
+    return this.getValue(LIFERAY_GROUPID_VAR);
   }
 
   getHost(): string | undefined {
-    return this._getValue(LIFERAY_HOST_VAR);
+    return this.getValue(LIFERAY_HOST_VAR);
   }
 
   private static _checkConnection() {
@@ -60,16 +60,16 @@ export default class AuthGenerator extends CustomGenerator {
   }
 
   private async _askHostData() {
-    this._setValue(LIFERAY_HOST_VAR, 'http://localhost:8080');
-    this._setValue(LIFERAY_USERNAME_VAR, 'test@liferay.com');
-    this._setValue(LIFERAY_PASSWORD_VAR, 'test');
+    this.setValue(LIFERAY_HOST_VAR, 'http://localhost:8080');
+    this.setValue(LIFERAY_USERNAME_VAR, 'test@liferay.com');
+    this.setValue(LIFERAY_PASSWORD_VAR, 'test');
 
-    await this._ask([
+    await this.ask([
       {
         type: 'input',
         name: LIFERAY_HOST_VAR,
         message: 'Liferay host & port',
-        default: this._getValue(LIFERAY_HOST_VAR),
+        default: this.getValue(LIFERAY_HOST_VAR),
         when: !(LIFERAY_HOST_VAR in this.options),
         store: true,
       },
@@ -77,7 +77,7 @@ export default class AuthGenerator extends CustomGenerator {
         type: 'input',
         name: LIFERAY_USERNAME_VAR,
         message: 'Username',
-        default: this._getValue(LIFERAY_USERNAME_VAR),
+        default: this.getValue(LIFERAY_USERNAME_VAR),
         when: !(LIFERAY_USERNAME_VAR in this.options),
         store: true,
       },
@@ -85,7 +85,7 @@ export default class AuthGenerator extends CustomGenerator {
         type: 'password',
         name: LIFERAY_PASSWORD_VAR,
         message: 'Password',
-        default: this._getValue(LIFERAY_PASSWORD_VAR),
+        default: this.getValue(LIFERAY_PASSWORD_VAR),
         when: !(LIFERAY_PASSWORD_VAR in this.options),
       },
     ]);
@@ -117,7 +117,7 @@ export default class AuthGenerator extends CustomGenerator {
     if (!(LIFERAY_GROUPID_VAR in this.options)) {
       this._companyChoices = await AuthGenerator._getCompanyChoices();
 
-      await this._ask([
+      await this.ask([
         {
           type: 'list',
           name: LIFERAY_COMPANYID_VAR,
@@ -130,13 +130,13 @@ export default class AuthGenerator extends CustomGenerator {
 
       this._groupChoices = await this._getGroupChoices();
 
-      await this._ask([
+      await this.ask([
         {
           type: 'list',
           name: LIFERAY_GROUPID_VAR,
           message: 'Group ID',
           choices: this._groupChoices,
-          default: this._getValue(LIFERAY_GROUPID_VAR),
+          default: this.getValue(LIFERAY_GROUPID_VAR),
           store: true,
         },
       ]);
@@ -161,9 +161,9 @@ export default class AuthGenerator extends CustomGenerator {
   }
 
   private async _wrapApi() {
-    const host = this._getValue(LIFERAY_HOST_VAR) || '';
-    const user = this._getValue(LIFERAY_USERNAME_VAR) || '';
-    const pass = this._getValue(LIFERAY_PASSWORD_VAR) || '';
+    const host = this.getValue(LIFERAY_HOST_VAR) || '';
+    const user = this.getValue(LIFERAY_USERNAME_VAR) || '';
+    const pass = this.getValue(LIFERAY_PASSWORD_VAR) || '';
     const base64Token = Buffer.from(`${user}:${pass}`).toString('base64');
 
     api.init(host, base64Token);

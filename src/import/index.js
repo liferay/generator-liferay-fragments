@@ -24,7 +24,7 @@ module.exports = class extends AuthGenerator {
   async asking() {
     await super.asking();
 
-    if (this._getValue(IMPORT_WATCH_VAR)) {
+    if (this.getValue(IMPORT_WATCH_VAR)) {
       await this._watchChanges();
     } else {
       await this._importProject();
