@@ -32,8 +32,20 @@ export default class AuthGenerator extends CustomGenerator {
     await this._askSiteData();
   }
 
+  getCompany(): IChoice | undefined {
+    const companyId = this.getCompanyId();
+
+    return this._companyChoices.find((company) => company.value === companyId);
+  }
+
   getCompanyId(): string | undefined {
     return this.getValue(LIFERAY_COMPANYID_VAR);
+  }
+
+  getGroup(): IChoice | undefined {
+    const groupId = this.getGroupId();
+
+    return this._groupChoices.find((group) => group.value === groupId);
   }
 
   getGroupId(): string | undefined {
@@ -42,6 +54,10 @@ export default class AuthGenerator extends CustomGenerator {
 
   getHost(): string | undefined {
     return this.getValue(LIFERAY_HOST_VAR);
+  }
+
+  getUsername(): string | undefined {
+    return this.getValue(LIFERAY_USERNAME_VAR);
   }
 
   private static _checkConnection() {
