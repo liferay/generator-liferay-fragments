@@ -21,7 +21,7 @@ const {
   PROJECT_NAME_VAR,
   PROJECT_SLUG_VAR,
 } = require('../utils/constants');
-const CustomGenerator = require('../utils/custom-generator');
+const { default: CustomGenerator } = require('../utils/custom-generator');
 const { log } = require('../utils/log');
 
 class AppGenerator extends CustomGenerator {

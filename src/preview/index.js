@@ -9,7 +9,7 @@ const ws = require('ws');
 const api = require('../utils/api');
 const AuthGenerator = require('../utils/auth-generator');
 const { LIFERAY_GROUPID_VAR, LIFERAY_HOST_VAR } = require('../utils/constants');
-const getProjectContent = require('../utils/get-project-content');
+const { default: getProjectContent } = require('../utils/get-project-content');
 const { log } = require('../utils/log');
 
 const DEV_SERVER_PORT = 8081;

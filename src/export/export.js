@@ -7,7 +7,7 @@ const rimraf = require('rimraf');
 const tmp = require('tmp');
 
 const api = require('../utils/api');
-const getProjectContent = require('../utils/get-project-content');
+const { default: getProjectContent } = require('../utils/get-project-content');
 const { log } = require('../utils/log');
 const writeProjectContent = require('../utils/write-project-content');
 const exportCollections = require('./export-legacy');

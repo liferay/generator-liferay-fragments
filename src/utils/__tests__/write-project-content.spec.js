@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const tmp = require('tmp');
 
-const getProjectContent = require('../get-project-content');
+const { default: getProjectContent } = require('../get-project-content');
 const writeProjectContent = require('../write-project-content');
 
 describe('utils/write-project-content', () => {

@@ -1,5 +1,7 @@
 const api = require('../../utils/api');
-const getProjectContent = require('../../utils/get-project-content');
+const {
+  default: getProjectContent,
+} = require('../../utils/get-project-content');
 const getTestFixtures = require('../../utils/get-test-fixtures');
 const exportCollections = require('../export-legacy');
 

@@ -7,7 +7,7 @@ const {
   FRAGMENT_IMPORT_STATUS,
   PAGE_TEMPLATE_IMPORT_STATUS,
 } = require('../utils/constants');
-const getProjectContent = require('../utils/get-project-content');
+const { default: getProjectContent } = require('../utils/get-project-content');
 const { log } = require('../utils/log');
 
 /**
