@@ -1,5 +1,12 @@
 {
-  "extends": "liferay",
+  "root": true,
+  "extends": [
+    "liferay",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "env": {
     "jest": true,
     "node": true
@@ -10,6 +17,20 @@
     "no-empty": "off",
     "no-for-of-loops/no-for-of-loops": "off",
     "no-return-assign": ["error", "except-parens"],
-    "sort-keys": "off"
-  }
+    "sort-keys": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+
+    "@typescript-eslint/explicit-module-boundary-types": ["error", {
+      "allowArgumentsExplicitlyTypedAsAny": true,
+    }]
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }
