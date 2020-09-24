@@ -34,7 +34,7 @@
     "copyfiles": "^2.3.0",
     "eslint": "^7.9.0",
     "eslint-config-liferay": "^21.1.0",
-    "husky": "2.4.1",
+    "husky": "^4.3.0",
     "jest": "^26.4.2",
     "lint-staged": "8.2.1",
     "prettier": "^2.1.2",
@@ -71,6 +71,11 @@
       "**/__tests__/**/*.spec.js?(x)"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.js": [
       "eslint --fix",
@@ -90,7 +95,6 @@
     "build:copy": "copyfiles --up 1 --all --exclude \"**/__tests__/**/*\" --exclude \"**/*.ts\" \"src/**/*\" generators",
     "build:typescript": "tsc --build tsconfig.json",
     "build": "npm run build:clean && npm run build:copy && npm run build:typescript",
-    "precommit": "lint-staged",
     "lint": "eslint src/",
     "test": "jest",
     "prepublish": "npm run lint && npm run test",
