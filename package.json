@@ -15,6 +15,9 @@
     "yeoman-generator"
   ],
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-angular": "^11.0.0",
+    "@commitlint/travis-cli": "^11.0.0",
     "@types/adm-zip": "^0.4.33",
     "@types/express": "4.17.0",
     "@types/glob": "7.1.1",
@@ -73,6 +76,7 @@
   },
   "husky": {
     "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
   },
@@ -95,6 +99,7 @@
     "build:copy": "copyfiles --up 1 --all --exclude \"**/__tests__/**/*\" --exclude \"**/*.ts\" \"src/**/*\" generators",
     "build:typescript": "tsc --build tsconfig.json",
     "build": "npm run build:clean && npm run build:copy && npm run build:typescript",
+    "commitlint-travis": "commitlint-travis",
     "lint": "eslint src/",
     "test": "jest",
     "prepublish": "npm run lint && npm run test",
