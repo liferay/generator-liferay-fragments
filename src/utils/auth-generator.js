@@ -14,7 +14,7 @@ const {
   LIFERAY_USERNAME_MESSAGE,
   LIFERAY_USERNAME_VAR,
 } = require('./constants');
-const CustomGenerator = require('./custom-generator');
+const { default: CustomGenerator } = require('./custom-generator');
 const getSiteGroups = require('./get-site-groups');
 const { log } = require('./log');
 

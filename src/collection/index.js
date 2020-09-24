@@ -15,7 +15,7 @@ const {
   MIN_LIFERAY_VERSION_SAMPLE,
   MIN_LIFERAY_VERSION_VAR,
 } = require('../utils/constants');
-const CustomGenerator = require('../utils/custom-generator');
+const { default: CustomGenerator } = require('../utils/custom-generator');
 
 module.exports = class extends CustomGenerator {
   /**

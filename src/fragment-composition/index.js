@@ -14,7 +14,7 @@ const {
   NEW_COLLECTION_SHORT,
   NEW_COLLECTION_VALUE,
 } = require('../utils/constants');
-const CustomGenerator = require('../utils/custom-generator');
+const { default: CustomGenerator } = require('../utils/custom-generator');
 
 module.exports = class extends CustomGenerator {
   /**

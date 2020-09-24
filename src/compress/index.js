@@ -9,7 +9,7 @@ const {
   DEPLOYMENT_DESCRIPTOR_GROUP_MESSAGE,
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
 } = require('../utils/constants');
-const CustomGenerator = require('../utils/custom-generator');
+const { default: CustomGenerator } = require('../utils/custom-generator');
 const compress = require('./compress');
 
 module.exports = class extends CustomGenerator {

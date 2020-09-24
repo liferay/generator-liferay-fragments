@@ -10,7 +10,7 @@ const {
   PAGE_TEMPLATE_TYPE_OPTIONS,
   PAGE_TEMPLATE_TYPE_VAR,
 } = require('../utils/constants');
-const CustomGenerator = require('../utils/custom-generator');
+const { default: CustomGenerator } = require('../utils/custom-generator');
 
 module.exports = class extends CustomGenerator {
   /**

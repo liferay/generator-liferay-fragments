@@ -1,4 +1,4 @@
-const getProjectContent = require('../get-project-content');
+const { default: getProjectContent } = require('../get-project-content');
 const getTestFixtures = require('../get-test-fixtures');
 
 describe('utils/get-project-content', () => {
