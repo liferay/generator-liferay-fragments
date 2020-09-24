@@ -11,7 +11,9 @@ const { log } = require('../utils/log');
 const {
   default: getProjectContent,
 } = require('../utils/project-content/get-project-content');
-const writeProjectContent = require('../utils/project-content/write-project-content');
+const {
+  default: writeProjectContent,
+} = require('../utils/project-content/write-project-content');
 const exportCollections = require('./export-legacy');
 
 const ZIP_PATHS = [

@@ -5,7 +5,9 @@ const tmp = require('tmp');
 const {
   default: getProjectContent,
 } = require('../project-content/get-project-content');
-const writeProjectContent = require('../project-content/write-project-content');
+const {
+  default: writeProjectContent,
+} = require('../project-content/write-project-content');
 
 describe('utils/write-project-content', () => {
   const projectCollections = JSON.parse(
