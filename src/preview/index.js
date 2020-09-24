@@ -7,8 +7,7 @@ const request = require('request');
 const ws = require('ws');
 
 const api = require('../utils/api');
-const AuthGenerator = require('../utils/auth-generator');
-const { LIFERAY_GROUPID_VAR, LIFERAY_HOST_VAR } = require('../utils/constants');
+const { default: AuthGenerator } = require('../utils/auth-generator');
 const { log } = require('../utils/log');
 const {
   default: getProjectContent,
@@ -49,10 +48,10 @@ module.exports = class extends AuthGenerator {
 
       log('Liferay Server URL', {
         newLine: true,
-        data: this._getValue(LIFERAY_HOST_VAR) || '',
+        data: this.getHost() || '',
       });
 
-      log('Group ID', { data: this._getValue(LIFERAY_GROUPID_VAR) || '' });
+      log('Group ID', { data: this.getGroupId() || '' });
       log('Preview URL', { data: `http://localhost:${DEV_SERVER_PORT}` });
     } else {
       log(
@@ -99,7 +98,7 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<string | object>} Composition's generated preview
    */
   _getCompositionPreview(definition) {
-    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+    const groupId = this.getGroupId();
 
     if (groupId) {
       return api.renderCompositionPreview(groupId, definition);
@@ -117,7 +116,7 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<string | object>} Fragment's generated preview
    */
   _getFragmentPreview(css, html, js, configuration) {
-    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+    const groupId = this.getGroupId();
 
     if (groupId) {
       return api.renderFragmentPreview(groupId, html, css, js, configuration);
@@ -132,7 +131,7 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<string | object>} Page Template's generated preview
    */
   _getPageTemplatePreview(definition) {
-    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+    const groupId = this.getGroupId();
 
     if (groupId) {
       return api.renderPageDefinitionPreview(groupId, definition);
@@ -243,7 +242,7 @@ module.exports = class extends AuthGenerator {
           )
         );
       } else {
-        const url = `${this._getValue(LIFERAY_HOST_VAR)}${req.originalUrl}`;
+        const url = `${this.getHost()}${req.originalUrl}`;
 
         // @ts-ignore
 
@@ -261,7 +260,7 @@ module.exports = class extends AuthGenerator {
   _replaceLinks(html) {
     return html.replace(
       /(src|href)=["']\/([^"']+)["']/gi,
-      `$1="${this._getValue(LIFERAY_HOST_VAR)}/$2"`
+      `$1="${this.getHost()}/$2"`
     );
   }
 

@@ -3,14 +3,8 @@
 const chokidar = require('chokidar');
 const path = require('path');
 
-const AuthGenerator = require('../utils/auth-generator');
-const {
-  IMPORT_WATCH_VAR,
-  LIFERAY_COMPANYID_VAR,
-  LIFERAY_GROUPID_VAR,
-  LIFERAY_HOST_VAR,
-  LIFERAY_USERNAME_VAR,
-} = require('../utils/constants');
+const { default: AuthGenerator } = require('../utils/auth-generator');
+const { IMPORT_WATCH_VAR } = require('../utils/constants');
 const { log } = require('../utils/log');
 const importProject = require('./import');
 
@@ -42,7 +36,7 @@ module.exports = class extends AuthGenerator {
    * @return {Promise<void>} Promise resolved when import has finished
    */
   _importProject() {
-    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+    const groupId = this.getGroupId();
 
     if (groupId) {
       return importProject(groupId, this.destinationPath());
@@ -60,10 +54,10 @@ module.exports = class extends AuthGenerator {
    */
   _watchChanges() {
     const watchPath = path.resolve(this.destinationPath(), 'src');
-    const host = this._getValue(LIFERAY_HOST_VAR);
-    const user = this._getValue(LIFERAY_USERNAME_VAR);
-    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
-    const companyId = this._getValue(LIFERAY_COMPANYID_VAR);
+    const host = this.getHost();
+    const user = this.getUsername();
+    const groupId = this.getGroupId();
+    const companyId = this.getCompanyId();
 
     const group = this._groupChoices.find((group) => group.value === groupId);
 

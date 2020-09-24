@@ -1,5 +1,4 @@
-const AuthGenerator = require('../utils/auth-generator');
-const { LIFERAY_GROUPID_VAR } = require('../utils/constants');
+const { default: AuthGenerator } = require('../utils/auth-generator');
 const exportProject = require('./export');
 
 module.exports = class extends AuthGenerator {
@@ -8,7 +7,7 @@ module.exports = class extends AuthGenerator {
    */
   async asking() {
     await super.asking();
-    const groupId = this._getValue(LIFERAY_GROUPID_VAR);
+    const groupId = this.getGroupId();
 
     if (!groupId) {
       throw new Error('groupId cannot be undefined');

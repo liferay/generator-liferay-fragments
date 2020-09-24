@@ -50,7 +50,7 @@ module.exports.FRAGMENT_TYPE_DEFAULT = 'section';
 module.exports.FRAGMENT_TYPE_MESSAGE = 'Fragment type';
 module.exports.FRAGMENT_TYPE_OPTIONS = [
   { name: 'Section', value: 'section' },
-  { name: 'Component', value: 'component' }
+  { name: 'Component', value: 'component' },
 ];
 module.exports.FRAGMENT_TYPE_VAR = 'fragmentType';
 
@@ -64,31 +64,13 @@ module.exports.FRAGMENT_COMPOSITION_NAME_VAR = 'fragmentCompositionName';
 module.exports.FRAGMENT_IMPORT_STATUS = {
   IMPORTED: 'imported',
   IMPORTED_DRAFT: 'imported-draft',
-  INVALID: 'invalid'
+  INVALID: 'invalid',
 };
 
 module.exports.FRAGMENTS_PORTLET_ID =
   'com_liferay_fragment_web_portlet_FragmentPortlet';
 
 module.exports.IMPORT_WATCH_VAR = 'watch';
-
-module.exports.LIFERAY_COMPANYID_MESSAGE = 'Company ID';
-module.exports.LIFERAY_COMPANYID_VAR = 'companyId';
-
-module.exports.LIFERAY_GROUPID_MESSAGE = 'Group ID';
-module.exports.LIFERAY_GROUPID_VAR = 'groupId';
-
-module.exports.LIFERAY_HOST_DEFAULT = 'http://localhost:8080';
-module.exports.LIFERAY_HOST_MESSAGE = 'Liferay host & port';
-module.exports.LIFERAY_HOST_VAR = 'host';
-
-module.exports.LIFERAY_PASSWORD_DEFAULT = 'test';
-module.exports.LIFERAY_PASSWORD_MESSAGE = 'Password';
-module.exports.LIFERAY_PASSWORD_VAR = 'password';
-
-module.exports.LIFERAY_USERNAME_DEFAULT = 'test@liferay.com';
-module.exports.LIFERAY_USERNAME_MESSAGE = 'Username';
-module.exports.LIFERAY_USERNAME_VAR = 'username';
 
 module.exports.MIN_LIFERAY_VERSION_MESSAGE =
   'Minimum liferay version you want fragments to be compatible with (e.g. 7.3.0)';
@@ -115,14 +97,14 @@ module.exports.PAGE_TEMPLATE_TYPE_MESSAGE = 'Page Template type';
 module.exports.PAGE_TEMPLATE_TYPE_OPTIONS = [
   { name: 'Display Page Template', value: 'display-page-template' },
   { name: 'Page Template', value: 'page-template' },
-  { name: 'Master Page', value: 'master-page' }
+  { name: 'Master Page', value: 'master-page' },
 ];
 module.exports.PAGE_TEMPLATE_TYPE_VAR = 'pageTemplateType';
 
 module.exports.PAGE_TEMPLATE_IMPORT_STATUS = {
   IMPORTED: 'imported',
   IGNORED: 'ignored',
-  INVALID: 'invalid'
+  INVALID: 'invalid',
 };
 
 module.exports.PORTLET_FILE_REPOSITORY =
