@@ -1,5 +1,7 @@
-const { default: getProjectContent } = require('../get-project-content');
 const getTestFixtures = require('../get-test-fixtures');
+const {
+  default: getProjectContent,
+} = require('../project-content/get-project-content');
 
 describe('utils/get-project-content', () => {
   it('requires a valid package.json file', () => {

@@ -1,8 +1,8 @@
 const api = require('../../utils/api');
+const getTestFixtures = require('../../utils/get-test-fixtures');
 const {
   default: getProjectContent,
-} = require('../../utils/get-project-content');
-const getTestFixtures = require('../../utils/get-test-fixtures');
+} = require('../../utils/project-content/get-project-content');
 const exportCollections = require('../export-legacy');
 
 /**

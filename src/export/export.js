@@ -7,9 +7,11 @@ const rimraf = require('rimraf');
 const tmp = require('tmp');
 
 const api = require('../utils/api');
-const { default: getProjectContent } = require('../utils/get-project-content');
 const { log } = require('../utils/log');
-const writeProjectContent = require('../utils/write-project-content');
+const {
+  default: getProjectContent,
+} = require('../utils/project-content/get-project-content');
+const writeProjectContent = require('../utils/project-content/write-project-content');
 const exportCollections = require('./export-legacy');
 
 const ZIP_PATHS = [

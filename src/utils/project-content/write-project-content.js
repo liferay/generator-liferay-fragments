@@ -3,7 +3,7 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const util = require('util');
 
-const { assertProjectContent, assertValidPath } = require('./assert');
+const { assertProjectContent, assertValidPath } = require('../assert');
 
 const writeFilePromise = util.promisify(fs.writeFile);
 
@@ -33,8 +33,8 @@ const _updateJSON = async (path, content) => {
 
 /**
  * @param {string} fragmentBasePath Fragment base path
- * @param {import('../../types').ICollection} collection
- * @param {import('../../types').IFragment} fragment
+ * @param {import('../../../types').ICollection} collection
+ * @param {import('../../../types').IFragment} fragment
  */
 const _writeProjectFragment = async (
   fragmentBasePath,
@@ -71,8 +71,8 @@ const _writeProjectFragment = async (
 
 /**
  * @param {string} fragmentBasePath Fragment base path
- * @param {import('../../types').ICollection} collection
- * @param {import('../../types').IFragmentComposition} fragmentComposition
+ * @param {import('../../../types').ICollection} collection
+ * @param {import('../../../types').IFragmentComposition} fragmentComposition
  */
 const _writeProjectFragmentComposition = async (
   fragmentBasePath,
@@ -99,7 +99,7 @@ const _writeProjectFragmentComposition = async (
 
 /**
  * @param {string} collectionBasePath Collection base path
- * @param {import('../../types').ICollection} collection
+ * @param {import('../../../types').ICollection} collection
  */
 const _writeProjectCollection = async (collectionBasePath, collection) => {
   mkdirp.sync(path.resolve(collectionBasePath));
@@ -137,7 +137,7 @@ const _writeProjectCollection = async (collectionBasePath, collection) => {
 
 /**
  * @param {string} projectBasePath
- * @param {import('../../types').IProject} projectContent
+ * @param {import('../../../types').IProject} projectContent
  */
 const writeProjectContent = async (projectBasePath, projectContent) => {
   assertValidPath(
