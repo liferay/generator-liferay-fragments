@@ -44,8 +44,9 @@ export default async function writeProjectContent(
   );
 }
 
-const _updateFile = async (path: string, content: string) => {
-  await writeFilePromise(path, content);
+const _updateFile = async (filePath: string, content: string) => {
+  mkdirp.sync(filePath.substring(0, filePath.lastIndexOf(path.sep)));
+  await writeFilePromise(filePath, content);
 };
 
 const _updateJSON = async (path: string, content: any) => {
