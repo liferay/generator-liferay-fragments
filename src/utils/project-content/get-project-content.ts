@@ -114,10 +114,9 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         css: readFile(metadata.cssPath),
         js: readFile(metadata.jsPath),
 
-        configuration: _getFramentConfiguration(
-          directory,
-          metadata.configurationPath
-        ),
+        configuration: metadata.configurationPath
+          ? _getFramentConfiguration(directory, metadata.configurationPath)
+          : '',
       };
     });
 }
