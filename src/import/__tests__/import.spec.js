@@ -78,13 +78,5 @@ const GROUP_ID = '1234';
       await importProject(GROUP_ID, projectPath);
       expect(legacyMock).toHaveBeenCalled();
     });
-
-    test.todo('[DEPRECATED] creates every collection in local project');
-
-    test.todo('[DEPRECATED] updates existing collections');
-
-    test.todo('[DEPRECATED] imports every fragment in local project');
-
-    test.todo('[DEPRECATED] updates existing fragments');
   });
 });
