@@ -74,7 +74,7 @@ export interface IFragmentMetadata {
   cssPath: string;
   htmlPath: string;
   jsPath: string;
-  configurationPath: string;
+  configurationPath?: string;
   thumbnailPath?: string;
   name: string;
   type: 'component' | 'section';

@@ -77,10 +77,12 @@ const _writeFragment = async (
     fragment.css
   );
 
-  await _updateFile(
-    path.resolve(fragmentBasePath, fragment.metadata.configurationPath),
-    fragment.configuration
-  );
+  if (fragment.metadata.configurationPath) {
+    await _updateFile(
+      path.resolve(fragmentBasePath, fragment.metadata.configurationPath),
+      fragment.configuration
+    );
+  }
 
   await _updateFile(
     path.resolve(fragmentBasePath, fragment.metadata.htmlPath),
