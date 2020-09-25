@@ -3,6 +3,7 @@ const fs = require('fs');
 const mime = require('mime-types');
 const path = require('path');
 const request = require('request');
+const tmp = require('tmp');
 const { parse: parseUrl } = require('url');
 const util = require('util');
 
@@ -10,8 +11,9 @@ const {
   FRAGMENTS_PORTLET_ID,
   PORTLET_FILE_REPOSITORY,
 } = require('./constants');
+const { default: writeZip } = require('./write-zip');
 
-const api = {
+module.exports = {
   _host: '',
   _basicAuthToken: '',
 
@@ -589,21 +591,18 @@ const api = {
   },
 
   /**
-   * @param {string} basePath
+   * @param {JSZip} zip
    * @param {string} groupId
    */
-  async importZip(basePath, groupId) {
+  async importZip(zip, groupId) {
     await this.refreshOAuthToken();
 
     const formData = new FormData();
+    const tmpZip = tmp.fileSync();
 
-    formData.append(
-      'file',
-      fs.createReadStream(
-        path.resolve(basePath, 'build', 'liferay-fragments.zip')
-      )
-    );
+    await writeZip(zip, tmpZip.name);
 
+    formData.append('file', fs.createReadStream(tmpZip.name));
     formData.append('groupId', groupId);
 
     const params = parseUrl(
@@ -621,6 +620,8 @@ const api = {
 
     return new Promise((resolve, reject) => {
       formData.submit(options, (error, response) => {
+        tmpZip.removeCallback();
+
         if (error) {
           reject(error);
         } else if (
@@ -708,5 +709,3 @@ const api = {
     );
   },
 };
-
-module.exports = api;

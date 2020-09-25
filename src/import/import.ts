@@ -6,6 +6,7 @@ import {
   PAGE_TEMPLATE_IMPORT_STATUS,
 } from '../utils/constants';
 import { log } from '../utils/log';
+import getProjectContent from '../utils/project-content/get-project-content';
 import importLegacy from './import-legacy';
 
 interface ImportResult {
@@ -23,32 +24,29 @@ export default async function importProject(
   // Try to import using Struts action first
 
   try {
-    const zip = await compress(projectPath, {
-      [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false,
-    });
+    const response = await api.importZip(
+      await compress(getProjectContent(projectPath), {
+        [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false,
+      }),
+      groupId
+    );
 
-    if (Object.keys(zip.files).length) {
-      const response = await api.importZip(projectPath, groupId);
+    if (response.error) {
+      throw new Error('Zip import error');
+    }
 
-      if (response.error) {
-        throw new Error('Zip import error');
-      }
-
-      if (
-        (response.fragmentEntriesImportResult &&
-          response.fragmentEntriesImportResult.length > 0) ||
-        (response.pageTemplatesImportResult &&
-          response.pageTemplatesImportResult.length > 0)
-      ) {
-        _logImportResults(
-          response.fragmentEntriesImportResult || [],
-          response.pageTemplatesImportResult || []
-        );
-      } else {
-        log('Project imported', { level: 'success' });
-      }
+    if (
+      (response.fragmentEntriesImportResult &&
+        response.fragmentEntriesImportResult.length > 0) ||
+      (response.pageTemplatesImportResult &&
+        response.pageTemplatesImportResult.length > 0)
+    ) {
+      _logImportResults(
+        response.fragmentEntriesImportResult || [],
+        response.pageTemplatesImportResult || []
+      );
     } else {
-      throw new Error('zip file not generated');
+      log('Project imported', { level: 'success' });
     }
   } catch (_) {
     log('Zip file not generated, using legacy APIs', {
