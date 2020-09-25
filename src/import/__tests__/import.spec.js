@@ -4,6 +4,9 @@ const { default: compress } = require('../../compress/compress');
 const api = require('../../utils/api');
 const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../utils/constants');
 const getTestFixtures = require('../../utils/get-test-fixtures');
+const {
+  default: getProjectContent,
+} = require('../../utils/project-content/get-project-content');
 const { default: importProject } = require('../import');
 const { default: importLegacy } = require('../import-legacy');
 
@@ -36,14 +39,21 @@ const GROUP_ID = '1234';
     it('tries to generate a zip file from the given project', async () => {
       await importProject(GROUP_ID, projectPath);
 
-      expect(compress).toHaveBeenCalledWith(projectPath, {
+      expect(compress).toHaveBeenCalledWith(getProjectContent(projectPath), {
         [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false,
       });
     });
 
     it('sends the given zip to backend', async () => {
       await importProject(GROUP_ID, projectPath);
-      expect(api.importZip).toHaveBeenCalledWith(projectPath, GROUP_ID);
+      expect(api.importZip).toHaveBeenCalledWith(
+        expect.objectContaining({
+          files: {
+            'sample.txt': expect.objectContaining({}),
+          },
+        }),
+        GROUP_ID
+      );
     });
 
     it('does not call legacy APIs if not necesary', async () => {
