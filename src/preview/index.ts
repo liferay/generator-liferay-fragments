@@ -1,37 +1,23 @@
 // @ts-nocheck
 
-const chokidar = require('chokidar');
-const express = require('express');
-const path = require('path');
-const request = require('request');
-const ws = require('ws');
+import chokidar from 'chokidar';
+import express from 'express';
+import path from 'path';
+import request from 'request';
+import ws from 'ws';
 
-const api = require('../utils/api');
-const { default: AuthGenerator } = require('../utils/auth-generator');
-const { log } = require('../utils/log');
-const {
-  default: getProjectContent,
-} = require('../utils/project-content/get-project-content');
+import api from '../utils/api';
+import AuthGenerator from '../utils/auth-generator';
+import { log } from '../utils/log';
+import getProjectContent from '../utils/project-content/get-project-content';
 
 const DEV_SERVER_PORT = 8081;
 const SOCKET_SERVER_PORT = 8082;
 
-module.exports = class extends AuthGenerator {
-  /**
-   * @param {any} args
-   * @param {any} options
-   */
-  constructor(args, options) {
-    super(args, options);
+export default class extends AuthGenerator {
+  private _connectedSockets: ws[] = [];
 
-    /** @type {ws[]} */
-    this._connectedSockets = [];
-  }
-
-  /**
-   * @inheritdoc
-   */
-  async asking() {
+  async asking(): Promise<void> {
     await super.asking();
 
     log('Checking site compatibility...', { newLine: true });
@@ -41,7 +27,8 @@ module.exports = class extends AuthGenerator {
 
       this._runExpressServer();
       this._runSocketServer();
-      this._watchChanges();
+
+      const watchPromise = this._watchChanges();
 
       log('\nDevelopment server connected to liferay');
       log('Visit preview URL and start developing to your fragments');
@@ -53,6 +40,8 @@ module.exports = class extends AuthGenerator {
 
       log('Group ID', { data: this.getGroupId() || '' });
       log('Preview URL', { data: `http://localhost:${DEV_SERVER_PORT}` });
+
+      await watchPromise;
     } else {
       log(
         '\nYour Liferay Server cannot generate fragment previews.' +
@@ -66,11 +55,7 @@ module.exports = class extends AuthGenerator {
     }
   }
 
-  /**
-   * Checks if given liferay site is compatible with fragment preview
-   * @return {Promise<boolean>} true if it is compatible, false otherwise
-   */
-  async _checkPreviewCompatibility() {
+  private async _checkPreviewCompatibility() {
     try {
       const preview = await this._getFragmentPreview(
         '.test {}',
@@ -92,12 +77,7 @@ module.exports = class extends AuthGenerator {
     return false;
   }
 
-  /**
-   * Get's a preview of the given composition using configured GroupID
-   * @param {object} definition Composition's definition
-   * @return {Promise<string | object>} Composition's generated preview
-   */
-  _getCompositionPreview(definition) {
+  private _getCompositionPreview(definition: Record<string, any>): string {
     const groupId = this.getGroupId();
 
     if (groupId) {
@@ -107,15 +87,12 @@ module.exports = class extends AuthGenerator {
     return Promise.reject(new Error('GroupId not found'));
   }
 
-  /**
-   * Get's a preview of the given fragment using configured GroupID
-   * @param {string} css Fragment's CSS
-   * @param {string} html Fragment's HTML
-   * @param {string} js Fragments's JS
-   * @param {string} configuration Fragments's configuration
-   * @return {Promise<string | object>} Fragment's generated preview
-   */
-  _getFragmentPreview(css, html, js, configuration) {
+  private _getFragmentPreview(
+    css: string,
+    html: string,
+    js: string,
+    configuration: string
+  ): string {
     const groupId = this.getGroupId();
 
     if (groupId) {
@@ -125,12 +102,7 @@ module.exports = class extends AuthGenerator {
     return Promise.reject(new Error('GroupId not found'));
   }
 
-  /**
-   * Get's a preview of the given page template using configured GroupID
-   * @param {object} definition Page Template's definition
-   * @return {Promise<string | object>} Page Template's generated preview
-   */
-  _getPageTemplatePreview(definition) {
+  private _getPageTemplatePreview(definition: Record<string, any>) {
     const groupId = this.getGroupId();
 
     if (groupId) {
@@ -140,11 +112,7 @@ module.exports = class extends AuthGenerator {
     return Promise.reject(new Error('GroupId not found'));
   }
 
-  /**
-   * Get's project content for generator's destinationPath
-   * @return {import('../../types/index').IProject} Project content
-   */
-  _getProjectContent() {
+  private _getProjectContent() {
     return getProjectContent(this.destinationPath());
   }
 
@@ -156,7 +124,7 @@ module.exports = class extends AuthGenerator {
    *  - /preview-constants.js: Gets server related constants in JS vars
    *  - *: Redirects these requests to liferay-portal
    */
-  _runExpressServer() {
+  private _runExpressServer() {
     const app = express();
     app.use(express.static(path.join(__dirname, 'assets')));
 
@@ -253,21 +221,14 @@ module.exports = class extends AuthGenerator {
     app.listen(DEV_SERVER_PORT);
   }
 
-  /**
-   * Replaces relative links in the preview HTML
-   * @param {string} html HTML to replace the links
-   */
-  _replaceLinks(html) {
+  private _replaceLinks(html: string) {
     return html.replace(
       /(src|href)=["']\/([^"']+)["']/gi,
       `$1="${this.getHost()}/$2"`
     );
   }
 
-  /**
-   * Runs a socket server
-   */
-  _runSocketServer() {
+  private _runSocketServer() {
     const socketServer = new ws.Server({ port: SOCKET_SERVER_PORT });
 
     socketServer.on('connection', (socket) => {
@@ -283,11 +244,7 @@ module.exports = class extends AuthGenerator {
     });
   }
 
-  /**
-   * Updates all sockets when project has changed
-   * @return {Promise} Watch promise
-   */
-  _watchChanges() {
+  private _watchChanges() {
     const watchPath = path.resolve(this.destinationPath(), 'src');
 
     return new Promise(() => {
@@ -299,4 +256,4 @@ module.exports = class extends AuthGenerator {
       });
     });
   }
-};
+}
