@@ -2,12 +2,15 @@ import fs from 'fs';
 import glob from 'glob';
 import JSZip from 'jszip';
 import path from 'path';
+import tmp from 'tmp';
 
+import { IProject } from '../../types';
 import {
   DEPLOYMENT_DESCRIPTOR_COMPANY_VAR,
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
 } from '../utils/constants';
 import { log } from '../utils/log';
+import writeProjectContent from '../utils/project-content/write-project-content';
 
 interface Options {
   addDeploymentDescriptor?: boolean;
@@ -15,10 +18,13 @@ interface Options {
   groupKey?: string;
 }
 
-export default function compress(
-  basePath: string,
+export default async function compress(
+  projectContent: IProject,
   { addDeploymentDescriptor = false, companyWebId = '', groupKey = '' }: Options
 ): Promise<JSZip> {
+  const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+  await writeProjectContent(tmpDir.name, projectContent);
+
   return new Promise((resolve) => {
     log('Generating zip file', { newLine: true });
 
@@ -29,12 +35,12 @@ export default function compress(
     }
 
     try {
-      fs.mkdirSync(path.join(basePath, 'build'));
+      fs.mkdirSync(path.join(tmpDir.name, 'build'));
     } catch (_) {}
 
-    glob.sync(path.join(basePath, 'src', '**/*')).forEach((filePath) => {
+    glob.sync(path.join(tmpDir.name, 'src', '**/*')).forEach((filePath) => {
       if (fs.statSync(filePath).isFile()) {
-        const _basePath = basePath.replace(/\\/g, path.posix.sep);
+        const _basePath = tmpDir.name.replace(/\\/g, path.posix.sep);
 
         const relativePath = filePath.replace(
           path.posix.join(_basePath, 'src/'),
@@ -44,28 +50,8 @@ export default function compress(
       }
     });
 
-    zip
-      .generateNodeStream({
-        type: 'nodebuffer',
-        streamFiles: true,
-      })
-      .pipe(
-        fs.createWriteStream(
-          path.join(basePath, 'build', 'liferay-fragments.zip')
-        )
-      )
-      .on('finish', () => {
-        log('build/liferay-fragments.zip file created', {
-          newLine: true,
-          level: 'success',
-        });
-
-        log('Import them to your liferay-portal to start using them', {
-          level: 'success',
-        });
-
-        resolve(zip);
-      });
+    tmpDir.removeCallback();
+    resolve(zip);
   });
 }
 
