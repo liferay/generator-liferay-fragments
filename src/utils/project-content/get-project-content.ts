@@ -16,12 +16,16 @@ import {
 import { log } from '../log';
 
 export default function getProjectContent(basePath: string): IProject {
-  return {
-    basePath,
-    project: _readJSONSync(path.resolve(basePath, 'package.json')),
-    collections: _getProjectCollections(basePath),
-    pageTemplates: _getPageTemplates(basePath),
-  };
+  try {
+    return {
+      basePath,
+      project: _readJSONSync(path.resolve(basePath, 'package.json')),
+      collections: _getProjectCollections(basePath),
+      pageTemplates: _getPageTemplates(basePath),
+    };
+  } catch (_) {
+    throw new Error(`Invalid project structure for path ${basePath}`);
+  }
 }
 
 function _readJSONSync<T>(jsonPath: string): T {
