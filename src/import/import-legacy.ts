@@ -6,6 +6,7 @@ import {
   IFragment,
   IFragmentRequest,
   IFragmentRequestStatus,
+  IProject,
   IServerCollection,
   IServerFragment,
 } from '../../types';
@@ -20,12 +21,10 @@ const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
  * @deprecated
  */
 export default async function importLegacy(
-  groupId: string,
-  projectPath: string
+  projectContent: IProject,
+  groupId: string
 ): Promise<void> {
-  const project = getProjectContent(projectPath);
-
-  const collectionRequests = project.collections.map((collection) => {
+  const collectionRequests = projectContent.collections.map((collection) => {
     const collectionRequest: ICollectionRequest = {
       collection,
       existingCollection: undefined,
@@ -70,8 +69,7 @@ export default async function importLegacy(
           fragmentRequest.promise = _importFragment(
             groupId,
             collectionRequest.existingCollection,
-            fragment,
-            projectPath
+            fragment
           )
             .then(([status, existingFragment]) => {
               fragmentRequest.status = status as IFragmentRequestStatus;
@@ -122,8 +120,7 @@ async function _importCollection(
 async function _importFragment(
   groupId: string,
   existingCollection: IServerCollection,
-  fragment: IFragment,
-  projectPath: string
+  fragment: IFragment
 ): Promise<[IFragmentRequestStatus, IServerFragment | undefined]> {
   const { fragmentCollectionId } = existingCollection;
   const { configuration, css, html, js } = fragment;
@@ -139,17 +136,11 @@ async function _importFragment(
     fragment
   );
 
-  if (fragment.metadata.thumbnailPath) {
+  if (fragment.thumbnail) {
     previewFileEntryId = await api.uploadThumbnail(
+      fragment.thumbnail,
       groupId,
       fragmentEntryKey,
-      path.join(
-        projectPath,
-        'src',
-        existingCollection.fragmentCollectionKey,
-        fragment.slug,
-        fragment.metadata.thumbnailPath
-      ),
       existingFragment ? existingFragment.previewFileEntryId : '0'
     );
   }

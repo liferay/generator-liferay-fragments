@@ -1,3 +1,4 @@
+import { IProject } from '../../types';
 import compress from '../compress/compress';
 import api from '../utils/api';
 import {
@@ -16,8 +17,8 @@ interface ImportResult {
 }
 
 export default async function importProject(
-  groupId: string,
-  projectPath: string
+  projectContent: IProject,
+  groupId: string
 ): Promise<void> {
   log('Importing project...', { newLine: true });
 
@@ -25,7 +26,7 @@ export default async function importProject(
 
   try {
     const response = await api.importZip(
-      await compress(getProjectContent(projectPath), {
+      await compress(projectContent, {
         [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false,
       }),
       groupId
@@ -52,7 +53,7 @@ export default async function importProject(
     log('Zip file not generated, using legacy APIs', {
       level: 'error',
     });
-    await importLegacy(groupId, projectPath);
+    await importLegacy(projectContent, groupId);
   }
 }
 

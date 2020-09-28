@@ -37,7 +37,7 @@ const GROUP_ID = '1234';
     });
 
     it('tries to generate a zip file from the given project', async () => {
-      await importProject(GROUP_ID, projectPath);
+      await importProject(getProjectContent(projectPath), GROUP_ID);
 
       expect(compress).toHaveBeenCalledWith(getProjectContent(projectPath), {
         [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false,
@@ -45,7 +45,8 @@ const GROUP_ID = '1234';
     });
 
     it('sends the given zip to backend', async () => {
-      await importProject(GROUP_ID, projectPath);
+      await importProject(getProjectContent(projectPath), GROUP_ID);
+
       expect(api.importZip).toHaveBeenCalledWith(
         expect.objectContaining({
           files: {
@@ -57,7 +58,7 @@ const GROUP_ID = '1234';
     });
 
     it('does not call legacy APIs if not necesary', async () => {
-      await importProject(GROUP_ID, projectPath);
+      await importProject(getProjectContent(projectPath), GROUP_ID);
       expect(legacyMock).not.toHaveBeenCalled();
     });
 
@@ -66,7 +67,7 @@ const GROUP_ID = '1234';
         throw new Error('error');
       });
 
-      await importProject(GROUP_ID, projectPath);
+      await importProject(getProjectContent(projectPath), GROUP_ID);
       expect(legacyMock).toHaveBeenCalled();
     });
 
@@ -75,7 +76,7 @@ const GROUP_ID = '1234';
         throw new Error('error');
       });
 
-      await importProject(GROUP_ID, projectPath);
+      await importProject(getProjectContent(projectPath), GROUP_ID);
       expect(legacyMock).toHaveBeenCalled();
     });
   });

@@ -4,6 +4,7 @@ import path from 'path';
 import AuthGenerator from '../utils/auth-generator';
 import { IMPORT_WATCH_VAR } from '../utils/constants';
 import { log } from '../utils/log';
+import getProjectContent from '../utils/project-content/get-project-content';
 import importProject from './import';
 
 export default class extends AuthGenerator {
@@ -45,12 +46,18 @@ export default class extends AuthGenerator {
             log('Group', { data: group.name });
 
             queuedUpdate = false;
-            updatePromise = importProject(group.value, this.destinationPath());
+            updatePromise = importProject(
+              getProjectContent(this.destinationPath()),
+              group.value
+            );
           }
         });
       });
     } else {
-      await importProject(group.value, this.destinationPath());
+      await importProject(
+        getProjectContent(this.destinationPath()),
+        group.value
+      );
     }
   }
 }
