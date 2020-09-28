@@ -44,7 +44,7 @@ export default async function writeProjectContent(
   );
 }
 
-const _updateFile = async (filePath: string, content: string) => {
+const _updateFile = async (filePath: string, content: string | Buffer) => {
   mkdirp.sync(filePath.substring(0, filePath.lastIndexOf(path.sep)));
   await writeFilePromise(filePath, content);
 };
@@ -83,6 +83,22 @@ const _writeFragment = async (
       fragment.configuration
     );
   }
+
+  if (fragment.thumbnail && fragment.metadata.thumbnailPath) {
+    await _updateFile(
+      path.resolve(fragmentBasePath, fragment.metadata.thumbnailPath),
+      fragment.thumbnail
+    );
+  }
+
+  await Promise.all(
+    fragment.unknownFiles.map((unknownFile) =>
+      _updateFile(
+        path.resolve(fragmentBasePath, unknownFile.filePath),
+        unknownFile.content
+      )
+    )
+  );
 
   await _updateFile(
     path.resolve(fragmentBasePath, fragment.metadata.htmlPath),
