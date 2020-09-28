@@ -91,9 +91,12 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         path.resolve(directory, 'fragment.json')
       );
 
-      const readFile = (filePath: string) => {
+      const readFile = (
+        filePath: string,
+        encoding: 'utf-8' | undefined
+      ): string | Buffer => {
         try {
-          return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
+          return fs.readFileSync(path.resolve(directory, filePath), encoding);
         } catch (_) {
           log(`✘ Fragment ${metadata.name || directory}`, {
             level: 'error',
@@ -106,17 +109,25 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         }
       };
 
+      const readTextFile = (filePath: string): string => {
+        return readFile(filePath, 'utf-8') as string;
+      };
+
       return {
         slug: path.basename(directory),
         metadata,
 
-        html: readFile(metadata.htmlPath),
-        css: readFile(metadata.cssPath),
-        js: readFile(metadata.jsPath),
+        html: readTextFile(metadata.htmlPath),
+        css: readTextFile(metadata.cssPath),
+        js: readTextFile(metadata.jsPath),
 
         configuration: metadata.configurationPath
           ? _getFramentConfiguration(directory, metadata.configurationPath)
           : '',
+
+        thumbnail: metadata.thumbnailPath
+          ? fs.readFileSync(path.join(directory, metadata.thumbnailPath))
+          : undefined,
       };
     });
 }
