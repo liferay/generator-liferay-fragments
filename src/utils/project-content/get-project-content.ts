@@ -1,6 +1,7 @@
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
+import { file } from 'tmp';
 
 import {
   ICollection,
@@ -87,15 +88,26 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
       }
     })
     .map((directory) => {
+      let unknownFiles = glob
+        .sync(path.join(directory, '*'), { dot: true })
+        .map((filePath) => path.relative(directory, filePath))
+        .filter((filePath) => filePath !== 'fragment.json');
+
       const metadata = _readJSONSync<IFragmentMetadata>(
         path.resolve(directory, 'fragment.json')
       );
 
       const readFile = (
         filePath: string,
-        encoding: 'utf-8' | undefined
+        encoding: 'utf-8' | undefined = undefined
       ): string | Buffer => {
         try {
+          const [baseDir] = filePath.split(path.sep);
+
+          unknownFiles = unknownFiles.filter(
+            (_filePath) => _filePath !== filePath && _filePath !== baseDir
+          );
+
           return fs.readFileSync(path.resolve(directory, filePath), encoding);
         } catch (_) {
           log(`✘ Fragment ${metadata.name || directory}`, {
@@ -113,21 +125,47 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         return readFile(filePath, 'utf-8') as string;
       };
 
+      const html = readTextFile(metadata.htmlPath);
+      const css = readTextFile(metadata.cssPath);
+      const js = readTextFile(metadata.jsPath);
+
+      const configuration = (() => {
+        try {
+          if (metadata.configurationPath) {
+            return readTextFile(metadata.configurationPath);
+          }
+
+          return '';
+        } catch (_) {
+          return '';
+        }
+      })();
+
+      const thumbnail = (() => {
+        try {
+          if (metadata.thumbnailPath) {
+            return readFile(metadata.thumbnailPath) as Buffer;
+          }
+
+          return undefined;
+        } catch (_) {
+          return undefined;
+        }
+      })();
+
       return {
         slug: path.basename(directory),
         metadata,
+        html,
+        css,
+        js,
+        configuration,
+        thumbnail,
 
-        html: readTextFile(metadata.htmlPath),
-        css: readTextFile(metadata.cssPath),
-        js: readTextFile(metadata.jsPath),
-
-        configuration: metadata.configurationPath
-          ? _getFramentConfiguration(directory, metadata.configurationPath)
-          : '',
-
-        thumbnail: metadata.thumbnailPath
-          ? fs.readFileSync(path.join(directory, metadata.thumbnailPath))
-          : undefined,
+        unknownFiles: unknownFiles.map((filePath) => ({
+          content: readFile(filePath) as Buffer,
+          filePath,
+        })),
       };
     });
 }
@@ -178,20 +216,6 @@ function _getCollectionFragmentCompositions(
         definitionData: readFile(metadata.fragmentCompositionDefinitionPath),
       };
     });
-}
-
-function _getFramentConfiguration(
-  directory: string,
-  configurationPath: string
-): string {
-  if (
-    configurationPath &&
-    fs.existsSync(path.resolve(directory, configurationPath))
-  ) {
-    return fs.readFileSync(path.resolve(directory, configurationPath), 'utf-8');
-  }
-
-  return '';
 }
 
 function _getPageTemplates(basePath: string): IPageTemplate[] {

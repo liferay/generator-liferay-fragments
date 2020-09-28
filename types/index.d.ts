@@ -88,6 +88,11 @@ export interface IFragment {
   js: string;
   configuration: string;
   thumbnail?: Buffer;
+
+  unknownFiles: Array<{
+    filePath: string;
+    content: Buffer;
+  }>;
 }
 
 export interface ICompany {
