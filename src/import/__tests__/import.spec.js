@@ -16,7 +16,7 @@ jest.mock('../import-legacy');
 
 const GROUP_ID = '1234';
 
-[getTestFixtures()[0]].forEach((projectPath) => {
+getTestFixtures().forEach((projectPath) => {
   describe(`import ${projectPath}`, () => {
     const legacyMock = importLegacy;
     const zip = new JSZip();
