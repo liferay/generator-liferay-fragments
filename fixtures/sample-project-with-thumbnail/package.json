@@ -1,0 +1,24 @@
+{
+  "name": "sample-project-with-thumbnail",
+  "description": "Liferay Fragments project",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">= 8.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "keywords": [
+    "liferay",
+    "liferay-fragments"
+  ],
+  "scripts": {
+    "add-collection": "yo liferay-fragments:collection",
+    "add-fragment": "yo liferay-fragments:fragment",
+    "add-fragment-composition": "yo liferay-fragments:fragment-composition",
+    "add-page-template": "yo liferay-fragments:page-template",
+    "compress": "yo liferay-fragments:compress",
+    "export": "yo liferay-fragments:export",
+    "import": "yo liferay-fragments:import",
+    "import:watch": "yo liferay-fragments:import --watch",
+    "preview": "yo liferay-fragments:preview"
+  }
+}
