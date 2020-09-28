@@ -227,3 +227,60 @@ Array [
   },
 ]
 `;
+
+exports[`export-generator/export exports fragments from a Liferay Site 5`] = `
+Array [
+  Object {
+    "fragmentCollectionId": "collection-a",
+    "fragmentCompositions": Array [],
+    "fragments": Array [
+      Object {
+        "configuration": "{\\"fieldSets\\": []}",
+        "css": ".fragment {}",
+        "html": "<fragment-a></fragment-a>",
+        "js": "console.log(\\"fragment\\")",
+        "metadata": Object {
+          "configurationPath": "configuration.json",
+          "cssPath": "styles.css",
+          "htmlPath": "index.html",
+          "jsPath": "main.js",
+          "name": "Fragment A",
+          "type": "1",
+        },
+        "slug": "1234-collection-a-fragment-a",
+      },
+    ],
+    "metadata": Object {
+      "description": "This is collection A",
+      "name": "Collection A",
+    },
+    "slug": "collection-a",
+  },
+  Object {
+    "fragmentCollectionId": "collection-b",
+    "fragmentCompositions": Array [],
+    "fragments": Array [
+      Object {
+        "configuration": "{\\"fieldSets\\": []}",
+        "css": ".fragment {}",
+        "html": "<fragment-a></fragment-a>",
+        "js": "console.log(\\"fragment\\")",
+        "metadata": Object {
+          "configurationPath": "configuration.json",
+          "cssPath": "styles.css",
+          "htmlPath": "index.html",
+          "jsPath": "main.js",
+          "name": "Fragment A",
+          "type": "1",
+        },
+        "slug": "1234-collection-b-fragment-a",
+      },
+    ],
+    "metadata": Object {
+      "description": "This is collection B",
+      "name": "Collection B",
+    },
+    "slug": "collection-b",
+  },
+]
+`;
