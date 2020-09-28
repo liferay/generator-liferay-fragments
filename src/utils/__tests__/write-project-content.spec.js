@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const tmp = require('tmp');
 
+const getTestFixtures = require('../get-test-fixtures');
 const {
   default: getProjectContent,
 } = require('../project-content/get-project-content');
@@ -17,22 +18,20 @@ describe('utils/write-project-content', () => {
     )
   );
 
-  it('writes a project inside a given path', async () => {
-    const projectContent = {
-      basePath: __dirname,
-      project: {
-        name: 'sample-project',
-      },
-      collections: projectCollections,
-    };
+  getTestFixtures().forEach((projectPath) => {
+    it(`writes ${projectPath} inside a given path`, async () => {
+      const projectContent = getProjectContent(projectPath);
+      const tmpDir = tmp.dirSync({ unsafeCleanup: true });
 
-    const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+      await writeProjectContent(tmpDir.name, projectContent);
 
-    await writeProjectContent(tmpDir.name, projectContent);
+      const newProjectContent = getProjectContent(tmpDir.name);
+      tmpDir.removeCallback();
 
-    const newProjectContent = getProjectContent(tmpDir.name);
-    tmpDir.removeCallback();
+      delete projectContent.basePath;
+      delete newProjectContent.basePath;
 
-    expect(projectContent.collections).toEqual(newProjectContent.collections);
+      expect(newProjectContent).toEqual(projectContent);
+    });
   });
 });
