@@ -435,22 +435,19 @@ module.exports = {
   },
 
   /**
+   * @param {Buffer} thumbnail
    * @param {string} groupId
    * @param {string} fragmentEntryKey
-   * @param {string} thumbnailPath
    * @param {string} previewFileEntryId
    */
   async uploadThumbnail(
+    thumbnail,
     groupId,
     fragmentEntryKey,
-    thumbnailPath,
     previewFileEntryId = '0'
   ) {
-    const bytes = JSON.stringify([...fs.readFileSync(thumbnailPath)]);
-
-    const filename = `${groupId}_${fragmentEntryKey}_${path.basename(
-      thumbnailPath
-    )}`;
+    const bytes = JSON.stringify([...thumbnail]);
+    const filename = `${groupId}_${fragmentEntryKey}_thumbnail`;
 
     let fileEntry;
 
