@@ -9,6 +9,7 @@ import ws from 'ws';
 import api from '../utils/api';
 import AuthGenerator from '../utils/auth-generator';
 import { log } from '../utils/log';
+import { buildProjectContent } from '../utils/project-content/build-project-content';
 import getProjectContent from '../utils/project-content/get-project-content';
 
 const DEV_SERVER_PORT = 8081;
@@ -113,7 +114,7 @@ export default class extends AuthGenerator {
   }
 
   private _getProjectContent() {
-    return getProjectContent(this.destinationPath());
+    return buildProjectContent(getProjectContent(this.destinationPath()));
   }
 
   /**

@@ -4,6 +4,7 @@ import path from 'path';
 import AuthGenerator from '../utils/auth-generator';
 import { IMPORT_WATCH_VAR } from '../utils/constants';
 import { log } from '../utils/log';
+import { buildProjectContent } from '../utils/project-content/build-project-content';
 import getProjectContent from '../utils/project-content/get-project-content';
 import importProject from './import';
 
@@ -47,7 +48,9 @@ export default class extends AuthGenerator {
 
             queuedUpdate = false;
             updatePromise = importProject(
-              getProjectContent(this.destinationPath()),
+              await buildProjectContent(
+                getProjectContent(this.destinationPath())
+              ),
               group.value
             );
           }
@@ -55,7 +58,7 @@ export default class extends AuthGenerator {
       });
     } else {
       await importProject(
-        getProjectContent(this.destinationPath()),
+        await buildProjectContent(getProjectContent(this.destinationPath())),
         group.value
       );
     }
