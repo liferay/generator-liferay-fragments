@@ -87,6 +87,7 @@ export interface IFragment {
   html: string;
   js: string;
   configuration: string;
+  thumbnail?: Buffer;
 }
 
 export interface ICompany {
