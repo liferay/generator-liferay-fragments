@@ -3,6 +3,6 @@
   "configurationPath": "configuration.json",
   "htmlPath": "index.html",
   "jsPath": "main.js",
-  "name": "Sample fragment with thumbnail",
-  "type": "section"
+  "name": "Sample fragment",
+  "type": "react"
 }

@@ -1,9 +1,9 @@
 {
-  "name": "sample-project-with-custom-build-process",
+  "name": "sample-project-with-build-process",
   "description": "Liferay Fragments project",
   "version": "1.0.0",
   "engines": {
-    "node": ">= 8.0.0",
+    "node": ">= 10.0.0",
     "npm": ">= 6.0.0"
   },
   "keywords": [
@@ -20,5 +20,16 @@
     "import": "yo liferay-fragments:import",
     "import:watch": "yo liferay-fragments:import --watch",
     "preview": "yo liferay-fragments:preview"
+  },
+  "dependencies": {
+    "react": "16.8.6",
+    "react-dom": "16.8.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "liferay-npm-bundler": "3.0.0-alpha.1"
   }
 }
