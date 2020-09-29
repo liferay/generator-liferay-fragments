@@ -32,6 +32,14 @@ export const buildProjectContent = async (
       _getBundlerConfig(projectContent, projectExports)
     );
 
+    // Allow users "debug" their bundler configuration by executing
+    // the configuration file, so console.log and other operations
+    // are shown in log.
+
+    try {
+      require(path.join(tmpDir.name, 'liferay-npm-bundler.config.js'));
+    } catch (_) {}
+
     await execa.command('npm ci', {
       cwd: tmpDir.name,
     });
