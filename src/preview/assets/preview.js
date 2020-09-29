@@ -24,7 +24,9 @@ const preview = document.getElementById('preview');
 
 const socket = new WebSocket(`ws://${location.hostname}:${SOCKET_SERVER_PORT}`);
 
-let projectContent = {};
+let projectContent = {
+  collections: [],
+};
 
 /**
  * @param {HTMLSelectElement} selectElement Select element
