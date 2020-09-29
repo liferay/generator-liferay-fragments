@@ -50,7 +50,7 @@ export const buildProjectContent = async (
 
     projectExports.forEach((exportItem) => {
       fs.renameSync(
-        path.resolve(tmpDir.name, OUTPUT_DIR, `${exportItem.slug}.bundle.js`),
+        path.resolve(tmpDir.name, OUTPUT_DIR, exportItem.path),
         path.resolve(tmpDir.name, 'src', exportItem.path)
       );
     });
