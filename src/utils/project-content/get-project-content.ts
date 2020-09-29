@@ -88,27 +88,28 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
       }
     })
     .map((directory) => {
-      let unknownFiles = glob
-        .sync(path.join(directory, '*'), { dot: true })
-        .map((filePath) => path.relative(directory, filePath))
-        .filter((filePath) => filePath !== 'fragment.json');
-
       const metadata = _readJSONSync<IFragmentMetadata>(
         path.resolve(directory, 'fragment.json')
       );
 
+      const getBaseDirectory = (filePath: string | undefined): string => {
+        if (!filePath) {
+          return '';
+        }
+
+        return path.normalize(filePath).split(path.sep)[0];
+      };
+
       const readFile = (
-        filePath: string,
-        encoding: 'utf-8' | undefined = undefined
-      ): string | Buffer => {
+        filePath: string | undefined,
+        defaultValue: Buffer = Buffer.from('')
+      ): Buffer => {
+        if (!filePath) {
+          return defaultValue;
+        }
+
         try {
-          const [baseDir] = filePath.split(path.sep);
-
-          unknownFiles = unknownFiles.filter(
-            (_filePath) => _filePath !== filePath && _filePath !== baseDir
-          );
-
-          return fs.readFileSync(path.resolve(directory, filePath), encoding);
+          return fs.readFileSync(path.resolve(directory, filePath));
         } catch (_) {
           log(`✘ Fragment ${metadata.name || directory}`, {
             level: 'error',
@@ -117,50 +118,36 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
 
           log(`File ${filePath} was not found`);
 
-          return '';
+          return defaultValue;
         }
       };
 
-      const readTextFile = (filePath: string): string => {
-        return readFile(filePath, 'utf-8') as string;
-      };
+      const readTextFile = (filePath: string | undefined, defaultValue = '') =>
+        readFile(filePath, Buffer.from(defaultValue)).toString('utf-8');
 
-      const html = readTextFile(metadata.htmlPath);
-      const css = readTextFile(metadata.cssPath);
-      const js = readTextFile(metadata.jsPath);
+      const savedFiles = [
+        'fragment.json',
+        getBaseDirectory(metadata.htmlPath),
+        getBaseDirectory(metadata.cssPath),
+        getBaseDirectory(metadata.jsPath),
+        getBaseDirectory(metadata.configurationPath),
+        getBaseDirectory(metadata.thumbnailPath),
+      ];
 
-      const configuration = (() => {
-        try {
-          if (metadata.configurationPath) {
-            return readTextFile(metadata.configurationPath);
-          }
-
-          return '';
-        } catch (_) {
-          return '';
-        }
-      })();
-
-      const thumbnail = (() => {
-        try {
-          if (metadata.thumbnailPath) {
-            return readFile(metadata.thumbnailPath) as Buffer;
-          }
-
-          return undefined;
-        } catch (_) {
-          return undefined;
-        }
-      })();
+      const unknownFiles = glob
+        .sync(path.join(directory, '*'), { dot: true })
+        .map((filePath) => path.relative(directory, filePath))
+        .filter((filePath) => !savedFiles.includes(filePath));
 
       return {
         slug: path.basename(directory),
         metadata,
-        html,
-        css,
-        js,
-        configuration,
-        thumbnail,
+
+        html: readTextFile(metadata.htmlPath),
+        css: readTextFile(metadata.cssPath),
+        js: readTextFile(metadata.jsPath),
+        configuration: readTextFile(metadata.configurationPath),
+        thumbnail: readFile(metadata.thumbnailPath),
 
         unknownFiles: unknownFiles.map((filePath) => ({
           content: readFile(filePath) as Buffer,
