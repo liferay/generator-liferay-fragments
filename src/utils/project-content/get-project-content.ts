@@ -16,13 +16,20 @@ import {
 import { log } from '../log';
 
 export default function getProjectContent(basePath: string): IProject {
-  const excludedFiles = ['package.json', '.yo-rc.json'];
+  const excludedFiles = [
+    'default-liferay-npm-bundler.config.js',
+    'package.json',
+    'node_modules',
+    'src',
+    '*.md',
+    '.editorconfig',
+    '.gitignore',
+    '.yo-rc.json',
+  ];
 
   const unknownFiles = glob
-    .sync(path.join(basePath, '*'), { dot: true })
-    .filter((filePath) => fs.statSync(filePath).isFile())
-    .map((filePath) => path.relative(basePath, filePath))
-    .filter((filePath) => !excludedFiles.includes(filePath));
+    .sync(path.join(basePath, `!(${excludedFiles.join('|')})`), { dot: true })
+    .filter((filePath) => fs.statSync(filePath).isFile());
 
   try {
     return {
@@ -33,7 +40,7 @@ export default function getProjectContent(basePath: string): IProject {
 
       unknownFiles: unknownFiles.map((filePath) => ({
         content: fs.readFileSync(filePath),
-        filePath,
+        filePath: path.relative(basePath, filePath),
       })),
     };
   } catch (_) {
