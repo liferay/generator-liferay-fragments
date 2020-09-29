@@ -38,7 +38,7 @@ module.exports.FRAGMENT_NAME_VAR = 'fragmentName';
 
 module.exports.FRAGMENT_SLUG_VAR = 'fragmentSlug';
 
-module.exports.FRAGMENT_TYPE_DEFAULT = 'section';
+module.exports.FRAGMENT_TYPE_DEFAULT = 'react';
 module.exports.FRAGMENT_TYPE_MESSAGE = 'Fragment type';
 module.exports.FRAGMENT_TYPE_OPTIONS = [
   { name: 'Section', value: 'section' },
