@@ -5,6 +5,11 @@ export interface IProject {
   };
   collections: ICollection[];
   pageTemplates?: IPageTemplate[];
+
+  unknownFiles: Array<{
+    filePath: string;
+    content: Buffer;
+  }>;
 }
 
 export interface ICollectionMetadata {
