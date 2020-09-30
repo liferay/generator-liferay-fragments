@@ -71,6 +71,7 @@ Object {
     \\"preview\\": \\"yo liferay-fragments:preview\\"
   },
   \\"dependencies\\": {
+    \\"generator-liferay-fragments\\": \\"1.7.0\\",
     \\"react\\": \\"16.8.6\\",
     \\"react-dom\\": \\"16.8.6\\"
   }
@@ -179,6 +180,7 @@ Object {
     \\"preview\\": \\"yo liferay-fragments:preview\\"
   },
   \\"dependencies\\": {
+    \\"generator-liferay-fragments\\": \\"1.7.0\\",
     \\"react\\": \\"16.8.6\\",
     \\"react-dom\\": \\"16.8.6\\"
   }
@@ -336,6 +338,7 @@ Object {
     \\"preview\\": \\"yo liferay-fragments:preview\\"
   },
   \\"dependencies\\": {
+    \\"generator-liferay-fragments\\": \\"1.7.0\\",
     \\"react\\": \\"16.8.6\\",
     \\"react-dom\\": \\"16.8.6\\"
   }
