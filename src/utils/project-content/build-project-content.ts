@@ -66,7 +66,7 @@ export const buildProjectContent = async (
     await writeProjectContent(tmpDir.name, projectContent);
 
     projectExports.forEach((exportItem) => {
-      fs.renameSync(
+      fs.copyFileSync(
         path.resolve(projectContent.basePath, OUTPUT_DIR, exportItem.path),
         path.resolve(tmpDir.name, 'src', exportItem.path)
       );
