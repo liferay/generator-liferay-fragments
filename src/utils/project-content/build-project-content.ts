@@ -26,39 +26,41 @@ export const buildProjectContent = async (
   const projectExports = _getProjectExports(projectContent);
 
   if (hasBundlerConfig && projectExports.length) {
-    fs.writeFileSync(
-      path.join(
-        projectContent.basePath,
-        'default-liferay-npm-bundler.config.js'
-      ),
-      _getBundlerConfig(projectContent, projectExports)
-    );
-
-    // Allow users "debug" their bundler configuration by executing
-    // the configuration file, so console.log and other operations
-    // are shown in log.
-
-    try {
-      require(path.join(
-        projectContent.basePath,
-        'liferay-npm-bundler.config.js'
-      ));
-    } catch (_) {}
-
     await execa.command('npm ci', {
       cwd: projectContent.basePath,
     });
 
-    await execa.command('npx liferay-npm-bundler', {
-      cwd: projectContent.basePath,
-    });
+    try {
+      fs.writeFileSync(
+        path.join(
+          projectContent.basePath,
+          'default-liferay-npm-bundler.config.js'
+        ),
+        _getBundlerConfig(projectContent, projectExports)
+      );
 
-    rimraf.sync(
-      path.join(
-        projectContent.basePath,
-        'default-liferay-npm-bundler.config.js'
-      )
-    );
+      // Allow users "debug" their bundler configuration by executing
+      // the configuration file, so console.log and other operations
+      // are shown in log.
+
+      try {
+        require(path.join(
+          projectContent.basePath,
+          'liferay-npm-bundler.config.js'
+        ));
+      } catch (_) {}
+
+      await execa.command('npx liferay-npm-bundler', {
+        cwd: projectContent.basePath,
+      });
+    } finally {
+      rimraf.sync(
+        path.join(
+          projectContent.basePath,
+          'default-liferay-npm-bundler.config.js'
+        )
+      );
+    }
 
     const tmpDir = tmp.dirSync({ unsafeCleanup: true });
     await writeProjectContent(tmpDir.name, projectContent);
