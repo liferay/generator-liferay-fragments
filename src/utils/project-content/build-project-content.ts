@@ -1,13 +1,14 @@
 import execa from 'execa';
 import fs from 'fs';
 import path from 'path';
+import rimraf from 'rimraf';
 import tmp from 'tmp';
 
 import { IProject } from '../../../types';
 import getProjectContent from './get-project-content';
 import writeProjectContent from './write-project-content';
 
-const OUTPUT_DIR = 'output';
+const OUTPUT_DIR = path.join('build', 'liferay-npm-bundler-output');
 
 interface Export {
   slug: string;
@@ -17,18 +18,19 @@ interface Export {
 export const buildProjectContent = async (
   projectContent: IProject
 ): Promise<IProject> => {
-  const tmpDir = tmp.dirSync({ unsafeCleanup: true });
-  await writeProjectContent(tmpDir.name, projectContent);
-
   const hasBundlerConfig = projectContent.unknownFiles.some(
     ({ filePath }) => filePath === 'liferay-npm-bundler.config.js'
   );
 
-  const projectExports = _getProjectExports(tmpDir.name, projectContent);
+  let builtProjectContent = projectContent;
+  const projectExports = _getProjectExports(projectContent);
 
   if (hasBundlerConfig && projectExports.length) {
     fs.writeFileSync(
-      path.join(tmpDir.name, 'default-liferay-npm-bundler.config.js'),
+      path.join(
+        projectContent.basePath,
+        'default-liferay-npm-bundler.config.js'
+      ),
       _getBundlerConfig(projectContent, projectExports)
     );
 
@@ -37,35 +39,45 @@ export const buildProjectContent = async (
     // are shown in log.
 
     try {
-      require(path.join(tmpDir.name, 'liferay-npm-bundler.config.js'));
+      require(path.join(
+        projectContent.basePath,
+        'liferay-npm-bundler.config.js'
+      ));
     } catch (_) {}
 
     await execa.command('npm ci', {
-      cwd: tmpDir.name,
+      cwd: projectContent.basePath,
     });
 
     await execa.command('npx liferay-npm-bundler', {
-      cwd: tmpDir.name,
+      cwd: projectContent.basePath,
     });
+
+    rimraf.sync(
+      path.join(
+        projectContent.basePath,
+        'default-liferay-npm-bundler.config.js'
+      )
+    );
+
+    const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+    await writeProjectContent(tmpDir.name, projectContent);
 
     projectExports.forEach((exportItem) => {
       fs.renameSync(
-        path.resolve(tmpDir.name, OUTPUT_DIR, exportItem.path),
+        path.resolve(projectContent.basePath, OUTPUT_DIR, exportItem.path),
         path.resolve(tmpDir.name, 'src', exportItem.path)
       );
     });
-  }
 
-  const builtProjectContent = getProjectContent(tmpDir.name);
-  tmpDir.removeCallback();
+    builtProjectContent = getProjectContent(tmpDir.name);
+    tmpDir.removeCallback();
+  }
 
   return builtProjectContent;
 };
 
-const _getProjectExports = (
-  basePath: string,
-  projectContent: IProject
-): Export[] =>
+const _getProjectExports = (projectContent: IProject): Export[] =>
   projectContent.collections
     .map((collection) =>
       collection.fragments
@@ -90,7 +102,7 @@ const _getBundlerConfig = (
   "create-jar": false,
   source: "src",
   output: "${OUTPUT_DIR}",
-  workdir: "build",
+  workdir: "${path.join('build', 'liferay-npm-bundler-workdir')}",
   exports: {
     ${exports
       .map((exportItem) => `"${exportItem.slug}": "${exportItem.path}"`)
