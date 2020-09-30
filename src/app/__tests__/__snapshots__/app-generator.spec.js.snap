@@ -79,7 +79,7 @@ Object {
     \\"@babel/preset-env\\": \\"^7.11.0\\",
     \\"@babel/preset-react\\": \\"^7.10.4\\",
     \\"babel-loader\\": \\"^8.1.0\\",
-    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.3\\"
+    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.4\\"
   }
 }
 ",
@@ -194,7 +194,7 @@ Object {
     \\"@babel/preset-env\\": \\"^7.11.0\\",
     \\"@babel/preset-react\\": \\"^7.10.4\\",
     \\"babel-loader\\": \\"^8.1.0\\",
-    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.3\\"
+    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.4\\"
   }
 }
 ",
@@ -358,7 +358,7 @@ Object {
     \\"@babel/preset-env\\": \\"^7.11.0\\",
     \\"@babel/preset-react\\": \\"^7.10.4\\",
     \\"babel-loader\\": \\"^8.1.0\\",
-    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.3\\"
+    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.4\\"
   }
 }
 ",
