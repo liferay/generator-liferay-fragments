@@ -73,13 +73,6 @@ Object {
   \\"dependencies\\": {
     \\"react\\": \\"16.8.6\\",
     \\"react-dom\\": \\"16.8.6\\"
-  },
-  \\"devDependencies\\": {
-    \\"@babel/core\\": \\"^7.11.6\\",
-    \\"@babel/preset-env\\": \\"^7.11.0\\",
-    \\"@babel/preset-react\\": \\"^7.10.4\\",
-    \\"babel-loader\\": \\"^8.1.0\\",
-    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.5\\"
   }
 }
 ",
@@ -188,13 +181,6 @@ Object {
   \\"dependencies\\": {
     \\"react\\": \\"16.8.6\\",
     \\"react-dom\\": \\"16.8.6\\"
-  },
-  \\"devDependencies\\": {
-    \\"@babel/core\\": \\"^7.11.6\\",
-    \\"@babel/preset-env\\": \\"^7.11.0\\",
-    \\"@babel/preset-react\\": \\"^7.10.4\\",
-    \\"babel-loader\\": \\"^8.1.0\\",
-    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.5\\"
   }
 }
 ",
@@ -352,13 +338,6 @@ Object {
   \\"dependencies\\": {
     \\"react\\": \\"16.8.6\\",
     \\"react-dom\\": \\"16.8.6\\"
-  },
-  \\"devDependencies\\": {
-    \\"@babel/core\\": \\"^7.11.6\\",
-    \\"@babel/preset-env\\": \\"^7.11.0\\",
-    \\"@babel/preset-react\\": \\"^7.10.4\\",
-    \\"babel-loader\\": \\"^8.1.0\\",
-    \\"liferay-npm-bundler\\": \\"3.0.0-alpha.5\\"
   }
 }
 ",
