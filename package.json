@@ -8,6 +8,7 @@
     "email": "pablo.molina@liferay.com"
   },
   "files": [
+    "bundler-config.js",
     "generators"
   ],
   "keywords": [

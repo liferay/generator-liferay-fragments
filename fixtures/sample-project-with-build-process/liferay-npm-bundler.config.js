@@ -1,1 +1,1 @@
-module.exports = require('./default-liferay-npm-bundler.config');
+module.exports = require('generator-liferay-fragments/bundler-config');

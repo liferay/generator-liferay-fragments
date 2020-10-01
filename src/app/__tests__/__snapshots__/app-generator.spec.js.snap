@@ -22,7 +22,6 @@ exports[`app-generator allows a custom repository name 2`] = `
 Object {
   "content": "build/
 node_modules/
-default-liferay-npm-bundler.config.js
 .yo-rc.json
 ",
   "filePath": "/.gitignore",
@@ -39,7 +38,7 @@ Object {
 
 exports[`app-generator allows a custom repository name 4`] = `
 Object {
-  "content": "module.exports = require('./default-liferay-npm-bundler.config');
+  "content": "module.exports = require('generator-liferay-fragments/bundler-config');
 ",
   "filePath": "/liferay-npm-bundler.config.js",
 }
@@ -131,7 +130,6 @@ exports[`app-generator allows adding sample content 2`] = `
 Object {
   "content": "build/
 node_modules/
-default-liferay-npm-bundler.config.js
 .yo-rc.json
 ",
   "filePath": "/.gitignore",
@@ -148,7 +146,7 @@ Object {
 
 exports[`app-generator allows adding sample content 4`] = `
 Object {
-  "content": "module.exports = require('./default-liferay-npm-bundler.config');
+  "content": "module.exports = require('generator-liferay-fragments/bundler-config');
 ",
   "filePath": "/liferay-npm-bundler.config.js",
 }
@@ -289,7 +287,6 @@ exports[`app-generator generates a new project 2`] = `
 Object {
   "content": "build/
 node_modules/
-default-liferay-npm-bundler.config.js
 .yo-rc.json
 ",
   "filePath": "/.gitignore",
@@ -306,7 +303,7 @@ Object {
 
 exports[`app-generator generates a new project 4`] = `
 Object {
-  "content": "module.exports = require('./default-liferay-npm-bundler.config');
+  "content": "module.exports = require('generator-liferay-fragments/bundler-config');
 ",
   "filePath": "/liferay-npm-bundler.config.js",
 }
