@@ -18,7 +18,7 @@ module.exports = (() => {
       source: 'src',
       output: BUNDLER_OUTPUT_DIR,
       workdir: path.join('build', 'liferay-npm-bundler-workdir'),
-      exports: exports.reduce(
+      exports: projectExports.reduce(
         (exportsObject, exportItem) => ({
           ...exportsObject,
           [exportItem.slug]: exportItem.path,
