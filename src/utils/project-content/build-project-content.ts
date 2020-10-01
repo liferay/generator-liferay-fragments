@@ -21,17 +21,6 @@ export const buildProjectContent = async (
   let builtProjectContent = projectContent;
 
   if (hasBundlerConfig && projectExports.length) {
-    // Allow users "debug" their bundler configuration by executing
-    // the configuration file, so console.log and other operations
-    // are shown in log.
-
-    try {
-      require(path.join(
-        projectContent.basePath,
-        'liferay-npm-bundler.config.js'
-      ));
-    } catch (_) {}
-
     await execa.command('npx liferay-npm-bundler', {
       cwd: projectContent.basePath,
     });
