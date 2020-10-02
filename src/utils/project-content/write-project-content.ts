@@ -35,6 +35,15 @@ export default async function writeProjectContent(
   );
 
   await Promise.all(
+    projectContent.unknownFiles.map((unknownFile) =>
+      _updateFile(
+        path.resolve(projectBasePath, unknownFile.filePath),
+        unknownFile.content
+      )
+    )
+  );
+
+  await Promise.all(
     projectContent.collections.map((collection) =>
       _writeCollection(
         path.resolve(projectBasePath, 'src', collection.slug),
