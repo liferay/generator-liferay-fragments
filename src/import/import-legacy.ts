@@ -14,7 +14,7 @@ import api from '../utils/api';
 import { log } from '../utils/log';
 import getProjectContent from '../utils/project-content/get-project-content';
 
-const FRAGMENT_TYPES = { component: 1, section: 0 };
+const FRAGMENT_TYPES = { component: 1, react: 2, section: 0 };
 const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
 
 /**
