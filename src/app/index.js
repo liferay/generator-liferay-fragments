@@ -1,3 +1,4 @@
+const execa = require('execa');
 const voca = require('voca');
 
 const {
@@ -70,6 +71,7 @@ class AppGenerator extends CustomGenerator {
       '.editorconfig',
       '.gitignore',
       '.yo-rc.json',
+      'liferay-npm-bundler.config.js',
       'package.json',
       'README.md',
     ]);
@@ -78,7 +80,15 @@ class AppGenerator extends CustomGenerator {
   /**
    * @inheritdoc
    */
-  end() {
+  async end() {
+    log('Running npm install', { newLine: true });
+
+    if (process.env.NODE_ENV !== 'test') {
+      await execa.command('npm install', {
+        cwd: this.destinationRoot(),
+      });
+    }
+
     if (this.getValue(ADD_SAMPLE_CONTENT_VAR)) {
       log('Adding sample content', { newLine: true });
 
