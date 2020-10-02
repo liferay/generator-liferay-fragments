@@ -1,6 +1,7 @@
 import chokidar from 'chokidar';
 import path from 'path';
 
+import { IProject } from '../../types';
 import AuthGenerator from '../utils/auth-generator';
 import { IMPORT_WATCH_VAR } from '../utils/constants';
 import { log } from '../utils/log';
@@ -47,20 +48,27 @@ export default class extends AuthGenerator {
             log('Group', { data: group.name });
 
             queuedUpdate = false;
-            updatePromise = importProject(
-              await buildProjectContent(
+
+            updatePromise = new Promise<IProject>((resolve) => {
+              log('Building project...', { newLine: true });
+
+              buildProjectContent(
                 getProjectContent(this.destinationPath())
-              ),
-              group.value
+              ).then(resolve);
+            }).then((builtProjectContent) =>
+              importProject(builtProjectContent, group.value)
             );
           }
         });
       });
     } else {
-      await importProject(
-        await buildProjectContent(getProjectContent(this.destinationPath())),
-        group.value
+      log('Building project...', { newLine: true });
+
+      const builtProjectContent = await buildProjectContent(
+        getProjectContent(this.destinationPath())
       );
+
+      await importProject(builtProjectContent, group.value);
     }
   }
 }
