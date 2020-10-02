@@ -38,13 +38,21 @@ Object {
 
 exports[`app-generator allows a custom repository name 4`] = `
 Object {
+  "content": "module.exports = require('generator-liferay-fragments').getBundlerConfig();
+",
+  "filePath": "/liferay-npm-bundler.config.js",
+}
+`;
+
+exports[`app-generator allows a custom repository name 5`] = `
+Object {
   "content": "{
   \\"name\\": \\"my-nice-custom-project\\",
   \\"description\\": \\"Liferay Fragments project\\",
   \\"version\\": \\"1.0.0\\",
 
   \\"engines\\": {
-    \\"node\\": \\">= 8.0.0\\",
+    \\"node\\": \\">= 10.0.0\\",
     \\"npm\\": \\">= 6.0.0\\"
   },
 
@@ -63,6 +71,15 @@ Object {
     \\"import\\": \\"yo liferay-fragments:import\\",
     \\"import:watch\\": \\"yo liferay-fragments:import --watch\\",
     \\"preview\\": \\"yo liferay-fragments:preview\\"
+  },
+
+  \\"dependencies\\": {
+    \\"react\\": \\"16.8.6\\",
+    \\"react-dom\\": \\"16.8.6\\"
+  },
+
+  \\"devDependencies\\": {
+    \\"generator-liferay-fragments\\": \\"1.7.0\\"
   }
 }
 ",
@@ -70,7 +87,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows a custom repository name 5`] = `
+exports[`app-generator allows a custom repository name 6`] = `
 Object {
   "content": "# My Nice Custom Project
 
@@ -84,14 +101,14 @@ how to manage this project in the [generator documentation][2].
 }
 `;
 
-exports[`app-generator allows a custom repository name 6`] = `
+exports[`app-generator allows a custom repository name 7`] = `
 Object {
   "content": "",
   "filePath": "/src",
 }
 `;
 
-exports[`app-generator allows a custom repository name 7`] = `
+exports[`app-generator allows a custom repository name 8`] = `
 Object {
   "content": "",
   "filePath": "/src/.gitkeep",
@@ -136,13 +153,21 @@ Object {
 
 exports[`app-generator allows adding sample content 4`] = `
 Object {
+  "content": "module.exports = require('generator-liferay-fragments').getBundlerConfig();
+",
+  "filePath": "/liferay-npm-bundler.config.js",
+}
+`;
+
+exports[`app-generator allows adding sample content 5`] = `
+Object {
   "content": "{
   \\"name\\": \\"sample-liferay-fragments\\",
   \\"description\\": \\"Liferay Fragments project\\",
   \\"version\\": \\"1.0.0\\",
 
   \\"engines\\": {
-    \\"node\\": \\">= 8.0.0\\",
+    \\"node\\": \\">= 10.0.0\\",
     \\"npm\\": \\">= 6.0.0\\"
   },
 
@@ -161,6 +186,15 @@ Object {
     \\"import\\": \\"yo liferay-fragments:import\\",
     \\"import:watch\\": \\"yo liferay-fragments:import --watch\\",
     \\"preview\\": \\"yo liferay-fragments:preview\\"
+  },
+
+  \\"dependencies\\": {
+    \\"react\\": \\"16.8.6\\",
+    \\"react-dom\\": \\"16.8.6\\"
+  },
+
+  \\"devDependencies\\": {
+    \\"generator-liferay-fragments\\": \\"1.7.0\\"
   }
 }
 ",
@@ -168,7 +202,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 5`] = `
+exports[`app-generator allows adding sample content 6`] = `
 Object {
   "content": "# Sample Liferay Fragments
 
@@ -182,21 +216,21 @@ how to manage this project in the [generator documentation][2].
 }
 `;
 
-exports[`app-generator allows adding sample content 6`] = `
+exports[`app-generator allows adding sample content 7`] = `
 Object {
   "content": "",
   "filePath": "/src",
 }
 `;
 
-exports[`app-generator allows adding sample content 7`] = `
+exports[`app-generator allows adding sample content 8`] = `
 Object {
   "content": "",
   "filePath": "/src/.gitkeep",
 }
 `;
 
-exports[`app-generator allows adding sample content 8`] = `
+exports[`app-generator allows adding sample content 9`] = `
 Object {
   "content": "{
   \\"cssPath\\": \\"styles.css\\",
@@ -211,7 +245,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 9`] = `
+exports[`app-generator allows adding sample content 10`] = `
 Object {
   "content": "<div class=\\"sample-fragment\\">
   Sample fragment
@@ -221,7 +255,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 10`] = `
+exports[`app-generator allows adding sample content 11`] = `
 Object {
   "content": ".sample-fragment {
   color: inherit;
@@ -235,7 +269,7 @@ Object {
 }
 `;
 
-exports[`app-generator allows adding sample content 11`] = `
+exports[`app-generator allows adding sample content 12`] = `
 Object {
   "content": "console.group('Sample fragment');
 console.log('fragmentElement', fragmentElement);
@@ -283,13 +317,21 @@ Object {
 
 exports[`app-generator generates a new project 4`] = `
 Object {
+  "content": "module.exports = require('generator-liferay-fragments').getBundlerConfig();
+",
+  "filePath": "/liferay-npm-bundler.config.js",
+}
+`;
+
+exports[`app-generator generates a new project 5`] = `
+Object {
   "content": "{
   \\"name\\": \\"sample-liferay-fragments\\",
   \\"description\\": \\"Liferay Fragments project\\",
   \\"version\\": \\"1.0.0\\",
 
   \\"engines\\": {
-    \\"node\\": \\">= 8.0.0\\",
+    \\"node\\": \\">= 10.0.0\\",
     \\"npm\\": \\">= 6.0.0\\"
   },
 
@@ -308,6 +350,15 @@ Object {
     \\"import\\": \\"yo liferay-fragments:import\\",
     \\"import:watch\\": \\"yo liferay-fragments:import --watch\\",
     \\"preview\\": \\"yo liferay-fragments:preview\\"
+  },
+
+  \\"dependencies\\": {
+    \\"react\\": \\"16.8.6\\",
+    \\"react-dom\\": \\"16.8.6\\"
+  },
+
+  \\"devDependencies\\": {
+    \\"generator-liferay-fragments\\": \\"1.7.0\\"
   }
 }
 ",
@@ -315,7 +366,7 @@ Object {
 }
 `;
 
-exports[`app-generator generates a new project 5`] = `
+exports[`app-generator generates a new project 6`] = `
 Object {
   "content": "# Sample Liferay Fragments
 
@@ -329,14 +380,14 @@ how to manage this project in the [generator documentation][2].
 }
 `;
 
-exports[`app-generator generates a new project 6`] = `
+exports[`app-generator generates a new project 7`] = `
 Object {
   "content": "",
   "filePath": "/src",
 }
 `;
 
-exports[`app-generator generates a new project 7`] = `
+exports[`app-generator generates a new project 8`] = `
 Object {
   "content": "",
   "filePath": "/src/.gitkeep",
