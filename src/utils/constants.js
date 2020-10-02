@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports.ADD_DEPLOYMENT_DESCRIPTOR_VAR = 'addDeploymentDescriptor';
 
 module.exports.ADD_SAMPLE_CONTENT_DEFAULT = true;
@@ -107,3 +109,8 @@ module.exports.PROJECT_NAME_MESSAGE = 'Project name';
 module.exports.PROJECT_NAME_VAR = 'projectName';
 
 module.exports.PROJECT_SLUG_VAR = 'projectSlug';
+
+module.exports.BUNDLER_OUTPUT_DIR = path.join(
+  'build',
+  'liferay-npm-bundler-output'
+);
