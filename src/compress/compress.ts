@@ -38,15 +38,14 @@ export default async function compress(
       fs.mkdirSync(path.join(tmpDir.name, 'build'));
     } catch (_) {}
 
-    glob.sync(path.join(tmpDir.name, 'src', '**/*')).forEach((filePath) => {
+    glob.sync(path.join(tmpDir.name, '**', '*')).forEach((filePath) => {
       if (fs.statSync(filePath).isFile()) {
-        const _basePath = tmpDir.name.replace(/\\/g, path.posix.sep);
-
-        const relativePath = filePath.replace(
-          path.posix.join(_basePath, 'src/'),
-          ''
+        zip.file(
+          path
+            .relative(tmpDir.name, filePath)
+            .replace(path.sep, path.posix.sep),
+          fs.createReadStream(filePath)
         );
-        zip.file(relativePath, fs.createReadStream(filePath));
       }
     });
 
