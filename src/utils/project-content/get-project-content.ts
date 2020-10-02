@@ -1,7 +1,6 @@
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
-import { file } from 'tmp';
 
 import {
   ICollection,
@@ -17,12 +16,32 @@ import {
 import { log } from '../log';
 
 export default function getProjectContent(basePath: string): IProject {
+  const excludedFiles = [
+    'default-liferay-npm-bundler.config.js',
+    'package.json',
+    'node_modules',
+    'src',
+    '*.md',
+    '.editorconfig',
+    '.gitignore',
+    '.yo-rc.json',
+  ];
+
+  const unknownFiles = glob
+    .sync(path.join(basePath, `!(${excludedFiles.join('|')})`), { dot: true })
+    .filter((filePath) => fs.statSync(filePath).isFile());
+
   try {
     return {
       basePath,
       project: _readJSONSync(path.resolve(basePath, 'package.json')),
       collections: _getProjectCollections(basePath),
       pageTemplates: _getPageTemplates(basePath),
+
+      unknownFiles: unknownFiles.map((filePath) => ({
+        content: fs.readFileSync(filePath),
+        filePath: path.relative(basePath, filePath),
+      })),
     };
   } catch (_) {
     throw new Error(`Invalid project structure for path ${basePath}`);
@@ -125,19 +144,24 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
       const readTextFile = (filePath: string | undefined, defaultValue = '') =>
         readFile(filePath, Buffer.from(defaultValue)).toString('utf-8');
 
-      const savedFiles = [
+      const excludedFiles = [
         'fragment.json',
-        getBaseDirectory(metadata.htmlPath),
-        getBaseDirectory(metadata.cssPath),
-        getBaseDirectory(metadata.jsPath),
-        getBaseDirectory(metadata.configurationPath),
-        getBaseDirectory(metadata.thumbnailPath),
+        metadata.htmlPath,
+        metadata.cssPath,
+        metadata.jsPath,
+        metadata.configurationPath,
+        metadata.thumbnailPath,
       ];
 
       const unknownFiles = glob
-        .sync(path.join(directory, '*'), { dot: true })
-        .map((filePath) => path.relative(directory, filePath))
-        .filter((filePath) => !savedFiles.includes(filePath));
+        .sync(path.join(directory, '**', '*'), {
+          dot: true,
+        })
+        .filter(
+          (filePath) =>
+            !excludedFiles.includes(path.relative(directory, filePath)) &&
+            fs.statSync(filePath).isFile()
+        );
 
       return {
         slug: path.basename(directory),
@@ -150,8 +174,8 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         thumbnail: readFile(metadata.thumbnailPath),
 
         unknownFiles: unknownFiles.map((filePath) => ({
-          content: readFile(filePath) as Buffer,
-          filePath,
+          content: fs.readFileSync(filePath),
+          filePath: path.relative(directory, filePath),
         })),
       };
     });
