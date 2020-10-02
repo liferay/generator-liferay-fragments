@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import Generator from 'yeoman-generator';
 import { IAnswerGroup, IQuestion } from 'yeoman-generator-types';
@@ -57,7 +58,18 @@ export default class CustomGenerator extends Generator {
     this.fs.copyTpl(
       this.templatePath(templatePath),
       this.destinationPath(destinationPath),
-      { ...this.defaultValues, ...this.options, ...this.answers }
+      {
+        pkg: JSON.parse(
+          fs.readFileSync(
+            path.join(__dirname, '..', '..', 'package.json'),
+            'utf-8'
+          )
+        ),
+
+        ...this.defaultValues,
+        ...this.options,
+        ...this.answers,
+      }
     );
   }
 
