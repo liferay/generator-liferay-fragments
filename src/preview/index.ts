@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import chokidar from 'chokidar';
 import express from 'express';
 import path from 'path';
@@ -78,11 +76,15 @@ export default class extends AuthGenerator {
     return false;
   }
 
-  private _getCompositionPreview(definition: Record<string, any>): string {
+  private _getCompositionPreview(
+    definition: Record<string, any>
+  ): Promise<string> {
     const groupId = this.getGroupId();
 
     if (groupId) {
-      return api.renderCompositionPreview(groupId, definition);
+      return api.renderCompositionPreview(groupId, definition) as Promise<
+        string
+      >;
     }
 
     return Promise.reject(new Error('GroupId not found'));
@@ -93,11 +95,17 @@ export default class extends AuthGenerator {
     html: string,
     js: string,
     configuration: string
-  ): string {
+  ): Promise<string> {
     const groupId = this.getGroupId();
 
     if (groupId) {
-      return api.renderFragmentPreview(groupId, html, css, js, configuration);
+      return api.renderFragmentPreview(
+        groupId,
+        html,
+        css,
+        js,
+        configuration
+      ) as Promise<string>;
     }
 
     return Promise.reject(new Error('GroupId not found'));
@@ -111,10 +119,6 @@ export default class extends AuthGenerator {
     }
 
     return Promise.reject(new Error('GroupId not found'));
-  }
-
-  private _getProjectContent() {
-    return buildProjectContent(getProjectContent(this.destinationPath()));
   }
 
   /**
@@ -133,14 +137,17 @@ export default class extends AuthGenerator {
     let fragmentId = '';
     let pageTemplateId = '';
 
-    app.get('/fragment-preview', (request, response) => {
+    app.get('/fragment-preview', async (request, response) => {
       collectionId = request.query.collection;
       fragmentId = request.query.fragment;
       pageTemplateId = request.query.pageTemplate;
 
       const type = request.query.type;
 
-      const projectContent = this._getProjectContent();
+      const projectContent =
+        type === 'fragment'
+          ? await buildProjectContent(getProjectContent(this.destinationPath()))
+          : getProjectContent(this.destinationPath());
 
       const collection = projectContent.collections.find(
         (collection) => collection.slug === collectionId
@@ -148,13 +155,14 @@ export default class extends AuthGenerator {
 
       if (collection) {
         const fragment =
-          type === 'fragment'
-            ? collection.fragments.find(
-                (fragment) => fragment.slug === fragmentId
-              )
-            : collection.fragmentCompositions.find(
-                (composition) => composition.slug === fragmentId
-              );
+          type === 'fragment' &&
+          collection.fragments.find((fragment) => fragment.slug === fragmentId);
+
+        const fragmentComposition =
+          type !== 'fragment' &&
+          collection.fragmentCompositions?.find(
+            (composition) => composition.slug === fragmentId
+          );
 
         if (fragment && type === 'fragment') {
           this._getFragmentPreview(
@@ -165,15 +173,15 @@ export default class extends AuthGenerator {
           ).then((preview) => {
             response.send(this._replaceLinks(preview));
           });
-        } else if (fragment && type === 'composition') {
-          this._getCompositionPreview(JSON.parse(fragment.definitionData)).then(
-            (preview) => {
-              response.send(this._replaceLinks(preview));
-            }
-          );
+        } else if (fragmentComposition && type === 'composition') {
+          this._getCompositionPreview(
+            JSON.parse(fragmentComposition.definitionData)
+          ).then((preview) => {
+            response.send(this._replaceLinks(preview));
+          });
         }
       } else if (pageTemplateId && type === 'page-template') {
-        const pageTemplate = projectContent.pageTemplates.find(
+        const pageTemplate = projectContent.pageTemplates?.find(
           (pageTemplate) => pageTemplate.slug === pageTemplateId
         );
 
@@ -181,7 +189,7 @@ export default class extends AuthGenerator {
           this._getPageTemplatePreview(
             JSON.parse(pageTemplate.definitionData)
           ).then((preview) => {
-            response.send(this._replaceLinks(preview));
+            response.send(this._replaceLinks(preview as string));
           });
         }
       } else {
@@ -213,8 +221,6 @@ export default class extends AuthGenerator {
       } else {
         const url = `${this.getHost()}${req.originalUrl}`;
 
-        // @ts-ignore
-
         request(url, (error, response, body) => res.send(body));
       }
     });
@@ -232,10 +238,10 @@ export default class extends AuthGenerator {
   private _runSocketServer() {
     const socketServer = new ws.Server({ port: SOCKET_SERVER_PORT });
 
-    socketServer.on('connection', (socket) => {
+    socketServer.on('connection', async (socket) => {
       this._connectedSockets = [...this._connectedSockets, socket];
 
-      socket.send(JSON.stringify(this._getProjectContent()));
+      socket.send(JSON.stringify(getProjectContent(this.destinationPath())));
 
       socket.on('close', () => {
         this._connectedSockets = this._connectedSockets.filter(
@@ -250,7 +256,8 @@ export default class extends AuthGenerator {
 
     return new Promise(() => {
       chokidar.watch(watchPath).on('all', async () => {
-        const projectContent = this._getProjectContent();
+        const projectContent = getProjectContent(this.destinationPath());
+
         this._connectedSockets.forEach((socket) =>
           socket.send(JSON.stringify(projectContent))
         );
