@@ -44,6 +44,17 @@ gracefully and so a nice error, but never break anything.
 4. Checkout created tag locally (`git fetch origin && git checkout vX.X.X`).
 5. `npm publish` release to NPM.
 
+#### Publishing a pre-release
+
+In case of publishing a pre-release in order to test some new functionallity,
+the steps are the same than publishing a regular release, except:
+
+- The package version and tag name will be `vX.X.X-rcY`, being `X.X.X` the future
+  stable version (ex. `2.12.1`) and `Y` an incremental number starting from 1
+  (`v2.12.1-rc1`, `v2.12.1-rc2` ...).
+- `npm publish --tag next` should be run instead of `npm publish`, to avoid
+  overriding existing stable release.
+
 ## Pull Request Process
 
 When you create your contribution, please keep this list in mind:
