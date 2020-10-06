@@ -35,7 +35,8 @@ gracefully and so a nice error, but never break anything.
 1. Create a new branch and add changes if needed:
    - `docs: x` update outdated documentation.
    - `build: Update/Remove x` update dependencies (`npm audit`, `npm outdated`, etc.).
-   - `fix: x` run all tests and linters.
+   - `test: x` fix tests if neccesary.
+   - `fix: x` fix something if needed.
    - `build: Prepare release vX.X.X` update `package.json` and `package-lock.json`.
 2. Create a [pull request][5] and merge into master.
 3. Create [a new release][4]:
