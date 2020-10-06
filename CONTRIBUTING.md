@@ -34,14 +34,14 @@ gracefully and so a nice error, but never break anything.
 
 1. Create a new branch and add changes if needed:
    - `docs: x` update outdated documentation.
-   - `chore: Update/Remove x` update dependencies (`npm audit`, `npm outdated`).
+   - `build: Update/Remove x` update dependencies (`npm audit`, `npm outdated`, etc.).
    - `fix: x` run all tests and linters.
-   - `chore: Prepare release vX.X.X` update `package.json` and `package-lock.json`.
-2. Create a PR and merge into master.
+   - `build: Prepare release vX.X.X` update `package.json` and `package-lock.json`.
+2. Create a [pull request][5] and merge into master.
 3. Create [a new release][4]:
    - Create `vX.X.X` tag format (same for release title).
    - Write the changelog in the release description.
-4. `git fetch origin && git checkout vX.X.X` checkout created tag locally.
+4. Checkout created tag locally (`git fetch origin && git checkout vX.X.X`).
 5. `npm publish` release to NPM.
 
 ## Pull Request Process
@@ -64,3 +64,4 @@ When you create your contribution, please keep this list in mind:
 [2]: https://github.com/liferay/liferay-frontend-guidelines/blob/master/general/commit_messages.md
 [3]: https://github.com/liferay/generator-liferay-fragments/blob/master/CONTRIBUTING.md#release-cycle
 [4]: https://github.com/liferay/generator-liferay-fragments/releases/new
+[5]: https://github.com/liferay/generator-liferay-fragments/compare
