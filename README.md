@@ -14,7 +14,7 @@ them in your browser immediately.
 
 ## Requirements
 
-- [NodeJS][3] 8+
+- [NodeJS][3] 10+
 - [NPM][2] 6+
 - [Yeoman][1] 2+
 
