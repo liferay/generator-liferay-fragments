@@ -66,7 +66,7 @@
     "form-data": "3.0.0",
     "glob": "7.1.1",
     "jszip": "3.1.5",
-    "liferay-npm-bundler": "^3.0.0-alpha.5",
+    "liferay-npm-bundler": "3.0.0-alpha.5",
     "mime-types": "2.1.26",
     "mkdirp": "0.5.1",
     "ncp": "^2.0.0",
