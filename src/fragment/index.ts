@@ -1,10 +1,10 @@
-const fs = require('fs');
-const glob = require('glob');
-const path = require('path');
-const semver = require('semver');
-const voca = require('voca');
+import fs from 'fs';
+import glob from 'glob';
+import path from 'path';
+import semver from 'semver';
+import voca from 'voca';
 
-const {
+import {
   DATA_LFR_SUPPORTED,
   DATA_LFR_SUPPORTED_MIN_VERSION,
   FRAGMENT_COLLECTION_SLUG_MESSAGE,
@@ -23,23 +23,17 @@ const {
   NEW_COLLECTION_MESSAGE,
   NEW_COLLECTION_SHORT,
   NEW_COLLECTION_VALUE,
-} = require('../utils/constants');
-const { default: CustomGenerator } = require('../utils/custom-generator');
+} from '../utils/constants';
+import CustomGenerator from '../utils/custom-generator';
 
-module.exports = class extends CustomGenerator {
-  /**
-   * @inheritdoc
-   */
-  async prompting() {
+export default class FragmentGenerator extends CustomGenerator {
+  async prompting(): Promise<void> {
     await this._askLiferayVersion();
     await this._askFragmentData();
     await this._askCollection();
   }
 
-  /**
-   * @inheritdoc
-   */
-  writing() {
+  writing(): void {
     if (this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
       this.composeWith(require.resolve('../collection'), {
         [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
@@ -66,12 +60,7 @@ module.exports = class extends CustomGenerator {
     }
   }
 
-  /**
-   * Request a collection for the created fragment.
-   * Available options are fetched in _getCollectionChoices method.
-   * @see _getCollectionChoices
-   */
-  async _askCollection() {
+  private async _askCollection() {
     await this.ask({
       type: 'list',
       name: FRAGMENT_COLLECTION_SLUG_VAR,
@@ -81,10 +70,7 @@ module.exports = class extends CustomGenerator {
     });
   }
 
-  /**
-   * Requests fragment information and sets the fragment slug.
-   */
-  async _askFragmentData() {
+  private async _askFragmentData() {
     await this.ask([
       {
         type: 'input',
@@ -116,15 +102,13 @@ module.exports = class extends CustomGenerator {
     this.setValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
   }
 
-  async _askLiferayVersion() {
+  private async _askLiferayVersion() {
     const previousMinLiferayVersion = this.getValue(MIN_LIFERAY_VERSION_VAR);
 
     await this.ask({
       type: 'input',
       name: MIN_LIFERAY_VERSION_VAR,
       message: MIN_LIFERAY_VERSION_MESSAGE,
-
-      /** @param {string} name */
       validate: (version) =>
         semver.valid(version)
           ? true
@@ -151,16 +135,12 @@ module.exports = class extends CustomGenerator {
     );
   }
 
-  /**
-   * Read the list of created collections from the project structure
-   * and returns a list of choices. It also adds an extra 'new collection'
-   * option for adding new collections.
-   * @return {import('yeoman-generator-types').IChoice[]} List of
-   *  choices parseable by yeoman's ask method.
-   */
-  _getCollectionChoices() {
-    /** @type {import('yeoman-generator-types').IChoice[]} */
-    let choices = [];
+  private _getCollectionChoices(): Array<{
+    name: string;
+    value: string;
+    short: string;
+  }> {
+    let choices: Array<{ name: string; value: string; short: string }> = [];
 
     try {
       choices = glob
@@ -190,4 +170,4 @@ module.exports = class extends CustomGenerator {
 
     return choices;
   }
-};
+}
