@@ -1,13 +1,11 @@
-const api = require('../utils/api');
-const { log } = require('../utils/log');
+import { ICollection, IProject, IServerCollection } from '../../types';
+import api from '../utils/api';
+import { log } from '../utils/log';
 
-/**
- * Exports existing collections from Liferay server to the current project
- * @param {string} groupId Group ID
- * @param {import('../../types/index').IProject} project
- * @return {Promise<import('../../types').ICollection[]>}
- */
-async function exportCollections(groupId, project) {
+export default async function exportCollections(
+  groupId: string,
+  project: IProject
+): Promise<ICollection[]> {
   log('Exporting collections to', {
     data: project.project.name,
     newLine: true,
@@ -20,13 +18,10 @@ async function exportCollections(groupId, project) {
   );
 }
 
-/**
- * Exports a collection from server
- * @param {string} groupId
- * @param {import('../../types/index').IServerCollection} collection
- * @return {Promise<import('../../types/index').ICollection>}
- */
-async function _exportCollection(groupId, collection) {
+async function _exportCollection(
+  groupId: string,
+  collection: IServerCollection
+): Promise<ICollection> {
   log('Exporting collection', { data: collection.name });
 
   const fragments = await api.getFragmentEntries(
@@ -42,10 +37,12 @@ async function _exportCollection(groupId, collection) {
   return {
     slug: collection.fragmentCollectionKey,
     fragmentCollectionId: collection.fragmentCollectionId,
+
     metadata: {
       name: collection.name,
       description: collection.description,
     },
+
     fragmentCompositions: fragmentCompositions.map((fragmentComposition) => ({
       slug: fragmentComposition.fragmentCompositionKey,
       metadata: {
@@ -54,6 +51,7 @@ async function _exportCollection(groupId, collection) {
       },
       definitionData: fragmentComposition.data,
     })),
+
     fragments: fragments.map((fragment) => ({
       slug: fragment.fragmentEntryKey,
       metadata: {
@@ -68,8 +66,7 @@ async function _exportCollection(groupId, collection) {
       html: fragment.html,
       js: fragment.js,
       configuration: fragment.configuration,
+      unknownFiles: [],
     })),
   };
 }
-
-module.exports = exportCollections;

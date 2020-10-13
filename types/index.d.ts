@@ -132,7 +132,7 @@ export interface IServerCollection {
 export interface IServerFragment {
   fragmentEntryId: string;
   fragmentEntryKey: string;
-  type: string;
+  type: 'component' | 'react' | 'section';
   name: string;
   html: string;
   css: string;
