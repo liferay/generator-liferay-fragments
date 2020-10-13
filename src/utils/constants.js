@@ -78,23 +78,6 @@ module.exports.NEW_COLLECTION_MESSAGE = '+ New collection';
 module.exports.NEW_COLLECTION_SHORT = '(new)';
 module.exports.NEW_COLLECTION_VALUE = '__NEW_COLLECTION_VALUE__';
 
-module.exports.PAGE_TEMPLATE_NAME_MESSAGE = 'Page Template name (required)';
-module.exports.PAGE_TEMPLATE_NAME_NON_EMPTY_ERROR_MESSAGE =
-  'Page Template name must not be empty';
-module.exports.PAGE_TEMPLATE_NAME_SAMPLE = 'Sample page template';
-module.exports.PAGE_TEMPLATE_NAME_VAR = 'pageTemplateName';
-
-module.exports.PAGE_TEMPLATE_SLUG_VAR = 'pageTemplateSlug';
-
-module.exports.PAGE_TEMPLATE_TYPE_DEFAULT = 'page-template';
-module.exports.PAGE_TEMPLATE_TYPE_MESSAGE = 'Page Template type';
-module.exports.PAGE_TEMPLATE_TYPE_OPTIONS = [
-  { name: 'Display Page Template', value: 'display-page-template' },
-  { name: 'Page Template', value: 'page-template' },
-  { name: 'Master Page', value: 'master-page' },
-];
-module.exports.PAGE_TEMPLATE_TYPE_VAR = 'pageTemplateType';
-
 module.exports.PAGE_TEMPLATE_IMPORT_STATUS = {
   IMPORTED: 'imported',
   IGNORED: 'ignored',
