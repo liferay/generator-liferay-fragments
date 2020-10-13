@@ -48,10 +48,6 @@ module.exports.FRAGMENT_TYPE_OPTIONS = [
 ];
 module.exports.FRAGMENT_TYPE_VAR = 'fragmentType';
 
-module.exports.FRAGMENT_COMPOSITION_NAME_MESSAGE =
-  'Fragment composition name (required)';
-module.exports.FRAGMENT_COMPOSITION_NAME_NON_EMPTY_ERROR_MESSAGE =
-  'Fragment name must not be empty';
 module.exports.FRAGMENT_COMPOSITION_NAME_SAMPLE = 'Sample fragment composition';
 module.exports.FRAGMENT_COMPOSITION_NAME_VAR = 'fragmentCompositionName';
 
