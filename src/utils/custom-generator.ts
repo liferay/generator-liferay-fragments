@@ -17,15 +17,16 @@ import { IAnswerGroup, IQuestion } from 'yeoman-generator-types';
  * @see Generator
  */
 export default class CustomGenerator extends Generator {
-  defaultValues: IAnswerGroup = {};
-  answers: IAnswerGroup = {};
-  options: IAnswerGroup;
+  private readonly options: IAnswerGroup;
+
+  private readonly _defaultValues: IAnswerGroup = {};
+  private _answers: IAnswerGroup = {};
 
   constructor(args: any, options: any) {
     super(args, options);
 
-    this.defaultValues = {};
-    this.answers = {};
+    this._defaultValues = {};
+    this._answers = {};
 
     // @ts-ignore
 
@@ -36,9 +37,9 @@ export default class CustomGenerator extends Generator {
 
   async ask(question: IQuestion | IQuestion[]): Promise<IAnswerGroup> {
     const answers = await this.prompt(question);
-    this.answers = { ...this.answers, ...answers };
+    this._answers = { ...this._answers, ...answers };
 
-    return this.answers;
+    return this._answers;
   }
 
   copyFile(filePath: string, destinationPath: string): void {
@@ -66,9 +67,9 @@ export default class CustomGenerator extends Generator {
           )
         ),
 
-        ...this.defaultValues,
+        ...this._defaultValues,
         ...this.options,
-        ...this.answers,
+        ...this._answers,
       }
     );
   }
@@ -84,19 +85,19 @@ export default class CustomGenerator extends Generator {
 
   getValue(key: string): string | undefined {
     return (
-      this.answers[key] ||
+      this._answers[key] ||
       this.options[key] ||
       this.config.get(key) ||
-      this.defaultValues[key]
+      this._defaultValues[key]
     );
   }
 
   hasValue(key: string): boolean {
     return (
-      key in this.answers ||
+      key in this._answers ||
       key in this.options ||
       Boolean(this.config.get(key)) ||
-      key in this.defaultValues
+      key in this._defaultValues
     );
   }
 
@@ -109,6 +110,6 @@ export default class CustomGenerator extends Generator {
   }
 
   setValue(key: string, value: string): void {
-    this.defaultValues[key] = value;
+    this._defaultValues[key] = value;
   }
 }
