@@ -24,7 +24,7 @@ export default class extends CustomGenerator {
       },
     ]);
 
-    if (this.answers[ADD_DEPLOYMENT_DESCRIPTOR_VAR]) {
+    if (this.hasValue(ADD_DEPLOYMENT_DESCRIPTOR_VAR)) {
       await this.ask([
         {
           type: 'input',
@@ -36,8 +36,8 @@ export default class extends CustomGenerator {
       ]);
 
       if (
-        this.answers[DEPLOYMENT_DESCRIPTOR_COMPANY_VAR] &&
-        this.answers[DEPLOYMENT_DESCRIPTOR_COMPANY_VAR] !== '*'
+        this.hasValue(DEPLOYMENT_DESCRIPTOR_COMPANY_VAR) &&
+        this.getValue(DEPLOYMENT_DESCRIPTOR_COMPANY_VAR) !== '*'
       ) {
         await this.ask([
           {
@@ -55,7 +55,7 @@ export default class extends CustomGenerator {
       await compress(
         await buildProjectContent(getProjectContent(this.destinationPath())),
         {
-          [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: this.getValue(
+          [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: !!this.getValue(
             ADD_DEPLOYMENT_DESCRIPTOR_VAR
           ),
           [DEPLOYMENT_DESCRIPTOR_COMPANY_VAR]: this.getValue(
