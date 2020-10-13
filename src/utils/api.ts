@@ -1,38 +1,39 @@
-const FormData = require('form-data');
-const fs = require('fs');
-const mime = require('mime-types');
-const path = require('path');
-const request = require('request');
-const tmp = require('tmp');
-const { parse: parseUrl } = require('url');
-const util = require('util');
+import FormData, { SubmitOptions } from 'form-data';
+import fs from 'fs';
+import JSZip from 'jszip';
+import mime from 'mime-types';
+import request from 'request';
+import tmp from 'tmp';
+import { parse as parseUrl } from 'url';
+import util from 'util';
 
-const {
-  FRAGMENTS_PORTLET_ID,
-  PORTLET_FILE_REPOSITORY,
-} = require('./constants');
-const { default: writeZip } = require('./write-zip');
+import {
+  ICompany,
+  IGetFragmentEntriesOptions,
+  IServerCollection,
+  IServerFragment,
+  IServerFragmentComposition,
+  IServerOauthToken,
+  ISiteGroup,
+} from '../../types';
+import { FRAGMENTS_PORTLET_ID, PORTLET_FILE_REPOSITORY } from './constants';
+import writeZip from './write-zip';
 
-module.exports = {
+const api = {
   _host: '',
   _basicAuthToken: '',
 
-  /**
-   * @type {import('../../types').IOauthToken}
-   */
   _oauthToken: {
     accessToken: '',
     refreshToken: '',
     expirationDate: new Date('1991-1-1'),
   },
 
-  /**
-   * Initializes api
-   * @param {string} host
-   * @param {string} basicAuthToken
-   * @param {import('../../types').IServerOauthToken} [oauthToken]
-   */
-  init(host, basicAuthToken, oauthToken) {
+  init(
+    host: string,
+    basicAuthToken: string,
+    oauthToken?: IServerOauthToken
+  ): void {
     this._host = host;
     this._basicAuthToken = basicAuthToken;
 
@@ -50,13 +51,11 @@ module.exports = {
     }
   },
 
-  /**
-   * @param {'GET' | 'POST'} method
-   * @param {string} url
-   * @param {object} [options={}]
-   * @return {Promise<object|string>}
-   */
-  async request(method, url, options = {}) {
+  async request<T = Record<string, any> | string>(
+    method: 'GET' | 'POST',
+    url: string,
+    options: Record<string, any> = {}
+  ): Promise<T> {
     if (process.env.NODE_ENV === 'test') {
       throw new Error(
         `Requests not available during testing (${method} ${url})`
@@ -70,24 +69,23 @@ module.exports = {
       ...options,
     };
 
-    const response = await promiseRequest(opts, undefined);
-
-    return this.parseResponse(response);
+    return this.parseResponse<T>(
+      (await promiseRequest(opts, undefined)) as {
+        statusCode: number;
+        body: Record<string, any> | string;
+      }
+    );
   },
 
-  /**
-   * @param {object} response
-   * @param {number} response.statusCode
-   * @param {string} response.body
-   * @return {object|string}
-   */
-  parseResponse(response) {
-    /** @type {object|string} */
+  parseResponse<T = Record<string, any> | string>(response: {
+    statusCode: number;
+    body: Record<string, any> | string;
+  }): T {
     let responseBody = response.body;
 
     if (typeof responseBody === 'string') {
       try {
-        responseBody = JSON.parse(response.body);
+        responseBody = JSON.parse(responseBody);
       } catch (_) {
         // If responseBody is not an object
         // we silently ignore
@@ -136,16 +134,14 @@ module.exports = {
       throw new Error(`${response.statusCode} ${response.body}`);
     }
 
-    return responseBody;
+    return responseBody as T;
   },
 
-  /**
-   * @param {string} url
-   * @param {object} [queryParameters = {}]
-   * @param {object} [options={}]
-   * @return {Promise<object|string>}
-   */
-  get(url, queryParameters = {}, options = {}) {
+  get<T>(
+    url: string,
+    queryParameters: Record<string, string> = {},
+    options: Record<string, any> = {}
+  ): Promise<T> {
     const queryString = Object.entries(queryParameters)
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
@@ -153,32 +149,26 @@ module.exports = {
     return this.request('GET', `${url}?${queryString}`, options);
   },
 
-  /**
-   * @param {string} url
-   * @param {object} [form={}]
-   * @param {object} [options={}]
-   * @return {Promise<object|string>}
-   */
-  postForm(url, form, options) {
+  postForm<T>(
+    url: string,
+    form: Record<string, any>,
+    options?: Record<string, any>
+  ): Promise<T> {
     return this.request('POST', url, { form, ...options });
   },
 
-  /**
-   * @param {string} url
-   * @param {object} [formData={}]
-   * @param {object} [options={}]
-   * @return {Promise<object|string>}
-   */
-  postFormData(url, formData = {}, options = {}) {
+  postFormData<T>(
+    url: string,
+    formData: Record<string, any>,
+    options: Record<string, any> = {}
+  ): Promise<T> {
     return this.request('POST', url, { formData, ...options });
   },
 
-  /**
-   * @param {string} username
-   * @param {string} password
-   * @return {Promise<import('../../types').IServerOauthToken>}
-   */
-  getOAuthToken(username, password) {
+  getOAuthToken(
+    username: string,
+    password: string
+  ): Promise<IServerOauthToken> {
     return this.postForm('/o/oauth2/token', {
       grant_type: 'password', // eslint-disable-line camelcase
       client_id: 'FragmentRenderer', // eslint-disable-line camelcase
@@ -187,18 +177,17 @@ module.exports = {
     });
   },
 
-  /**
-   * Tries to refresh existing oauth2Token.
-   * It existing token is invalid it sets it to null.
-   */
-  async refreshOAuthToken() {
+  async refreshOAuthToken(): Promise<void> {
     if (this._oauthToken.expirationDate < new Date()) {
       try {
-        const oauthToken = await this.postForm('/o/oauth2/token', {
-          client_id: 'FragmentRenderer', // eslint-disable-line camelcase
-          grant_type: 'refresh_token', // eslint-disable-line camelcase
-          refresh_token: this._oauthToken.refreshToken, // eslint-disable-line camelcase
-        });
+        const oauthToken = await this.postForm<IServerOauthToken>(
+          '/o/oauth2/token',
+          {
+            client_id: 'FragmentRenderer', // eslint-disable-line camelcase
+            grant_type: 'refresh_token', // eslint-disable-line camelcase
+            refresh_token: this._oauthToken.refreshToken, // eslint-disable-line camelcase
+          }
+        );
 
         this.init(this._host, this._basicAuthToken, oauthToken);
       } catch (_) {
@@ -211,11 +200,7 @@ module.exports = {
     }
   },
 
-  /**
-   * Checks authentication with both BasicAuth and OAuth2
-   * @return {Promise<void>}
-   */
-  async checkAuthentication() {
+  async checkAuthentication(): Promise<void> {
     await this.postFormData(
       '/api/jsonws/user/get-current-user',
       {},
@@ -235,10 +220,7 @@ module.exports = {
     }
   },
 
-  /**
-   * @return {Promise<import('../../types').ICompany[]>}
-   */
-  getCompanies() {
+  getCompanies(): Promise<ICompany[]> {
     return this.postFormData(
       '/api/jsonws/company/get-companies',
       {},
@@ -248,11 +230,7 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {string} companyId
-   * @return {Promise<import('../../types').ISiteGroup[]>}
-   */
-  getStagingGroups(companyId) {
+  getStagingGroups(companyId: string): Promise<ISiteGroup[]> {
     return this.postFormData(
       `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`,
       {},
@@ -262,11 +240,7 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {string} companyId
-   * @return {Promise<import('../../types').ISiteGroup[]>}
-   */
-  getSiteGroups(companyId) {
+  getSiteGroups(companyId: string): Promise<ISiteGroup[]> {
     return this.postFormData(
       `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`,
       {},
@@ -276,17 +250,12 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {string} groupId
-   * @param {string} fragmentCollectionId
-   * @param {string} [name]
-   * @return {Promise<import('../../types').IServerFragment[]>}
-   */
-  getFragmentEntries(groupId, fragmentCollectionId, name) {
-    /**
-     * @type {import('../../types').IGetFragmentEntriesOptions}
-     */
-    const options = {
+  getFragmentEntries(
+    groupId: string,
+    fragmentCollectionId: string,
+    name?: string
+  ): Promise<IServerFragment[]> {
+    const formData: IGetFragmentEntriesOptions = {
       groupId,
       fragmentCollectionId,
       status: 0,
@@ -295,34 +264,32 @@ module.exports = {
     };
 
     if (name) {
-      options.name = name;
+      formData.name = name;
     }
 
     return this.postFormData(
       '/api/jsonws/fragment.fragmententry/get-fragment-entries',
-      options,
+      formData,
       {
         headers: { Authorization: `Basic ${this._basicAuthToken}` },
       }
     );
   },
 
-  /**
-   * @param {string} groupId
-   * @param {string} fragmentCollectionId
-   * @return {Promise<import('../../types').IServerFragmentComposition[]>}
-   */
-  getFragmentCompositions(groupId, fragmentCollectionId) {
-    const options = {
+  getFragmentCompositions(
+    groupId: string,
+    fragmentCollectionId: string
+  ): Promise<IServerFragmentComposition[]> {
+    const formData = {
       groupId,
       fragmentCollectionId,
       start: -1,
       end: -1,
     };
 
-    return this.postFormData(
+    return this.postFormData<IServerFragmentComposition[]>(
       '/api/jsonws/fragment.fragmentcomposition/get-fragment-compositions',
-      options,
+      formData,
       {
         headers: { Authorization: `Basic ${this._basicAuthToken}` },
       }
@@ -331,39 +298,39 @@ module.exports = {
     });
   },
 
-  /**
-   * @param {string} groupId
-   * @param {string} [name]
-   * @return {Promise<import('../../types').IServerCollection[]>}
-   */
-  getFragmentCollections(groupId, name) {
-    /** @type {{ groupId: string, name?: string, start: number, end: number }} */
-    const options = {
+  getFragmentCollections(
+    groupId: string,
+    name?: string
+  ): Promise<IServerCollection[]> {
+    const formData: {
+      groupId: string;
+      start: number;
+      end: number;
+      name?: string;
+    } = {
       groupId,
       start: -1,
       end: -1,
     };
 
     if (name) {
-      options.name = name;
+      formData.name = name;
     }
 
     return this.postFormData(
       '/api/jsonws/fragment.fragmentcollection/get-fragment-collections',
-      options,
+      formData,
       {
         headers: { Authorization: `Basic ${this._basicAuthToken}` },
       }
     );
   },
 
-  /**
-   * @param {string} fragmentCollectionId
-   * @param {string} name
-   * @param {string} [description='']
-   * @return {Promise<''>}
-   */
-  updateFragmentCollection(fragmentCollectionId, name, description = '') {
+  updateFragmentCollection(
+    fragmentCollectionId: string,
+    name: string,
+    description = ''
+  ): Promise<void> {
     return this.postFormData(
       '/api/jsonws/fragment.fragmentcollection/update-fragment-collection',
       {
@@ -379,19 +346,12 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {string} groupId
-   * @param {string} fragmentCollectionKey
-   * @param {string} name
-   * @param {string} [description='']
-   * @return {Promise<''>}
-   */
   addFragmentCollection(
-    groupId,
-    fragmentCollectionKey,
-    name,
+    groupId: string,
+    fragmentCollectionKey: string,
+    name: string,
     description = ''
-  ) {
+  ): Promise<void> {
     return this.postFormData(
       '/api/jsonws/fragment.fragmentcollection/add-fragment-collection',
       {
@@ -408,14 +368,26 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {string} fragmentEntryId
-   * @param {{ status: number, name: string, html: string, css: string, js: string,  configuration: string, previewFileEntryId?: number}} data
-   */
   updateFragmentEntry(
-    fragmentEntryId,
-    { configuration, css, html, js, name, previewFileEntryId = 0, status }
-  ) {
+    fragmentEntryId: string,
+    {
+      configuration,
+      css,
+      html,
+      js,
+      name,
+      previewFileEntryId = 0,
+      status,
+    }: {
+      configuration: string;
+      css: string;
+      html: string;
+      js: string;
+      name: string;
+      previewFileEntryId?: number;
+      status: number;
+    }
+  ): Promise<void> {
     return this.postFormData(
       '/api/jsonws/fragment.fragmententry/update-fragment-entry',
       {
@@ -434,24 +406,21 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {Buffer} thumbnail
-   * @param {string} groupId
-   * @param {string} fragmentEntryKey
-   * @param {string} previewFileEntryId
-   */
   async uploadThumbnail(
-    thumbnail,
-    groupId,
-    fragmentEntryKey,
+    thumbnail: Buffer,
+    groupId: string,
+    fragmentEntryKey: string,
     previewFileEntryId = '0'
-  ) {
+  ): Promise<number> {
     const bytes = JSON.stringify([...thumbnail]);
     const filename = `${groupId}_${fragmentEntryKey}_thumbnail`;
 
-    let fileEntry;
+    let fileEntry: number;
 
-    const repository = await this.postFormData(
+    const repository = await this.postFormData<{
+      repositoryId: string;
+      dlFolderId: string;
+    }>(
       '/api/jsonws/repository/get-repository',
       {
         groupId,
@@ -463,7 +432,7 @@ module.exports = {
     )
       .then((response) => response)
       .catch(async () => {
-        const classNameId = await this.postFormData(
+        const classNameId = await this.postFormData<{ classNameId: string }>(
           '/api/jsonws/classname/fetch-class-name',
           {
             value: PORTLET_FILE_REPOSITORY,
@@ -473,7 +442,10 @@ module.exports = {
           }
         ).then((response) => response.classNameId);
 
-        return this.postFormData(
+        return this.postFormData<{
+          repositoryId: string;
+          dlFolderId: string;
+        }>(
           '/api/jsonws/repository/add-repository',
           {
             groupId,
@@ -491,7 +463,7 @@ module.exports = {
       });
 
     if (Number(previewFileEntryId) > 0) {
-      fileEntry = this.postFormData(
+      fileEntry = await this.postFormData<{ fileEntryId: number }>(
         '/api/jsonws/dlapp/update-file-entry',
         {
           fileEntryId: previewFileEntryId,
@@ -506,9 +478,9 @@ module.exports = {
         {
           headers: { Authorization: `Basic ${this._basicAuthToken}` },
         }
-      ).then((response) => response);
+      ).then((response) => response.fileEntryId);
     } else {
-      fileEntry = this.postFormData(
+      fileEntry = await this.postFormData<{ fileEntryId: number }>(
         '/api/jsonws/dlapp/add-file-entry',
         {
           repositoryId: repository.repositoryId,
@@ -529,18 +501,30 @@ module.exports = {
     return fileEntry;
   },
 
-  /**
-   * @param {string} groupId
-   * @param {string} fragmentCollectionId
-   * @param {string} fragmentEntryKey
-   * @param {{ status: number, name: string, type: number, html: string, css: string, js: string,  configuration: string, previewFileEntryId?: number}} data
-   */
   addFragmentEntry(
-    groupId,
-    fragmentCollectionId,
-    fragmentEntryKey,
-    { configuration, css, html, js, name, previewFileEntryId = 0, status, type }
-  ) {
+    groupId: string,
+    fragmentCollectionId: string,
+    fragmentEntryKey: string,
+    {
+      configuration,
+      css,
+      html,
+      js,
+      name,
+      previewFileEntryId = 0,
+      status,
+      type,
+    }: {
+      configuration: string;
+      css: string;
+      html: string;
+      js: string;
+      name: string;
+      previewFileEntryId?: number;
+      status: number;
+      type: number;
+    }
+  ): Promise<IServerFragment> {
     return this.postFormData(
       '/api/jsonws/fragment.fragmententry/add-fragment-entry',
       {
@@ -562,11 +546,7 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {string} groupId
-   * @return {Promise<Buffer>}
-   */
-  async exportZip(groupId) {
+  async exportZip(groupId: string): Promise<Buffer> {
     await this.refreshOAuthToken();
 
     return new Promise((resolve, reject) => {
@@ -587,11 +567,7 @@ module.exports = {
     });
   },
 
-  /**
-   * @param {JSZip} zip
-   * @param {string} groupId
-   */
-  async importZip(zip, groupId) {
+  async importZip(zip: JSZip, groupId: string): Promise<Record<string, any>> {
     await this.refreshOAuthToken();
 
     const formData = new FormData();
@@ -616,7 +592,7 @@ module.exports = {
     };
 
     return new Promise((resolve, reject) => {
-      formData.submit(options, (error, response) => {
+      formData.submit(options as SubmitOptions, (error, response) => {
         tmpZip.removeCallback();
 
         if (error) {
@@ -628,10 +604,9 @@ module.exports = {
         ) {
           reject(new Error('statusCode=' + response.statusCode));
         } else {
-          /** @type {any[]} */
-          let body = [];
+          let body: Buffer[] = [];
 
-          response.on('data', (chunk) => {
+          response.on('data', (chunk: Buffer) => {
             body.push(chunk);
           });
 
@@ -644,32 +619,29 @@ module.exports = {
               return;
             }
 
-            resolve(body);
+            resolve((body as unknown) as Record<string, any>);
           });
         }
       });
     });
   },
 
-  /**
-   * @param {string} groupId
-   * @param {object} definition
-   */
-  async renderCompositionPreview(groupId, definition) {
+  async renderCompositionPreview(
+    groupId: string,
+    definition: Record<string, any>
+  ): Promise<string> {
     return this.renderPageDefinitionPreview(groupId, {
       pageElement: definition,
     });
   },
 
-  /**
-   * @param {string} groupId
-   * @param {string} html
-   * @param {string} css
-   * @param {string} js
-   * @param {string} configuration
-   */
-  // eslint-disable-next-line max-params
-  async renderFragmentPreview(groupId, html, css, js, configuration) {
+  async renderFragmentPreview(
+    groupId: string,
+    html: string,
+    css: string,
+    js: string,
+    configuration: string
+  ): Promise<string> {
     await this.refreshOAuthToken();
 
     return this.postFormData(
@@ -687,11 +659,10 @@ module.exports = {
     );
   },
 
-  /**
-   * @param {string} groupId
-   * @param {object} definition
-   */
-  async renderPageDefinitionPreview(groupId, definition) {
+  async renderPageDefinitionPreview(
+    groupId: string,
+    definition: Record<string, any>
+  ): Promise<string> {
     return this.request(
       'POST',
       `/o/headless-admin-content/v1.0/sites/${groupId}/page-definitions/preview`,
@@ -706,3 +677,5 @@ module.exports = {
     );
   },
 };
+
+export default api;
