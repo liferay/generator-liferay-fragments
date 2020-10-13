@@ -86,7 +86,7 @@ export default class AuthGenerator extends CustomGenerator {
         name: LIFERAY_HOST_VAR,
         message: 'Liferay host & port',
         default: this.getValue(LIFERAY_HOST_VAR),
-        when: !(LIFERAY_HOST_VAR in this.options),
+        when: !this.hasOption(LIFERAY_HOST_VAR),
         store: true,
       },
       {
@@ -94,7 +94,7 @@ export default class AuthGenerator extends CustomGenerator {
         name: LIFERAY_USERNAME_VAR,
         message: 'Username',
         default: this.getValue(LIFERAY_USERNAME_VAR),
-        when: !(LIFERAY_USERNAME_VAR in this.options),
+        when: !this.hasOption(LIFERAY_USERNAME_VAR),
         store: true,
       },
       {
@@ -102,7 +102,7 @@ export default class AuthGenerator extends CustomGenerator {
         name: LIFERAY_PASSWORD_VAR,
         message: 'Password',
         default: this.getValue(LIFERAY_PASSWORD_VAR),
-        when: !(LIFERAY_PASSWORD_VAR in this.options),
+        when: !this.hasOption(LIFERAY_PASSWORD_VAR),
       },
     ]);
 
@@ -120,17 +120,17 @@ export default class AuthGenerator extends CustomGenerator {
         { level: 'error' }
       );
 
-      delete this.options[LIFERAY_HOST_VAR];
-      delete this.options[LIFERAY_USERNAME_VAR];
-      delete this.options[LIFERAY_PASSWORD_VAR];
-      delete this.options[LIFERAY_GROUPID_VAR];
+      this.deleteOption(LIFERAY_HOST_VAR);
+      this.deleteOption(LIFERAY_USERNAME_VAR);
+      this.deleteOption(LIFERAY_PASSWORD_VAR);
+      this.deleteOption(LIFERAY_GROUPID_VAR);
 
       await this._askHostData();
     }
   }
 
   private async _askSiteData() {
-    if (!(LIFERAY_GROUPID_VAR in this.options)) {
+    if (!this.hasOption(LIFERAY_GROUPID_VAR)) {
       this._companyChoices = await AuthGenerator._getCompanyChoices();
 
       await this.ask([

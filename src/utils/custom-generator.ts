@@ -83,6 +83,10 @@ export default class CustomGenerator extends Generator {
     );
   }
 
+  deleteOption(key: string): void {
+    delete this.options[key];
+  }
+
   getValue(key: string): string | undefined {
     return (
       this._answers[key] ||
@@ -92,13 +96,12 @@ export default class CustomGenerator extends Generator {
     );
   }
 
+  hasOption(key: string): boolean {
+    return this.options[key] !== 'undefined';
+  }
+
   hasValue(key: string): boolean {
-    return (
-      key in this._answers ||
-      key in this.options ||
-      Boolean(this.config.get(key)) ||
-      key in this._defaultValues
-    );
+    return typeof this.getValue(key) !== 'undefined';
   }
 
   throwRequiredError(variable: string): void {
