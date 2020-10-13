@@ -1,11 +1,8 @@
-const voca = require('voca');
+import voca from 'voca';
 
-const {
+import {
   COLLECTION_DESCRIPTION_DEFAULT,
-  COLLECTION_DESCRIPTION_MESSAGE,
   COLLECTION_DESCRIPTION_VAR,
-  COLLECTION_NAME_MESSAGE,
-  COLLECTION_NAME_NON_EMPTY_ERROR_MESSAGE,
   COLLECTION_NAME_VAR,
   COLLECTION_SLUG_VAR,
   FRAGMENT_COLLECTION_SLUG_VAR,
@@ -14,27 +11,23 @@ const {
   FRAGMENT_TYPE_VAR,
   MIN_LIFERAY_VERSION_SAMPLE,
   MIN_LIFERAY_VERSION_VAR,
-} = require('../utils/constants');
-const { default: CustomGenerator } = require('../utils/custom-generator');
+} from '../utils/constants';
+import CustomGenerator from '../utils/custom-generator';
 
-module.exports = class extends CustomGenerator {
-  /**
-   * @inheritdoc
-   */
-  async prompting() {
+export default class CollectionGenerator extends CustomGenerator {
+  async prompting(): Promise<void> {
     await this.ask([
       {
         type: 'input',
         name: COLLECTION_NAME_VAR,
-        message: COLLECTION_NAME_MESSAGE,
-        validate: (name) =>
-          name ? true : COLLECTION_NAME_NON_EMPTY_ERROR_MESSAGE,
+        message: 'Collection name',
+        validate: (name) => (name ? true : 'Collection name must not be empty'),
         when: !this.hasValue(COLLECTION_NAME_VAR),
       },
       {
         type: 'input',
         name: COLLECTION_DESCRIPTION_VAR,
-        message: COLLECTION_DESCRIPTION_MESSAGE,
+        message: 'Collection description',
         when: !this.hasValue(COLLECTION_DESCRIPTION_VAR),
       },
     ]);
@@ -49,19 +42,13 @@ module.exports = class extends CustomGenerator {
     this.throwRequiredError(COLLECTION_SLUG_VAR);
   }
 
-  /**
-   * @inheritdoc
-   */
-  writing() {
+  writing(): void {
     this.copyTemplates(`src/${this.getValue(COLLECTION_SLUG_VAR)}`, [
       'collection.json',
     ]);
   }
 
-  /**
-   * @inheritdoc
-   */
-  end() {
+  end(): void {
     const fragmentName = this.getValue(FRAGMENT_NAME_VAR);
     const minLiferayVersion = this.getValue(MIN_LIFERAY_VERSION_VAR);
     const fragmentCompositionName = this.getValue(
@@ -85,4 +72,4 @@ module.exports = class extends CustomGenerator {
       });
     }
   }
-};
+}

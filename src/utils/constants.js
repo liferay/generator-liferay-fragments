@@ -3,13 +3,8 @@ const path = require('path');
 module.exports.ADD_DEPLOYMENT_DESCRIPTOR_VAR = 'addDeploymentDescriptor';
 
 module.exports.COLLECTION_DESCRIPTION_DEFAULT = '';
-module.exports.COLLECTION_DESCRIPTION_MESSAGE =
-  'Collection description (optional)';
 module.exports.COLLECTION_DESCRIPTION_VAR = 'collectionDescription';
 
-module.exports.COLLECTION_NAME_MESSAGE = 'Collection name (required)';
-module.exports.COLLECTION_NAME_NON_EMPTY_ERROR_MESSAGE =
-  'Collection name must not be empty';
 module.exports.COLLECTION_NAME_VAR = 'collectionName';
 
 module.exports.COLLECTION_SLUG_VAR = 'collectionSlug';
