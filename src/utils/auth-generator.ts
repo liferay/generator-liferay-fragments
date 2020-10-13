@@ -76,9 +76,9 @@ export default class AuthGenerator extends CustomGenerator {
   }
 
   private async _askHostData() {
-    this.setValue(LIFERAY_HOST_VAR, 'http://localhost:8080');
-    this.setValue(LIFERAY_USERNAME_VAR, 'test@liferay.com');
-    this.setValue(LIFERAY_PASSWORD_VAR, 'test');
+    this.setDefaultValue(LIFERAY_HOST_VAR, 'http://localhost:8080');
+    this.setDefaultValue(LIFERAY_USERNAME_VAR, 'test@liferay.com');
+    this.setDefaultValue(LIFERAY_PASSWORD_VAR, 'test');
 
     await this.ask([
       {

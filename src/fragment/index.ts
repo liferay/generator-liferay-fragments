@@ -94,12 +94,12 @@ export default class FragmentGenerator extends CustomGenerator {
       },
     ]);
 
-    this.setValue(
+    this.setDefaultValue(
       FRAGMENT_SLUG_VAR,
       voca.slugify(this.getValue(FRAGMENT_NAME_VAR))
     );
 
-    this.setValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
+    this.setDefaultValue(FRAGMENT_TYPE_VAR, FRAGMENT_TYPE_DEFAULT);
   }
 
   private async _askLiferayVersion() {
@@ -123,7 +123,7 @@ export default class FragmentGenerator extends CustomGenerator {
       );
     }
 
-    this.setValue(
+    this.setDefaultValue(
       DATA_LFR_SUPPORTED,
 
       // @ts-ignore

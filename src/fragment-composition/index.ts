@@ -26,7 +26,7 @@ export default class FragmentCompositionGenerator extends CustomGenerator {
       },
     ]);
 
-    this.setValue(
+    this.setDefaultValue(
       FRAGMENT_SLUG_VAR,
       voca.slugify(this.getValue(FRAGMENT_COMPOSITION_NAME_VAR))
     );
