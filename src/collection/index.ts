@@ -32,9 +32,12 @@ export default class CollectionGenerator extends CustomGenerator {
       },
     ]);
 
-    this.setValue(COLLECTION_DESCRIPTION_VAR, COLLECTION_DESCRIPTION_DEFAULT);
+    this.setDefaultValue(
+      COLLECTION_DESCRIPTION_VAR,
+      COLLECTION_DESCRIPTION_DEFAULT
+    );
 
-    this.setValue(
+    this.setDefaultValue(
       COLLECTION_SLUG_VAR,
       voca.slugify(this.getValue(COLLECTION_NAME_VAR))
     );

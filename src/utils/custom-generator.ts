@@ -109,7 +109,7 @@ export default class CustomGenerator extends Generator {
     }
   }
 
-  setValue(key: string, value: string): void {
+  setDefaultValue(key: string, value: string): void {
     this._defaultValues[key] = value;
   }
 }

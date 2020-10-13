@@ -37,7 +37,7 @@ export default class AppGenerator extends CustomGenerator {
       },
     ]);
 
-    this.setValue(
+    this.setDefaultValue(
       PROJECT_SLUG_VAR,
       voca.slugify(this.getValue(PROJECT_NAME_VAR))
     );

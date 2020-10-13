@@ -31,7 +31,7 @@ export default class PageTemplateGenerator extends CustomGenerator {
       },
     ]);
 
-    this.setValue(
+    this.setDefaultValue(
       PAGE_TEMPLATE_SLUG_VAR,
       (this.getValue(PAGE_TEMPLATE_NAME_VAR) || '')
         .replace(/\s+/g, '-')
