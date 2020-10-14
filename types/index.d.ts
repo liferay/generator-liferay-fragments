@@ -44,23 +44,6 @@ export interface ICollectionRequest {
   error: Error | undefined;
 }
 
-export type IFragmentRequestStatus =
-  | 'pending'
-  | 'added'
-  | 'updated'
-  | 'upToDate'
-  | 'ignored'
-  | 'error';
-
-export interface IFragmentRequest {
-  collection: ICollection;
-  fragment: IFragment;
-  existingFragment: IServerFragment | undefined;
-  promise: Promise<void> | undefined;
-  status: IFragmentRequestStatus;
-  error: Error | undefined;
-}
-
 export interface IServerOauthToken {
   access_token: string;
   token_type: string;

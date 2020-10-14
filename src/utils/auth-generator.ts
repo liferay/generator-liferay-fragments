@@ -3,7 +3,6 @@ import { IChoice } from 'yeoman-generator-types';
 import api from './api';
 import CustomGenerator from './custom-generator';
 import getSiteGroups from './get-site-groups';
-import { log } from './log';
 
 const LIFERAY_COMPANYID_VAR = 'companyId';
 const LIFERAY_GROUPID_VAR = 'groupId';
@@ -106,14 +105,14 @@ export default class AuthGenerator extends CustomGenerator {
       },
     ]);
 
-    log('Checking connection...', { newLine: true });
+    this.log('Checking connection...', { newLine: true });
 
     try {
       await this._wrapApi();
       await AuthGenerator._checkConnection();
-      log('Connection successful\n', { level: 'success' });
+      this.log('Connection successful\n', { level: 'success' });
     } catch (error) {
-      log(
+      this.log(
         'Connection unsuccessful,\n' +
           'please check your host information.\n\n' +
           `${error.toString()}\n`,

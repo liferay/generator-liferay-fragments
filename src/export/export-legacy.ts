@@ -1,16 +1,9 @@
-import { ICollection, IProject, IServerCollection } from '../../types';
+import { ICollection, IServerCollection } from '../../types';
 import api from '../utils/api';
-import { log } from '../utils/log';
 
 export default async function exportCollections(
-  groupId: string,
-  project: IProject
+  groupId: string
 ): Promise<ICollection[]> {
-  log('Exporting collections to', {
-    data: project.project.name,
-    newLine: true,
-  });
-
   const collections = await api.getFragmentCollections(groupId);
 
   return Promise.all(
@@ -22,8 +15,6 @@ async function _exportCollection(
   groupId: string,
   collection: IServerCollection
 ): Promise<ICollection> {
-  log('Exporting collection', { data: collection.name });
-
   const fragments = await api.getFragmentEntries(
     groupId,
     collection.fragmentCollectionId

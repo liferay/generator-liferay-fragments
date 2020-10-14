@@ -3,11 +3,14 @@ import path from 'path';
 
 import { IProject } from '../../types';
 import AuthGenerator from '../utils/auth-generator';
-import { IMPORT_WATCH_VAR } from '../utils/constants';
-import { log } from '../utils/log';
+import {
+  FRAGMENT_IMPORT_STATUS,
+  IMPORT_WATCH_VAR,
+  PAGE_TEMPLATE_IMPORT_STATUS,
+} from '../utils/constants';
 import { buildProjectContent } from '../utils/project-content/build-project-content';
 import getProjectContent from '../utils/project-content/get-project-content';
-import importProject from './import';
+import importProject, { ImportResult } from './import';
 
 export default class extends AuthGenerator {
   constructor(args: any, options: any) {
@@ -40,35 +43,131 @@ export default class extends AuthGenerator {
             await updatePromise;
 
             console.clear();
-            log(`Watching changes in ${watchPath}`);
-            log('Press Ctrl+C to stop watching\n');
-            log('Host', { data: host });
-            log('User', { data: user });
-            log('Company', { data: company.name });
-            log('Group', { data: group.name });
+            this.log(`Watching changes in ${watchPath}`);
+            this.log('Press Ctrl+C to stop watching\n');
+            this.log('Host', { data: host });
+            this.log('User', { data: user });
+            this.log('Company', { data: company.name });
+            this.log('Group', { data: group.name });
 
             queuedUpdate = false;
 
             updatePromise = new Promise<IProject>((resolve) => {
-              log('Building project...', { newLine: true });
+              this.log('Building project...');
 
               buildProjectContent(
                 getProjectContent(this.destinationPath())
               ).then(resolve);
-            }).then((builtProjectContent) =>
-              importProject(builtProjectContent, group.value)
-            );
+            }).then((builtProjectContent) => {
+              this.log('Importing project...');
+
+              importProject(builtProjectContent, group.value).then(
+                (importResults) => {
+                  this._logImportResults(importResults);
+                }
+              );
+
+              this.log('Project imported', { level: 'success' });
+            });
           }
         });
       });
     } else {
-      log('Building project...', { newLine: true });
-
+      this.log('Building project...');
       const builtProjectContent = await buildProjectContent(
         getProjectContent(this.destinationPath())
       );
 
-      await importProject(builtProjectContent, group.value);
+      this.log('Importing project...');
+
+      this._logImportResults(
+        await importProject(builtProjectContent, group.value)
+      );
+
+      this.log('Project imported', { level: 'success' });
     }
+  }
+
+  private _logImportResults(importResults: undefined | ImportResult[][]) {
+    importResults?.[0]?.forEach((result) => {
+      switch (result.status) {
+        case FRAGMENT_IMPORT_STATUS.IMPORTED: {
+          this.log(`✔ Fragment ${result.name} imported`, { level: 'success' });
+
+          break;
+        }
+
+        case FRAGMENT_IMPORT_STATUS.IMPORTED_DRAFT: {
+          this.log(
+            `↷ Fragment ${result.name} imported as draft due to the following errors`,
+            {
+              level: 'info',
+            }
+          );
+
+          this.log(`ERROR: ${result.errorMessage}`, {
+            level: 'error',
+          });
+
+          break;
+        }
+
+        case FRAGMENT_IMPORT_STATUS.INVALID: {
+          this.log(
+            `Fragment ${result.name} not imported due to the following errors`,
+            {
+              level: 'error',
+            }
+          );
+
+          this.log(`ERROR: ${result.errorMessage}`, {
+            level: 'error',
+          });
+
+          break;
+        }
+
+        default:
+          break;
+      }
+    });
+
+    importResults?.[1]?.forEach((result) => {
+      switch (result.status) {
+        case PAGE_TEMPLATE_IMPORT_STATUS.IMPORTED: {
+          this.log(`✔ Page template ${result.name} imported`, {
+            level: 'success',
+          });
+
+          break;
+        }
+
+        case PAGE_TEMPLATE_IMPORT_STATUS.IGNORED: {
+          this.log(`↷ Page template ${result.name} ignored`, {
+            level: 'info',
+          });
+
+          break;
+        }
+
+        case PAGE_TEMPLATE_IMPORT_STATUS.INVALID: {
+          this.log(
+            `Page template ${result.name} not imported due to the following errors`,
+            {
+              level: 'error',
+            }
+          );
+
+          this.log(`ERROR: ${result.errorMessage}`, {
+            level: 'error',
+          });
+
+          break;
+        }
+
+        default:
+          break;
+      }
+    });
   }
 }

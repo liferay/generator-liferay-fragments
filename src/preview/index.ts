@@ -6,7 +6,6 @@ import ws from 'ws';
 
 import api from '../utils/api';
 import AuthGenerator from '../utils/auth-generator';
-import { log } from '../utils/log';
 import { buildProjectContent } from '../utils/project-content/build-project-content';
 import getProjectContent from '../utils/project-content/get-project-content';
 
@@ -19,30 +18,30 @@ export default class extends AuthGenerator {
   async asking(): Promise<void> {
     await super.asking();
 
-    log('Checking site compatibility...', { newLine: true });
+    this.log('Checking site compatibility...', { newLine: true });
 
     if (await this._checkPreviewCompatibility()) {
-      log('Found compatible Liferay Server', { level: 'success' });
+      this.log('Found compatible Liferay Server', { level: 'success' });
 
       this._runExpressServer();
       this._runSocketServer();
 
       const watchPromise = this._watchChanges();
 
-      log('\nDevelopment server connected to liferay');
-      log('Visit preview URL and start developing to your fragments');
+      this.log('\nDevelopment server connected to liferay');
+      this.log('Visit preview URL and start developing to your fragments');
 
-      log('Liferay Server URL', {
+      this.log('Liferay Server URL', {
         newLine: true,
         data: this.getHost() || '',
       });
 
-      log('Group ID', { data: this.getGroupId() || '' });
-      log('Preview URL', { data: `http://localhost:${DEV_SERVER_PORT}` });
+      this.log('Group ID', { data: this.getGroupId() || '' });
+      this.log('Preview URL', { data: `http://localhost:${DEV_SERVER_PORT}` });
 
       await watchPromise;
     } else {
-      log(
+      this.log(
         '\nYour Liferay Server cannot generate fragment previews.' +
           '\nUpdate it to a more recent version to use this feature.' +
           '\nCheck your OAuth2 plugin version too, it should be >= 2.0.0.' +
