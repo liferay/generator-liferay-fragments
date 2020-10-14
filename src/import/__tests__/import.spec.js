@@ -1,7 +1,7 @@
 const JSZip = require('jszip');
 
 const { default: compress } = require('../../compress/compress');
-const api = require('../../utils/api');
+const { default: api } = require('../../utils/api');
 const { ADD_DEPLOYMENT_DESCRIPTOR_VAR } = require('../../utils/constants');
 const getTestFixtures = require('../../utils/get-test-fixtures');
 const {
