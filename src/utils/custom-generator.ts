@@ -120,11 +120,11 @@ export default class CustomGenerator extends Generator {
   }
 
   hasOption(key: string): boolean {
-    return this.options[key] !== 'undefined';
+    return this.options[key] !== undefined;
   }
 
   hasValue(key: string): boolean {
-    return typeof this.getValue(key) !== 'undefined';
+    return this.getValue(key) !== undefined;
   }
 
   throwRequiredError(variable: string): void {
