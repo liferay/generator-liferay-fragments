@@ -31,13 +31,9 @@ export default class extends AuthGenerator {
       this.log('\nDevelopment server connected to liferay');
       this.log('Visit preview URL and start developing to your fragments');
 
-      this.log('Liferay Server URL', {
-        newLine: true,
-        data: this.getHost() || '',
-      });
-
-      this.log('Group ID', { data: this.getGroupId() || '' });
-      this.log('Preview URL', { data: `http://localhost:${DEV_SERVER_PORT}` });
+      this.log(`Liferay Server URL: ${this.getHost()}`);
+      this.log(`Group ID: ${this.getGroupId()}`);
+      this.log(`Preview URL: http://localhost:${DEV_SERVER_PORT}`);
 
       await watchPromise;
     } else {
@@ -133,12 +129,8 @@ export default class extends AuthGenerator {
       fragmentId = request.query.fragment;
       pageTemplateId = request.query.pageTemplate;
 
+      const projectContent = getProjectContent(this.destinationPath());
       const type = request.query.type;
-
-      const projectContent =
-        type === 'fragment'
-          ? await buildProjectContent(getProjectContent(this.destinationPath()))
-          : getProjectContent(this.destinationPath());
 
       const collection = projectContent.collections.find(
         (collection) => collection.slug === collectionId
@@ -156,6 +148,13 @@ export default class extends AuthGenerator {
           );
 
         if (fragment && type === 'fragment') {
+          if (fragment.metadata.type === 'react') {
+            this.log(
+              'React based fragments do not support preview command (yet)',
+              { level: 'error' }
+            );
+          }
+
           this._getFragmentPreview(
             fragment.css,
             fragment.html,
