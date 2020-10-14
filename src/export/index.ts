@@ -10,6 +10,8 @@ export default class ExportGenerator extends AuthGenerator {
       throw new Error('groupId cannot be undefined');
     }
 
+    this.log('Exporting site...');
     await exportProject(groupId, this.destinationPath());
+    this.log('Site succesfully exported', { level: 'success' });
   }
 }

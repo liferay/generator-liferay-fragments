@@ -13,7 +13,6 @@ import {
   IPageTemplateMetadata,
   IProject,
 } from '../../../types';
-import { log } from '../log';
 
 export default function getProjectContent(basePath: string): IProject {
   const excludedFiles = [
@@ -62,10 +61,6 @@ function _getProjectCollections(basePath: string): ICollection[] {
 
         return true;
       } catch (_) {
-        log(`✘ Invalid ${directory}/collection.json, collection ignored`, {
-          level: 'error',
-        });
-
         return false;
       }
     })
@@ -99,10 +94,6 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
 
         return true;
       } catch (_) {
-        log(`✘ Invalid ${directory}/fragment.json, fragment ignored`, {
-          level: 'error',
-        });
-
         return false;
       }
     })
@@ -110,14 +101,6 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
       const metadata = _readJSONSync<IFragmentMetadata>(
         path.resolve(directory, 'fragment.json')
       );
-
-      const getBaseDirectory = (filePath: string | undefined): string => {
-        if (!filePath) {
-          return '';
-        }
-
-        return path.normalize(filePath).split(path.sep)[0];
-      };
 
       const readFile = (
         filePath: string | undefined,
@@ -130,13 +113,6 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         try {
           return fs.readFileSync(path.resolve(directory, filePath));
         } catch (_) {
-          log(`✘ Fragment ${metadata.name || directory}`, {
-            level: 'error',
-            newLine: true,
-          });
-
-          log(`File ${filePath} was not found`);
-
           return defaultValue;
         }
       };
@@ -193,11 +169,6 @@ function _getCollectionFragmentCompositions(
 
         return true;
       } catch (_) {
-        log(
-          `✘ Invalid ${directory}/fragment-composition.json, fragment composition ignored`,
-          { level: 'error' }
-        );
-
         return false;
       }
     })
@@ -210,13 +181,6 @@ function _getCollectionFragmentCompositions(
         try {
           return fs.readFileSync(path.resolve(directory, filePath), 'utf-8');
         } catch (_) {
-          log(`✘ Fragment composition ${metadata.name || directory}`, {
-            level: 'error',
-            newLine: true,
-          });
-
-          log(`File ${filePath} was not found`);
-
           return '';
         }
       };
@@ -239,13 +203,6 @@ function _getPageTemplates(basePath: string): IPageTemplate[] {
 
         return true;
       } catch (_) {
-        log(
-          `✘ Invalid ${directory}/page-template.json, page template ignored`,
-          {
-            level: 'error',
-          }
-        );
-
         return false;
       }
     })

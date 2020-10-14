@@ -12,7 +12,6 @@ import {
   MIN_LIFERAY_VERSION_VAR,
 } from '../utils/constants';
 import CustomGenerator from '../utils/custom-generator';
-import { log } from '../utils/log';
 
 const ADD_SAMPLE_CONTENT_VAR = 'addSampleContent';
 const PROJECT_NAME_VAR = 'projectName';
@@ -20,7 +19,13 @@ const PROJECT_SLUG_VAR = 'projectSlug';
 
 export default class AppGenerator extends CustomGenerator {
   async prompting(): Promise<void> {
-    AppGenerator._logWelcome();
+    this.log(`
+    __    ____________________  _____  __
+   / /   /  _/ ____/ ____/ __ \\/   \\ \\/ /
+  / /    / // /_  / __/ / /_/ / /| |\\  /
+ / /____/ // __/ / /___/ _, _/ ___ |/ /
+/_____/___/_/   /_____/_/ |_/_/  |_/_/
+`);
 
     await this.ask([
       {
@@ -50,7 +55,7 @@ export default class AppGenerator extends CustomGenerator {
   }
 
   writing(): void {
-    log('Creating directory', { newLine: true });
+    this.log('Creating directory', { newLine: true });
 
     this.copyFiles(this.destinationRoot(), ['src/.gitkeep']);
 
@@ -65,7 +70,7 @@ export default class AppGenerator extends CustomGenerator {
   }
 
   async end(): Promise<void> {
-    log('Running npm install', { newLine: true });
+    this.log('Running npm install...', { newLine: true });
 
     if (process.env.NODE_ENV !== 'test') {
       await execa.command('npm install', {
@@ -74,7 +79,7 @@ export default class AppGenerator extends CustomGenerator {
     }
 
     if (this.getValue(ADD_SAMPLE_CONTENT_VAR)) {
-      log('Adding sample content', { newLine: true });
+      this.log('Adding sample content', { newLine: true });
 
       this.composeWith(require.resolve('../collection'), {
         [COLLECTION_NAME_VAR]: 'Sample collection',
@@ -88,18 +93,8 @@ export default class AppGenerator extends CustomGenerator {
     }
 
     setTimeout(() => {
-      log('Done!', { newLine: true, level: 'success' });
-      log("You're ready to create fragments.");
+      this.log('Done!', { newLine: true, level: 'success' });
+      this.log("You're ready to create fragments.");
     }, 100);
-  }
-
-  private static _logWelcome() {
-    log(`
-    __    ____________________  _____  __
-    / /   /  _/ ____/ ____/ __ \\/   \\ \\/ /
-  / /    / // /_  / __/ / /_/ / /| |\\  /
-  / /____/ // __/ / /___/ _, _/ ___ |/ /
-/_____/___/_/   /_____/_/ |_/_/  |_/_/
-    `);
   }
 }

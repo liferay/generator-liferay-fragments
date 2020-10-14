@@ -2,17 +2,38 @@ import {
   ICollection,
   ICollectionRequest,
   IFragment,
-  IFragmentRequest,
-  IFragmentRequestStatus,
   IProject,
   IServerCollection,
   IServerFragment,
 } from '../../types';
 import api from '../utils/api';
-import { log } from '../utils/log';
+import { FRAGMENT_IMPORT_STATUS } from '../utils/constants';
 
 const FRAGMENT_TYPES = { component: 1, react: 2, section: 0 };
 const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
+
+interface ImportResult {
+  name: string;
+  errorMessage: string;
+  status: string;
+}
+
+type IFragmentRequestStatus =
+  | 'pending'
+  | 'added'
+  | 'updated'
+  | 'upToDate'
+  | 'ignored'
+  | 'error';
+
+interface IFragmentRequest {
+  collection: ICollection;
+  fragment: IFragment;
+  existingFragment: IServerFragment | undefined;
+  promise: Promise<ImportResult>;
+  status: IFragmentRequestStatus;
+  error: Error | undefined;
+}
 
 /**
  * @deprecated
@@ -20,7 +41,7 @@ const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
 export default async function importLegacy(
   projectContent: IProject,
   groupId: string
-): Promise<void> {
+): Promise<ImportResult[]> {
   const collectionRequests = projectContent.collections.map((collection) => {
     const collectionRequest: ICollectionRequest = {
       collection,
@@ -54,7 +75,11 @@ export default async function importLegacy(
           collection: collectionRequest.collection,
           fragment,
           existingFragment: undefined,
-          promise: undefined,
+          promise: Promise.resolve({
+            status: FRAGMENT_IMPORT_STATUS.INVALID,
+            name: fragment.metadata.name,
+            errorMessage: '',
+          }),
           error: undefined,
           status: 'pending',
         };
@@ -67,17 +92,8 @@ export default async function importLegacy(
             groupId,
             collectionRequest.existingCollection,
             fragment
-          )
-            .then(([status, existingFragment]) => {
-              fragmentRequest.status = status as IFragmentRequestStatus;
-              fragmentRequest.existingFragment = existingFragment as IServerFragment;
-            })
-            .catch((error) => {
-              fragmentRequest.status = 'error';
-              fragmentRequest.error = error;
-            });
+          );
         } else {
-          fragmentRequest.promise = Promise.resolve();
           fragmentRequest.status = 'ignored';
         }
 
@@ -86,12 +102,9 @@ export default async function importLegacy(
     )
     .reduce((a, b) => [...a, ...b], []);
 
-  await Promise.all(
+  return await Promise.all(
     fragmentRequests.map((fragmentRequest) => fragmentRequest.promise)
   );
-
-  _logImportSummary(collectionRequests, fragmentRequests);
-  _logImportErrorsLegacy(collectionRequests, fragmentRequests);
 }
 
 async function _importCollection(
@@ -118,7 +131,7 @@ async function _importFragment(
   groupId: string,
   existingCollection: IServerCollection,
   fragment: IFragment
-): Promise<[IFragmentRequestStatus, IServerFragment | undefined]> {
+): Promise<ImportResult> {
   const { fragmentCollectionId } = existingCollection;
   const { configuration, css, html, js } = fragment;
   const { name } = fragment.metadata;
@@ -153,11 +166,19 @@ async function _importFragment(
       previewFileEntryId,
     });
 
-    return ['updated', existingFragment];
+    return {
+      errorMessage: '',
+      name: fragment.metadata.name,
+      status: FRAGMENT_IMPORT_STATUS.IMPORTED,
+    };
   }
 
   if (existingFragment) {
-    return ['upToDate', existingFragment];
+    return {
+      errorMessage: '',
+      name: fragment.metadata.name,
+      status: FRAGMENT_IMPORT_STATUS.IMPORTED,
+    };
   }
 
   existingFragment = (await api.addFragmentEntry(
@@ -176,96 +197,11 @@ async function _importFragment(
     }
   )) as IServerFragment | undefined;
 
-  return ['added', existingFragment];
-}
-
-function _logImportErrorsLegacy(
-  collectionRequests: ICollectionRequest[],
-  fragmentRequests: IFragmentRequest[]
-) {
-  const sortedFragmentRequests = [...fragmentRequests].sort((a, b) => {
-    if (a.collection.slug < b.collection.slug) {
-      return -1;
-    }
-
-    if (a.collection.slug > b.collection.slug) {
-      return 1;
-    }
-
-    if (a.fragment.slug < b.fragment.slug) {
-      return -1;
-    }
-
-    if (a.fragment.slug > b.fragment.slug) {
-      return 1;
-    }
-
-    return 0;
-  });
-
-  collectionRequests.forEach((collectionRequest) => {
-    const name =
-      collectionRequest.collection.metadata.name ||
-      collectionRequest.collection.slug;
-
-    log('');
-    if (collectionRequest.status === 'success') {
-      log(`✔ Collection ${name}`, { level: 'success' });
-    } else {
-      log(`✘ Collection ${name} was not imported`, { level: 'error' });
-
-      if (collectionRequest.error) {
-        log(collectionRequest.error.message);
-      }
-    }
-
-    sortedFragmentRequests
-      .filter(
-        (fragmentRequest) =>
-          fragmentRequest.collection.slug === collectionRequest.collection.slug
-      )
-      .forEach((fragmentRequest) => {
-        if (fragmentRequest.status === 'error') {
-          log(
-            `✘ Fragment ${
-              fragmentRequest.fragment.metadata.name ||
-              fragmentRequest.fragment.slug
-            } was not imported due to fragment errors`,
-            { level: 'error', indent: true }
-          );
-
-          if (fragmentRequest.error) {
-            log(fragmentRequest.error.message, { indent: true });
-          }
-        } else if (fragmentRequest.status === 'ignored') {
-          log(
-            `↷ Fragment ${fragmentRequest.fragment.metadata.name} was not imported due to collection errors`,
-            {
-              level: 'error',
-              indent: true,
-            }
-          );
-        } else if (fragmentRequest.status === 'added') {
-          log(`✚ Fragment ${fragmentRequest.fragment.metadata.name} added`, {
-            level: 'success',
-            indent: true,
-          });
-        } else if (fragmentRequest.status === 'updated') {
-          log(`✎ Fragment ${fragmentRequest.fragment.metadata.name} updated`, {
-            level: 'success',
-            indent: true,
-          });
-        } else {
-          log(
-            `✔ Fragment ${fragmentRequest.fragment.metadata.name} up-to-date`,
-            {
-              level: 'success',
-              indent: true,
-            }
-          );
-        }
-      });
-  });
+  return {
+    errorMessage: '',
+    name: fragment.metadata.name,
+    status: FRAGMENT_IMPORT_STATUS.IMPORTED,
+  };
 }
 
 function _fragmentHasChanges(
@@ -319,51 +255,4 @@ async function _getExistingFragment(
   return existingFragments.find(
     (existingFragment) => existingFragment.name === fragment.metadata.name
   );
-}
-
-function _logImportSummary(
-  collectionRequests: ICollectionRequest[],
-  fragmentRequests: IFragmentRequest[]
-) {
-  const addedCount = fragmentRequests.filter(
-    (fragmentRequest) => fragmentRequest.status === 'added'
-  ).length;
-
-  const updatedCount = fragmentRequests.filter(
-    (fragmentRequest) => fragmentRequest.status === 'updated'
-  ).length;
-
-  const upToDateCount = fragmentRequests.filter(
-    (fragmentRequest) => fragmentRequest.status === 'upToDate'
-  ).length;
-
-  const ignoredCount = fragmentRequests.filter(
-    (fragmentRequest) => fragmentRequest.status === 'ignored'
-  ).length;
-
-  const errorCount = fragmentRequests.filter(
-    (fragmentRequest) => fragmentRequest.status === 'error'
-  ).length;
-
-  const statusLog = (
-    count: number,
-    message: string,
-    level: 'success' | 'error' = 'success'
-  ) => {
-    const noun = fragmentRequests.length === 1 ? 'fragment' : 'fragments';
-    const verb = count === 1 ? 'was' : 'were';
-
-    if (count > 0) {
-      log(
-        `${count} of ${fragmentRequests.length} ${noun} ${verb} ${message}.`,
-        { level }
-      );
-    }
-  };
-
-  log('');
-  statusLog(addedCount, 'added successfully');
-  statusLog(updatedCount, 'updated successfully');
-  statusLog(upToDateCount, 'already up to date');
-  statusLog(ignoredCount + errorCount, 'not imported due to errors', 'error');
 }

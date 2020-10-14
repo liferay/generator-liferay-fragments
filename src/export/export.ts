@@ -7,7 +7,6 @@ import rimraf from 'rimraf';
 import tmp from 'tmp';
 
 import api from '../utils/api';
-import { log } from '../utils/log';
 import getProjectContent from '../utils/project-content/get-project-content';
 import writeProjectContent from '../utils/project-content/write-project-content';
 import exportCollections from './export-legacy';
@@ -81,17 +80,9 @@ export default async function exportProject(
       path.join(tmpDir.name, 'src'),
       path.join(destinationPath, 'src')
     );
-
-    log('Site succesfully exported', { level: 'success' });
   } catch (_) {
-    log('Zip export error, using legacy export', { level: 'error' });
-
-    projectContent.collections = await exportCollections(
-      groupId,
-      projectContent
-    );
-
-    writeProjectContent(projectContent.basePath, projectContent);
+    projectContent.collections = await exportCollections(groupId);
+    await writeProjectContent(projectContent.basePath, projectContent);
   }
 
   tmpDir.removeCallback();

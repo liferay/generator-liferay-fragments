@@ -6,7 +6,6 @@ import {
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
 } from '../utils/constants';
 import CustomGenerator from '../utils/custom-generator';
-import { log } from '../utils/log';
 import { buildProjectContent } from '../utils/project-content/build-project-content';
 import getProjectContent from '../utils/project-content/get-project-content';
 import writeZip from '../utils/write-zip';
@@ -51,30 +50,33 @@ export default class extends CustomGenerator {
       }
     }
 
+    this.log('Building project...');
+    const projectContent = await buildProjectContent(
+      getProjectContent(this.destinationPath())
+    );
+
+    this.log('Generating zip file...');
     await writeZip(
-      await compress(
-        await buildProjectContent(getProjectContent(this.destinationPath())),
-        {
-          [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: !!this.getValue(
-            ADD_DEPLOYMENT_DESCRIPTOR_VAR
-          ),
-          [DEPLOYMENT_DESCRIPTOR_COMPANY_VAR]: this.getValue(
-            DEPLOYMENT_DESCRIPTOR_COMPANY_VAR
-          ),
-          [DEPLOYMENT_DESCRIPTOR_GROUP_VAR]: this.getValue(
-            DEPLOYMENT_DESCRIPTOR_GROUP_VAR
-          ),
-        }
-      ),
+      await compress(projectContent, {
+        [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: !!this.getValue(
+          ADD_DEPLOYMENT_DESCRIPTOR_VAR
+        ),
+        [DEPLOYMENT_DESCRIPTOR_COMPANY_VAR]: this.getValue(
+          DEPLOYMENT_DESCRIPTOR_COMPANY_VAR
+        ),
+        [DEPLOYMENT_DESCRIPTOR_GROUP_VAR]: this.getValue(
+          DEPLOYMENT_DESCRIPTOR_GROUP_VAR
+        ),
+      }),
       path.join(this.destinationPath(), 'build', 'liferay-fragments.zip')
     );
 
-    log('build/liferay-fragments.zip file created', {
+    this.log('build/liferay-fragments.zip file created', {
       newLine: true,
       level: 'success',
     });
 
-    log('Import them to your liferay-portal to start using them', {
+    this.log('Import them to your liferay-portal to start using them', {
       level: 'success',
     });
   }
