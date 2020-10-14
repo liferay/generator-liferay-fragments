@@ -43,6 +43,7 @@ export default class FragmentGenerator extends CustomGenerator {
         },
         {
           [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
+          [FRAGMENT_TYPE_VAR]: this.getValue(FRAGMENT_TYPE_VAR),
           [MIN_LIFERAY_VERSION_VAR]: this.getValue(MIN_LIFERAY_VERSION_VAR),
         }
       );
