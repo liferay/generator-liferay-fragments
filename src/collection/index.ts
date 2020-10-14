@@ -1,5 +1,7 @@
 import voca from 'voca';
 
+import FragmentGenerator from '../fragment';
+import FragmentCompositionGenerator from '../fragment-composition';
 import {
   COLLECTION_DESCRIPTION_DEFAULT,
   COLLECTION_DESCRIPTION_VAR,
@@ -59,20 +61,32 @@ export default class CollectionGenerator extends CustomGenerator {
     );
 
     if (fragmentName) {
-      this.composeWith(require.resolve('../fragment'), {
-        [FRAGMENT_NAME_VAR]: fragmentName,
-        [FRAGMENT_TYPE_VAR]: this.getValue(FRAGMENT_TYPE_VAR),
-        [FRAGMENT_COLLECTION_SLUG_VAR]: this.getValue(COLLECTION_SLUG_VAR),
-        [MIN_LIFERAY_VERSION_VAR]:
-          minLiferayVersion || MIN_LIFERAY_VERSION_SAMPLE,
-      });
+      this.composeWith(
+        {
+          Generator: FragmentGenerator,
+          path: require.resolve('../fragment'),
+        },
+        {
+          [FRAGMENT_NAME_VAR]: fragmentName,
+          [FRAGMENT_TYPE_VAR]: this.getValue(FRAGMENT_TYPE_VAR),
+          [FRAGMENT_COLLECTION_SLUG_VAR]: this.getValue(COLLECTION_SLUG_VAR),
+          [MIN_LIFERAY_VERSION_VAR]:
+            minLiferayVersion || MIN_LIFERAY_VERSION_SAMPLE,
+        }
+      );
     }
 
     if (fragmentCompositionName) {
-      this.composeWith(require.resolve('../fragment-composition'), {
-        [FRAGMENT_COMPOSITION_NAME_VAR]: fragmentCompositionName,
-        [FRAGMENT_COLLECTION_SLUG_VAR]: this.getValue(COLLECTION_SLUG_VAR),
-      });
+      this.composeWith(
+        {
+          Generator: FragmentCompositionGenerator,
+          path: require.resolve('../fragment-composition'),
+        },
+        {
+          [FRAGMENT_COMPOSITION_NAME_VAR]: fragmentCompositionName,
+          [FRAGMENT_COLLECTION_SLUG_VAR]: this.getValue(COLLECTION_SLUG_VAR),
+        }
+      );
     }
   }
 }

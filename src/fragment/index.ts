@@ -4,6 +4,7 @@ import path from 'path';
 import semver from 'semver';
 import voca from 'voca';
 
+import CollectionGenerator from '../collection';
 import {
   DATA_LFR_SUPPORTED,
   DATA_LFR_SUPPORTED_MIN_VERSION,
@@ -35,10 +36,16 @@ export default class FragmentGenerator extends CustomGenerator {
 
   writing(): void {
     if (this.getValue(FRAGMENT_COLLECTION_SLUG_VAR) === NEW_COLLECTION_VALUE) {
-      this.composeWith(require.resolve('../collection'), {
-        [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
-        [MIN_LIFERAY_VERSION_VAR]: this.getValue(MIN_LIFERAY_VERSION_VAR),
-      });
+      this.composeWith(
+        {
+          Generator: CollectionGenerator,
+          path: require.resolve('../collection'),
+        },
+        {
+          [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
+          [MIN_LIFERAY_VERSION_VAR]: this.getValue(MIN_LIFERAY_VERSION_VAR),
+        }
+      );
     } else {
       this.throwRequiredError(FRAGMENT_COLLECTION_SLUG_VAR);
       this.throwRequiredError(FRAGMENT_SLUG_VAR);
