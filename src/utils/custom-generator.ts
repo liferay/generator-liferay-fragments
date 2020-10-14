@@ -46,6 +46,18 @@ export default class CustomGenerator extends Generator {
     }
   }
 
+  // @ts-ignore
+
+  composeWith(
+    generator: {
+      Generator: new (...args: any[]) => CustomGenerator;
+      path: string;
+    },
+    options: Record<string, any>
+  ): void {
+    super.composeWith((generator as unknown) as string, options);
+  }
+
   async ask(question: IQuestion | IQuestion[]): Promise<IAnswerGroup> {
     const answers = await this.prompt(question);
     this._answers = { ...this._answers, ...answers };
