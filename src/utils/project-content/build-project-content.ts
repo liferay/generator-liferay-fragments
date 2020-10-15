@@ -21,7 +21,7 @@ export const buildProjectContent = async (
   let builtProjectContent = projectContent;
 
   if (hasBundlerConfig && projectExports.length) {
-    await execa.command('npx liferay-npm-bundler', {
+    await execa.command('npx @liferay/npm-bundler', {
       cwd: projectContent.basePath,
     });
 
