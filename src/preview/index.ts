@@ -125,9 +125,9 @@ export default class extends AuthGenerator {
     let pageTemplateId = '';
 
     app.get('/fragment-preview', async (request, response) => {
-      collectionId = request.query.collection;
-      fragmentId = request.query.fragment;
-      pageTemplateId = request.query.pageTemplate;
+      collectionId = request.query.collection?.toString() ?? '';
+      fragmentId = request.query.fragment?.toString() ?? '';
+      pageTemplateId = request.query.pageTemplate?.toString() ?? '';
 
       const projectContent = getProjectContent(this.destinationPath());
       const type = request.query.type;
