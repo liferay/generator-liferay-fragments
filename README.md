@@ -1,4 +1,4 @@
-[![NPM Publish Version][5]][6]
+[![Yarn Publish Version][5]][6]
 
 # Liferay Fragments Toolkit
 
@@ -14,18 +14,17 @@ them in your browser immediately.
 
 ## Requirements
 
-- [NodeJS][3] 10+
-- [NPM][2] 6+
+- [NodeJS][3] (see `package.json > engines > node` version)
+- [Yarn][2] (see `package.json > engines > yarn` version)
 - [Yeoman][1] 2+
 
 ## Installation
 
-First, install *Yeoman* and *generator-liferay-fragments* using *npm*
+First, install *Yeoman* and *generator-liferay-fragments* using *yarn*
 (we assume you have pre-installed *node.js*).
 
 ```bash
-npm install -g yo
-npm install -g generator-liferay-fragments
+yarn global add yo generator-liferay-fragments
 ```
 
 The first step is always to generate a new project. You must do this even if you
@@ -44,7 +43,7 @@ cd my-new-fragments-project
 
 ## Usage
 
-Once you've created your project, there are several npm scripts that allow
+Once you've created your project, there are several scripts that allow
 you to create fragments and fragment collections, export fragments from a
 Liferay instance, and manage your existing fragments.
 
@@ -87,7 +86,7 @@ with the Toolkit:
 Fragments are always grouped inside collections. To create a collection, run
 
 ```bash
-npm run add-collection
+yarn run add-collection
 ```
 
 You can create as many collections as desired.
@@ -96,7 +95,7 @@ Once a collection has been created, you can add as many fragments as desired
 inside by running
 
 ```bash
-npm run add-fragment
+yarn run add-fragment
 ```
 
 #### Fragments and Liferay versions
@@ -129,7 +128,7 @@ Fragment compositions are treated as regular fragments, so they need to be group
 inside collections too:
 
 ```bash
-npm run add-fragment-composition
+yarn run add-fragment-composition
 ```
 
 ### 🐾 Creating Page Templates
@@ -138,7 +137,7 @@ All Page Templates can be created with a single command, which will ask the kind
 of template you want to create:
 
 ```
-npm run add-page-template
+yarn run add-page-template
 ```
 
 ### 📥 Exporting from a Liferay instance
@@ -157,7 +156,7 @@ command. It will guide you through the information that you need to connect to
 Liferay and choose among its sites:
 
 ```bash
-npm run export
+yarn run export
 ```
 
 ### 📤 Importing into a Liferay instance
@@ -169,7 +168,7 @@ After you've created your own elements or after you've made modifications to
 exported fragments, you can import them into a Liferay instance by running:
 
 ```bash
-npm run import
+yarn run import
 ```
 
 You can also ask the Fragments Toolkit to watch for further changes and import them
@@ -178,7 +177,7 @@ with your preferred editor and the browser to check the changes automatically
 imported into Liferay.
 
 ```bash
-npm run import:watch
+yarn run import:watch
 ```
 
 ### 👀 Previewing with a Liferay Server
@@ -194,7 +193,7 @@ your elements rendered without importing them. Moreover, this command also
 autoreloads features, so you can make changes in your fragments rapidly.
 
 ```bash
-npm run preview
+yarn run preview
 ```
 
 ### 📦 Packaging for distribution
@@ -207,11 +206,11 @@ a ZIP file, which can be imported inside any Liferay site. To prepare the ZIP
 file, run
 
 ```bash
-npm run compress
+yarn run compress
 ```
 
 [1]: https://yeoman.io
-[2]: https://www.npmjs.com
+[2]: https://classic.yarnpkg.com/en/
 [3]: https://nodejs.org
 [4]: https://github.com/lerna
 [5]: https://badge.fury.io/js/generator-liferay-fragments.svg?style=flat

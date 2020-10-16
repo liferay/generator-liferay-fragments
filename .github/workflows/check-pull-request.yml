@@ -24,8 +24,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10
-      - run: npm ci
-      - run: npm run lint
+      - run: yarn install --frozen-lockfile
+      - run: yarn run lint
 
   build:
     runs-on: ubuntu-latest
@@ -35,8 +35,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10
-      - run: npm ci
-      - run: npm run build
+      - run: yarn --frozen-lockfile
+      - run: yarn run build
 
   test:
     runs-on: ${{ matrix.os }}
@@ -50,5 +50,5 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npm run test
+      - run: yarn install --frozen-lockfile
+      - run: yarn run test

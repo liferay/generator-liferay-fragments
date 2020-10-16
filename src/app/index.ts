@@ -124,10 +124,10 @@ https://www.npmjs.com/package/generator-liferay-fragments#creating-new-fragments
       );
     }
 
-    this.log('Running npm install...', { newLine: true });
+    this.log('Running yarn...', { newLine: true });
 
     if (process.env.NODE_ENV !== 'test') {
-      await execa.command('npm install', {
+      await execa.command('yarn', {
         cwd: this.destinationRoot(),
       });
     }
