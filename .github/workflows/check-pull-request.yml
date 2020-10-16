@@ -5,6 +5,11 @@ on:
     branches:
       - master
 
+env:
+  CI: true
+  yarn-cache-name: yarn-cache-1
+  yarn-cache-path: .yarn
+
 jobs:
   commit-lint:
     runs-on: ubuntu-latest
@@ -17,26 +22,44 @@ jobs:
       - uses: wagoid/commitlint-github-action@v1
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [ 10 ]
+        os: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v1
         with:
-          node-version: 10
-      - run: yarn install --frozen-lockfile
-      - run: yarn run lint
+          node-version: ${{ matrix.node }}
+      - name: Use or update Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.yarn-cache-path }}
+          key: ${{ matrix.os }}-${{ matrix.node }}-${{ env.yarn-cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --cache-folder=${{ env.yarn-cache-path }} install --frozen-lockfile
+      - run: yarn --cache-folder=${{ env.yarn-cache-path }} run lint
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [ 10 ]
+        os: [ ubuntu-latest ]
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v1
         with:
-          node-version: 10
-      - run: yarn --frozen-lockfile
-      - run: yarn run build
+          node-version: ${{ matrix.node }}
+      - name: Use or update Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.yarn-cache-path }}
+          key: ${{ matrix.os }}-${{ matrix.node }}-${{ env.yarn-cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --cache-folder=${{ env.yarn-cache-path }} install --frozen-lockfile
+      - run: yarn --cache-folder=${{ env.yarn-cache-path }} run build
 
   test:
     runs-on: ${{ matrix.os }}
@@ -50,5 +73,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn install --frozen-lockfile
-      - run: yarn run test
+      - name: Use or update Yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.yarn-cache-path }}
+          key: ${{ matrix.os }}-${{ matrix.node }}-${{ env.yarn-cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: yarn --cache-folder=${{ env.yarn-cache-path }} install --frozen-lockfile
+      - run: yarn --cache-folder=${{ env.yarn-cache-path }} run test
