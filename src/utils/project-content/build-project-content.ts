@@ -1,10 +1,10 @@
 import execa from 'execa';
 import fs from 'fs';
 import path from 'path';
-import tmp from 'tmp';
 
 import { IProject } from '../../../types';
 import { BUNDLER_OUTPUT_DIR } from '../constants';
+import { createTemporaryDirectory } from '../temporary';
 import getProjectContent from './get-project-content';
 import { getProjectExports } from './get-project-exports';
 import writeProjectContent from './write-project-content';
@@ -25,7 +25,7 @@ export const buildProjectContent = async (
       cwd: projectContent.basePath,
     });
 
-    const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+    const tmpDir = createTemporaryDirectory();
     await writeProjectContent(tmpDir.name, projectContent);
 
     projectExports.forEach((exportItem) => {
