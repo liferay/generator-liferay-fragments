@@ -52,7 +52,7 @@ Liferay instance, and manage your existing fragments.
 > compositions. In this documentation file we will refer to all them as
 > "elements", as they are being considered in all CLI commands (preview, import, etc).
 
-### Directory Structure
+### 📂 Project Structure
 
 All elements must follow a specific (although simple) directory structure
 so that they can be imported into a Liferay instance. The information about
@@ -82,7 +82,7 @@ with the Toolkit:
     - `display-page-template.json`
     - `page-definition.json`
 
-### Creating New Fragments
+### 📄 Creating New Fragments
 
 Fragments are always grouped inside collections. To create a collection, run
 
@@ -122,7 +122,7 @@ is a small summary of which features come with each release.
   writing HTML.
 - New fragment type _react_ that process fragment's JS before sending to portal.
 
-#### Creating fragment compositions
+### 🗐 Creating fragment compositions
 
 Fragment compositions are treated as regular fragments, so they need to be grouped
 inside collections too:
@@ -131,7 +131,7 @@ inside collections too:
 npm run add-fragment-composition
 ```
 
-### Creating Page Templates
+### 🐾 Creating Page Templates
 
 All Page Templates can be created with a single command, which will ask the kind
 of template you want to create:
@@ -140,7 +140,7 @@ of template you want to create:
 npm run add-page-template
 ```
 
-### Exporting from a Liferay instance
+### 📥 Exporting from a Liferay instance
 
 > ⚠️ When exporting a site, fragments with `type: 'react'` won't be
 > be, as portal only keeps fragment compiled code.
@@ -159,7 +159,7 @@ Liferay and choose among its sites:
 npm run export
 ```
 
-### Importing into a Liferay instance
+### 📤 Importing into a Liferay instance
 
 > ⚠️ When importing to a site, fragments with `type: 'react'` will
 > be compiled and the imported. Portal doesn't store fragment's original source.
@@ -180,7 +180,7 @@ imported into Liferay.
 npm run import:watch
 ```
 
-### Previewing with a Liferay Server
+### 👀 Previewing with a Liferay Server
 
 > ⚠️ This functionality is only available with Liferay 7.2 Fixpack 1 or later.
 > You also need to include the marketplace [Oauth 2 Plugin][7] in your Liferay Portal.
@@ -196,7 +196,7 @@ autoreloads features, so you can make changes in your fragments rapidly.
 npm run preview
 ```
 
-### Packaging for distribution
+### 📦 Packaging for distribution
 
 > ⚠️ Before creating the zip file, fragments with `type: 'react'` will
 > be compiled. The zip file won't contain fragments' original source.
