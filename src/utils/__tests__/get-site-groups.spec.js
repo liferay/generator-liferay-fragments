@@ -1,4 +1,4 @@
-const getSiteGroups = require('../get-site-groups');
+const { default: getSiteGroups } = require('../get-site-groups');
 
 jest.mock('../api', () => ({
   getStagingGroups: () => [

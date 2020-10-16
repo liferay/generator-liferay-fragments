@@ -3,7 +3,6 @@ import { IChoice } from 'yeoman-generator-types';
 import api from './api';
 import CustomGenerator from './custom-generator';
 import getSiteGroups from './get-site-groups';
-import { log } from './log';
 
 const LIFERAY_COMPANYID_VAR = 'companyId';
 const LIFERAY_GROUPID_VAR = 'groupId';
@@ -76,9 +75,9 @@ export default class AuthGenerator extends CustomGenerator {
   }
 
   private async _askHostData() {
-    this.setValue(LIFERAY_HOST_VAR, 'http://localhost:8080');
-    this.setValue(LIFERAY_USERNAME_VAR, 'test@liferay.com');
-    this.setValue(LIFERAY_PASSWORD_VAR, 'test');
+    this.setDefaultValue(LIFERAY_HOST_VAR, 'http://localhost:8080');
+    this.setDefaultValue(LIFERAY_USERNAME_VAR, 'test@liferay.com');
+    this.setDefaultValue(LIFERAY_PASSWORD_VAR, 'test');
 
     await this.ask([
       {
@@ -86,7 +85,7 @@ export default class AuthGenerator extends CustomGenerator {
         name: LIFERAY_HOST_VAR,
         message: 'Liferay host & port',
         default: this.getValue(LIFERAY_HOST_VAR),
-        when: !(LIFERAY_HOST_VAR in this.options),
+        when: !this.hasOption(LIFERAY_HOST_VAR),
         store: true,
       },
       {
@@ -94,7 +93,7 @@ export default class AuthGenerator extends CustomGenerator {
         name: LIFERAY_USERNAME_VAR,
         message: 'Username',
         default: this.getValue(LIFERAY_USERNAME_VAR),
-        when: !(LIFERAY_USERNAME_VAR in this.options),
+        when: !this.hasOption(LIFERAY_USERNAME_VAR),
         store: true,
       },
       {
@@ -102,35 +101,35 @@ export default class AuthGenerator extends CustomGenerator {
         name: LIFERAY_PASSWORD_VAR,
         message: 'Password',
         default: this.getValue(LIFERAY_PASSWORD_VAR),
-        when: !(LIFERAY_PASSWORD_VAR in this.options),
+        when: !this.hasOption(LIFERAY_PASSWORD_VAR),
       },
     ]);
 
-    log('Checking connection...', { newLine: true });
+    this.log('Checking connection...', { newLine: true });
 
     try {
       await this._wrapApi();
       await AuthGenerator._checkConnection();
-      log('Connection successful\n', { level: 'success' });
+      this.log('Connection successful\n', { level: 'success' });
     } catch (error) {
-      log(
+      this.log(
         'Connection unsuccessful,\n' +
           'please check your host information.\n\n' +
           `${error.toString()}\n`,
         { level: 'error' }
       );
 
-      delete this.options[LIFERAY_HOST_VAR];
-      delete this.options[LIFERAY_USERNAME_VAR];
-      delete this.options[LIFERAY_PASSWORD_VAR];
-      delete this.options[LIFERAY_GROUPID_VAR];
+      this.deleteOption(LIFERAY_HOST_VAR);
+      this.deleteOption(LIFERAY_USERNAME_VAR);
+      this.deleteOption(LIFERAY_PASSWORD_VAR);
+      this.deleteOption(LIFERAY_GROUPID_VAR);
 
       await this._askHostData();
     }
   }
 
   private async _askSiteData() {
-    if (!(LIFERAY_GROUPID_VAR in this.options)) {
+    if (!this.hasOption(LIFERAY_GROUPID_VAR)) {
       this._companyChoices = await AuthGenerator._getCompanyChoices();
 
       await this.ask([

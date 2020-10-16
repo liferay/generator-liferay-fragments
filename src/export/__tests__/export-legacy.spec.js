@@ -1,9 +1,9 @@
-const api = require('../../utils/api');
+const { default: api } = require('../../utils/api');
 const getTestFixtures = require('../../utils/get-test-fixtures');
 const {
   default: getProjectContent,
 } = require('../../utils/project-content/get-project-content');
-const exportCollections = require('../export-legacy');
+const { default: exportCollections } = require('../export-legacy');
 
 /**
  * @type string

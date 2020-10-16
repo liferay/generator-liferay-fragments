@@ -1,7 +1,18 @@
+import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 import Generator from 'yeoman-generator';
 import { IAnswerGroup, IQuestion } from 'yeoman-generator-types';
+
+type LogLevel = 'info' | 'success' | 'error';
+
+interface Options {
+  newLine?: boolean;
+  indent?: boolean;
+  level?: LogLevel;
+  data?: string;
+  description?: string;
+}
 
 /**
  * Custom Generator that extends Yeoman's Generator class
@@ -17,15 +28,16 @@ import { IAnswerGroup, IQuestion } from 'yeoman-generator-types';
  * @see Generator
  */
 export default class CustomGenerator extends Generator {
-  defaultValues: IAnswerGroup = {};
-  answers: IAnswerGroup = {};
-  options: IAnswerGroup;
+  private readonly options: IAnswerGroup;
+
+  private readonly _defaultValues: IAnswerGroup = {};
+  private _answers: IAnswerGroup = {};
 
   constructor(args: any, options: any) {
     super(args, options);
 
-    this.defaultValues = {};
-    this.answers = {};
+    this._defaultValues = {};
+    this._answers = {};
 
     // @ts-ignore
 
@@ -34,11 +46,23 @@ export default class CustomGenerator extends Generator {
     }
   }
 
+  // @ts-ignore
+
+  composeWith(
+    generator: {
+      Generator: new (...args: any[]) => CustomGenerator;
+      path: string;
+    },
+    options: Record<string, any>
+  ): void {
+    super.composeWith((generator as unknown) as string, options);
+  }
+
   async ask(question: IQuestion | IQuestion[]): Promise<IAnswerGroup> {
     const answers = await this.prompt(question);
-    this.answers = { ...this.answers, ...answers };
+    this._answers = { ...this._answers, ...answers };
 
-    return this.answers;
+    return this._answers;
   }
 
   copyFile(filePath: string, destinationPath: string): void {
@@ -66,9 +90,9 @@ export default class CustomGenerator extends Generator {
           )
         ),
 
-        ...this.defaultValues,
+        ...this._defaultValues,
         ...this.options,
-        ...this.answers,
+        ...this._answers,
       }
     );
   }
@@ -82,22 +106,25 @@ export default class CustomGenerator extends Generator {
     );
   }
 
+  deleteOption(key: string): void {
+    delete this.options[key];
+  }
+
   getValue(key: string): string | undefined {
     return (
-      this.answers[key] ||
+      this._answers[key] ||
       this.options[key] ||
       this.config.get(key) ||
-      this.defaultValues[key]
+      this._defaultValues[key]
     );
   }
 
+  hasOption(key: string): boolean {
+    return this.options[key] !== undefined;
+  }
+
   hasValue(key: string): boolean {
-    return (
-      key in this.answers ||
-      key in this.options ||
-      Boolean(this.config.get(key)) ||
-      key in this.defaultValues
-    );
+    return this.getValue(key) !== undefined;
   }
 
   throwRequiredError(variable: string): void {
@@ -108,7 +135,46 @@ export default class CustomGenerator extends Generator {
     }
   }
 
-  setValue(key: string, value: string): void {
-    this.defaultValues[key] = value;
+  setDefaultValue(key: string, value: string): void {
+    this._defaultValues[key] = value;
+  }
+
+  log(message: string, options: Options = {}): void {
+    if (process.env.NODE_ENV !== 'test') {
+      let _message = message;
+
+      switch (options.level) {
+        case 'success':
+          _message = chalk.green(_message);
+          break;
+        case 'error':
+          _message = chalk.bold(chalk.red(_message));
+          break;
+        default:
+          _message = chalk.reset(_message);
+          break;
+      }
+
+      if (options.newLine || options.description) {
+        _message = `\n${_message}`;
+      }
+
+      if (options.indent) {
+        _message = _message
+          .split('\n')
+          .map((line) => `  ${line}`)
+          .join('\n');
+      }
+
+      if (options.data) {
+        _message = `${_message} ${chalk.bold(options.data)}`;
+      }
+
+      console.log(_message);
+
+      if (options.description) {
+        console.log(options.description);
+      }
+    }
   }
 }

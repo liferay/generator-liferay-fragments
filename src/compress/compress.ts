@@ -9,7 +9,6 @@ import {
   DEPLOYMENT_DESCRIPTOR_COMPANY_VAR,
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
 } from '../utils/constants';
-import { log } from '../utils/log';
 import writeProjectContent from '../utils/project-content/write-project-content';
 
 interface Options {
@@ -26,8 +25,6 @@ export default async function compress(
   await writeProjectContent(tmpDir.name, projectContent);
 
   return new Promise((resolve) => {
-    log('Generating zip file', { newLine: true });
-
     const zip = new JSZip();
 
     if (addDeploymentDescriptor) {

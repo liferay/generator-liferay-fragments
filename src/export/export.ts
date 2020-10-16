@@ -1,20 +1,15 @@
-const AdmZip = require('adm-zip');
-const fs = require('fs');
-const glob = require('glob');
-const ncp = require('ncp');
-const path = require('path');
-const rimraf = require('rimraf');
-const tmp = require('tmp');
+import AdmZip from 'adm-zip';
+import fs from 'fs';
+import glob from 'glob';
+import ncp from 'ncp';
+import path from 'path';
+import rimraf from 'rimraf';
+import tmp from 'tmp';
 
-const api = require('../utils/api');
-const { log } = require('../utils/log');
-const {
-  default: getProjectContent,
-} = require('../utils/project-content/get-project-content');
-const {
-  default: writeProjectContent,
-} = require('../utils/project-content/write-project-content');
-const exportCollections = require('./export-legacy');
+import api from '../utils/api';
+import getProjectContent from '../utils/project-content/get-project-content';
+import writeProjectContent from '../utils/project-content/write-project-content';
+import exportCollections from './export-legacy';
 
 const ZIP_PATHS = [
   'fragments',
@@ -28,11 +23,10 @@ const ZIP_FRAGMENT_COLLECTION_DIRECTORY_NAME = [
   'fragment-compositions',
 ];
 
-/**
- * @param {string} groupId
- * @param {string} destinationPath
- */
-async function exportProject(groupId, destinationPath) {
+export default async function exportProject(
+  groupId: string,
+  destinationPath: string
+): Promise<void> {
   const projectContent = getProjectContent(destinationPath);
   const tmpDir = tmp.dirSync({ unsafeCleanup: true });
   const tmpSrc = path.join(tmpDir.name, 'src');
@@ -86,28 +80,15 @@ async function exportProject(groupId, destinationPath) {
       path.join(tmpDir.name, 'src'),
       path.join(destinationPath, 'src')
     );
-
-    log('Site succesfully exported', { level: 'success' });
   } catch (_) {
-    log('Zip export error, using legacy export', { level: 'error' });
-
-    projectContent.collections = await exportCollections(
-      groupId,
-      projectContent
-    );
-
-    writeProjectContent(projectContent.basePath, projectContent);
+    projectContent.collections = await exportCollections(groupId);
+    await writeProjectContent(projectContent.basePath, projectContent);
   }
 
   tmpDir.removeCallback();
 }
 
-/**
- * @param {string} fromPath
- * @param {string} toPath
- * @return {Promise<void>}
- */
-function move(fromPath, toPath) {
+function move(fromPath: string, toPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
     ncp(fromPath, toPath, (error) => {
       if (error) {
@@ -118,5 +99,3 @@ function move(fromPath, toPath) {
     });
   });
 }
-
-module.exports = exportProject;
