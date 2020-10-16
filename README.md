@@ -99,6 +99,29 @@ inside by running
 npm run add-fragment
 ```
 
+#### Fragments and Liferay versions
+
+In newer Liferay Portal releases a lot of incredible features have been added
+to the Toolkit and portal itself. Although this tool can manage any kind of
+fragment, not all versions of portal support the same set of features. This
+is a small summary of which features come with each release.
+
+##### Liferay 7.2
+
+- Support different fragment types: _section_ for full-with content elements and
+  _component_ for smaller elements than can be nested anywhere.
+  > If you want to create _section_ fragments you have to change `fragment.json`
+  > file manually.
+
+##### Liferay 7.3
+
+- Fragment's can be configured by user if a `configuration.json` is defined.
+- Now both _section_ and _component_ fragments can be nested anywhere on a page,
+  so both types have the same effect.
+- Support a new editable syntax that gives more control to developers when
+  writing HTML.
+- New fragment type _react_ that process fragment's JS before sending to portal.
+
 #### Creating fragment compositions
 
 Fragment compositions are treated as regular fragments, so they need to be grouped
