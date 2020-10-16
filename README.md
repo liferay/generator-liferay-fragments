@@ -119,6 +119,9 @@ npm run add-page-template
 
 ### Exporting from a Liferay instance
 
+> ⚠️ When exporting a site, fragments with `type: 'react'` won't be
+> be, as portal only keeps fragment compiled code.
+
 Instead of creating elements from scratch, it's also possible to export them
 from an existing Liferay instance. This is very useful to continue the
 development with any desired desktop tool such as VSCode, Atom, Sublime, etc.
@@ -134,6 +137,9 @@ npm run export
 ```
 
 ### Importing into a Liferay instance
+
+> ⚠️ When importing to a site, fragments with `type: 'react'` will
+> be compiled and the imported. Portal doesn't store fragment's original source.
 
 After you've created your own elements or after you've made modifications to
 exported fragments, you can import them into a Liferay instance by running:
@@ -153,8 +159,10 @@ npm run import:watch
 
 ### Previewing with a Liferay Server
 
-> *Warning*: this functionality is only available with Liferay 7.2 Fixpack 1 or later.
+> ⚠️ This functionality is only available with Liferay 7.2 Fixpack 1 or later.
 > You also need to include the marketplace [Oauth 2 Plugin][7] in your Liferay Portal.
+
+> ⚠️ Previewing fragments with `type: 'react'` is not supported (yet).
 
 Sometimes you may want to see how an element will look once it has been imported
 to Liferay. With the `preview` command, you can specify a Liferay Server and see
@@ -166,6 +174,9 @@ npm run preview
 ```
 
 ### Packaging for distribution
+
+> ⚠️ Before creating the zip file, fragments with `type: 'react'` will
+> be compiled. The zip file won't contain fragments' original source.
 
 After you have finished the development of the project, it can be distributed as
 a ZIP file, which can be imported inside any Liferay site. To prepare the ZIP
