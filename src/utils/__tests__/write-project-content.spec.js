@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const tmp = require('tmp');
 
 const getTestFixtures = require('../get-test-fixtures');
 const {
@@ -9,6 +8,7 @@ const {
 const {
   default: writeProjectContent,
 } = require('../project-content/write-project-content');
+const { createTemporaryDirectory } = require('../temporary');
 
 describe('utils/write-project-content', () => {
   const projectCollections = JSON.parse(
@@ -21,7 +21,7 @@ describe('utils/write-project-content', () => {
   getTestFixtures().forEach((projectPath) => {
     it(`writes ${projectPath} inside a given path`, async () => {
       const projectContent = getProjectContent(projectPath);
-      const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+      const tmpDir = createTemporaryDirectory();
 
       await writeProjectContent(tmpDir.name, projectContent);
 

@@ -4,11 +4,11 @@ import glob from 'glob';
 import ncp from 'ncp';
 import path from 'path';
 import rimraf from 'rimraf';
-import tmp from 'tmp';
 
 import api from '../utils/api';
 import getProjectContent from '../utils/project-content/get-project-content';
 import writeProjectContent from '../utils/project-content/write-project-content';
+import { createTemporaryDirectory } from '../utils/temporary';
 import exportCollections from './export-legacy';
 
 const ZIP_PATHS = [
@@ -28,7 +28,7 @@ export default async function exportProject(
   destinationPath: string
 ): Promise<void> {
   const projectContent = getProjectContent(destinationPath);
-  const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+  const tmpDir = createTemporaryDirectory();
   const tmpSrc = path.join(tmpDir.name, 'src');
 
   try {

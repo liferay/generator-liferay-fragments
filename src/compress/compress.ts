@@ -2,7 +2,6 @@ import fs from 'fs';
 import glob from 'glob';
 import JSZip from 'jszip';
 import path from 'path';
-import tmp from 'tmp';
 
 import { IProject } from '../../types';
 import {
@@ -10,7 +9,7 @@ import {
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
 } from '../utils/constants';
 import writeProjectContent from '../utils/project-content/write-project-content';
-import ReadableStream = NodeJS.ReadableStream;
+import { createTemporaryDirectory } from '../utils/temporary';
 
 interface Options {
   addDeploymentDescriptor?: boolean;
@@ -22,7 +21,7 @@ export default async function compress(
   projectContent: IProject,
   { addDeploymentDescriptor = false, companyWebId = '', groupKey = '' }: Options
 ): Promise<JSZip> {
-  const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+  const tmpDir = createTemporaryDirectory();
   await writeProjectContent(tmpDir.name, projectContent);
 
   const zip = new JSZip();

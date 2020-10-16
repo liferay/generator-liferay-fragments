@@ -3,7 +3,6 @@ import fs from 'fs';
 import JSZip from 'jszip';
 import mime from 'mime-types';
 import request from 'request';
-import tmp from 'tmp';
 import { parse as parseUrl } from 'url';
 import util from 'util';
 
@@ -17,6 +16,7 @@ import {
   ISiteGroup,
 } from '../../types';
 import { FRAGMENTS_PORTLET_ID, PORTLET_FILE_REPOSITORY } from './constants';
+import { createTemporaryFile } from './temporary';
 import writeZip from './write-zip';
 
 const api = {
@@ -571,7 +571,7 @@ const api = {
     await this.refreshOAuthToken();
 
     const formData = new FormData();
-    const tmpZip = tmp.fileSync();
+    const tmpZip = createTemporaryFile();
 
     await writeZip(zip, tmpZip.name);
 
