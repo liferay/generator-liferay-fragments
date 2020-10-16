@@ -1,5 +1,3 @@
-import fs from 'fs';
-import glob from 'glob';
 import path from 'path';
 import semver from 'semver';
 import voca from 'voca';
@@ -21,11 +19,10 @@ import {
   MIN_LIFERAY_VERSION_MESSAGE,
   MIN_LIFERAY_VERSION_MESSAGE_ERROR_MESSAGE,
   MIN_LIFERAY_VERSION_VAR,
-  NEW_COLLECTION_MESSAGE,
-  NEW_COLLECTION_SHORT,
   NEW_COLLECTION_VALUE,
 } from '../utils/constants';
 import CustomGenerator from '../utils/custom-generator';
+import { getCollectionChoices } from '../utils/get-collection-choices';
 
 export default class FragmentGenerator extends CustomGenerator {
   async prompting(): Promise<void> {
@@ -73,7 +70,7 @@ export default class FragmentGenerator extends CustomGenerator {
       type: 'list',
       name: FRAGMENT_COLLECTION_SLUG_VAR,
       message: FRAGMENT_COLLECTION_SLUG_MESSAGE,
-      choices: this._getCollectionChoices(),
+      choices: getCollectionChoices(this.destinationRoot()),
       when: !this.hasValue(FRAGMENT_COLLECTION_SLUG_VAR),
     });
   }
@@ -141,41 +138,5 @@ export default class FragmentGenerator extends CustomGenerator {
         DATA_LFR_SUPPORTED_MIN_VERSION
       )
     );
-  }
-
-  private _getCollectionChoices(): Array<{
-    name: string;
-    value: string;
-    short: string;
-  }> {
-    let choices: Array<{ name: string; value: string; short: string }> = [];
-
-    try {
-      choices = glob
-        .sync(`${this.destinationRoot()}/src/*/collection.json`)
-        .map((collectionJSON) => {
-          const collectionName = JSON.parse(
-            fs.readFileSync(collectionJSON, 'utf-8')
-          ).name;
-
-          const collectionSlug = path.basename(
-            path.resolve(`${collectionJSON}/..`)
-          );
-
-          return {
-            name: collectionName,
-            value: collectionSlug,
-            short: `(${collectionSlug})`,
-          };
-        });
-    } catch (_) {}
-
-    choices.push({
-      name: NEW_COLLECTION_MESSAGE,
-      value: NEW_COLLECTION_VALUE,
-      short: NEW_COLLECTION_SHORT,
-    });
-
-    return choices;
   }
 }
