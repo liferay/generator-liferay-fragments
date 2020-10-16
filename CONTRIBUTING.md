@@ -10,13 +10,13 @@ Please follow it in all your interactions regarding the project.
 ## Local development
 
 In order to test your changes without having them published on master, you
-can use `npm link` feature:
+can use `yarn link` feature:
 
 1. Ensure you have uninstalled existing `generator-liferay-fragments`
-   from global NPM.
+   from global Yarn dependencies.
 2. `cd yourToolkitProjectDirectory`.
-3. `npm link` (this only has to be runned once, run `npm unlink` to undo).
-4. Now you can use _Yeoman_ and _NPM_ commands normally, it will use your
+3. `yarn link` (this only has to be runned once, run `yarn unlink` to undo).
+4. Now you can use _Yeoman_ and _Yarn_ commands normally, it will use your
    local toolkit project.
 
 ## Release Cycle
@@ -34,16 +34,16 @@ gracefully and so a nice error, but never break anything.
 
 1. Create a new branch and add changes if needed:
    - `docs: x` update outdated documentation.
-   - `build: Update/Remove x` update dependencies (`npm audit`, `npm outdated`, etc.).
+   - `build: Update/Remove x` update dependencies (`yarn audit`, `yarn outdated`, etc.).
    - `test: x` fix tests if neccesary.
    - `fix: x` fix something if needed.
-   - `build: Prepare release vX.X.X` update `package.json` and `package-lock.json`.
+   - `build: Prepare release vX.X.X` update `package.json`.
 2. Create a [pull request][5] and merge into master.
 3. Create [a new release][4]:
    - Create `vX.X.X` tag format (same for release title).
    - Write the changelog in the release description.
 4. Checkout created tag locally (`git fetch origin && git checkout vX.X.X`).
-5. `npm publish` release to NPM.
+5. `yarn publish` release to `npmjs.com`.
 
 #### Publishing a pre-release
 
@@ -53,7 +53,7 @@ the steps are the same than publishing a regular release, except:
 - The package version and tag name will be `vX.X.X-rcY`, being `X.X.X` the future
   stable version (ex. `2.12.1`) and `Y` an incremental number starting from 1
   (`v2.12.1-rc1`, `v2.12.1-rc2` ...).
-- `npm publish --tag next` should be run instead of `npm publish`, to avoid
+- `yarn publish --tag next` should be run instead of `yarn publish`, to avoid
   overriding existing stable release.
 
 ## Pull Request Process
