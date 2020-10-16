@@ -51,11 +51,6 @@ Object {
   \\"description\\": \\"Liferay Fragments project\\",
   \\"version\\": \\"1.0.0\\",
 
-  \\"engines\\": {
-    \\"node\\": \\">= 10.0.0\\",
-    \\"npm\\": \\">= 6.0.0\\"
-  },
-
   \\"keywords\\": [
     \\"liferay\\",
     \\"liferay-fragments\\"
@@ -170,11 +165,6 @@ Object {
   \\"name\\": \\"sample-liferay-fragments\\",
   \\"description\\": \\"Liferay Fragments project\\",
   \\"version\\": \\"1.0.0\\",
-
-  \\"engines\\": {
-    \\"node\\": \\">= 10.0.0\\",
-    \\"npm\\": \\">= 6.0.0\\"
-  },
 
   \\"keywords\\": [
     \\"liferay\\",
@@ -344,11 +334,6 @@ Object {
   \\"name\\": \\"sample-liferay-fragments\\",
   \\"description\\": \\"Liferay Fragments project\\",
   \\"version\\": \\"1.0.0\\",
-
-  \\"engines\\": {
-    \\"node\\": \\">= 10.0.0\\",
-    \\"npm\\": \\">= 6.0.0\\"
-  },
 
   \\"keywords\\": [
     \\"liferay\\",
