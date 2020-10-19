@@ -11,8 +11,7 @@ import {
   FRAGMENT_COMPOSITION_NAME_VAR,
   FRAGMENT_NAME_VAR,
   FRAGMENT_TYPE_VAR,
-  MIN_LIFERAY_VERSION_SAMPLE,
-  MIN_LIFERAY_VERSION_VAR,
+  USE_DATA_LFR_EDITABLES_VAR,
 } from '../utils/constants';
 import CustomGenerator from '../utils/custom-generator';
 
@@ -55,7 +54,6 @@ export default class CollectionGenerator extends CustomGenerator {
 
   end(): void {
     const fragmentName = this.getValue(FRAGMENT_NAME_VAR);
-    const minLiferayVersion = this.getValue(MIN_LIFERAY_VERSION_VAR);
     const fragmentCompositionName = this.getValue(
       FRAGMENT_COMPOSITION_NAME_VAR
     );
@@ -70,8 +68,9 @@ export default class CollectionGenerator extends CustomGenerator {
           [FRAGMENT_NAME_VAR]: fragmentName,
           [FRAGMENT_TYPE_VAR]: this.getValue(FRAGMENT_TYPE_VAR),
           [FRAGMENT_COLLECTION_SLUG_VAR]: this.getValue(COLLECTION_SLUG_VAR),
-          [MIN_LIFERAY_VERSION_VAR]:
-            minLiferayVersion || MIN_LIFERAY_VERSION_SAMPLE,
+          [USE_DATA_LFR_EDITABLES_VAR]: this.getValue(
+            USE_DATA_LFR_EDITABLES_VAR
+          ),
         }
       );
     }
