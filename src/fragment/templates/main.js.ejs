@@ -1,6 +1,10 @@
-console.group('<%= fragmentName %>');
+<%_ if (fragmentType == 'react') { %>import React from 'react';
+
+export default function (props) {
+  console.log("props", props);
+
+  return <h1>Hello world</h1>;
+}<%_ } else { %>console.group('<%= fragmentName %>');
 console.log('fragmentElement', fragmentElement);
-<%_ if (useDataLfrEditables) { _%>
 console.log('configuration', configuration);
-<%_ } _%>
-console.groupEnd();
+console.groupEnd();<%_ } %>
