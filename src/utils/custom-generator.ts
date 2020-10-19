@@ -111,12 +111,15 @@ export default class CustomGenerator extends Generator {
   }
 
   getValue(key: string): string | undefined {
-    return (
-      this._answers[key] ||
-      this.options[key] ||
-      this.config.get(key) ||
-      this._defaultValues[key]
-    );
+    if (this._answers[key] !== undefined) {
+      return this._answers[key];
+    } else if (this.options[key] !== undefined) {
+      return this.options[key];
+    } else if (this.config.get(key) !== undefined) {
+      return this.config.get(key);
+    }
+
+    return this._defaultValues[key];
   }
 
   hasOption(key: string): boolean {
