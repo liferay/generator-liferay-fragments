@@ -238,7 +238,7 @@ Object {
   \\"htmlPath\\": \\"index.html\\",
   \\"jsPath\\": \\"main.js\\",
   \\"name\\": \\"Sample fragment\\",
-  \\"type\\": \\"section\\"
+  \\"type\\": \\"component\\"
 }
 ",
   "filePath": "fragment.json",
@@ -248,7 +248,11 @@ Object {
 exports[`app-generator allows adding sample content 10`] = `
 Object {
   "content": "<div class=\\"sample-fragment\\">
-  Sample fragment
+  <h1>
+    <lfr-editable id=\\"title\\" type=\\"text\\">
+      Sample fragment
+    </lfr-editable>
+  </h1>
 </div>
 ",
   "filePath": "index.html",
@@ -273,6 +277,7 @@ exports[`app-generator allows adding sample content 12`] = `
 Object {
   "content": "console.group('Sample fragment');
 console.log('fragmentElement', fragmentElement);
+console.log('configuration', configuration);
 console.groupEnd();
 ",
   "filePath": "main.js",
