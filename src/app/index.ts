@@ -78,7 +78,7 @@ export default class AppGenerator extends CustomGenerator {
     }
 
     if (this.getValue(ADD_SAMPLE_CONTENT_VAR)) {
-      this.log('Adding sample content', { newLine: true });
+      this.log('Adding sample content...', { newLine: true });
 
       this.composeWith(
         {
@@ -132,6 +132,6 @@ export default class AppGenerator extends CustomGenerator {
     setTimeout(() => {
       this.log('Done!', { newLine: true, level: 'success' });
       this.log("You're ready to create fragments.");
-    }, 100);
+    }, 1000);
   }
 }
