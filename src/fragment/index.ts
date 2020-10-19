@@ -14,6 +14,8 @@ import {
 import CustomGenerator from '../utils/custom-generator';
 import { getCollectionChoices } from '../utils/get-collection-choices';
 
+const USE_REACT_VAR = 'useReact';
+
 export default class FragmentGenerator extends CustomGenerator {
   async prompting(): Promise<void> {
     await this.ask([
@@ -26,23 +28,18 @@ export default class FragmentGenerator extends CustomGenerator {
       },
       {
         type: 'confirm',
+        name: USE_REACT_VAR,
+        message: 'Use React (or other JS framework)?',
+        default: true,
+        when: !this.hasValue(FRAGMENT_TYPE_VAR),
+      },
+      {
+        type: 'confirm',
         name: USE_DATA_LFR_EDITABLES_VAR,
         message: 'Use new data-lfr editable syntax?',
         default: true,
-        when: !this.hasValue(USE_DATA_LFR_EDITABLES_VAR),
-      },
-      {
-        type: 'list',
-        name: FRAGMENT_TYPE_VAR,
-        message: 'Fragment type',
-        choices: [
-          { name: 'Section', value: 'section' },
-          { name: 'Component', value: 'component' },
-        ],
-        default: 'component',
-        when:
-          !this.hasValue(FRAGMENT_TYPE_VAR) &&
-          !this.getValue(USE_DATA_LFR_EDITABLES_VAR),
+        when: ({ [USE_REACT_VAR]: useReact }) =>
+          !useReact && !this.hasValue(USE_DATA_LFR_EDITABLES_VAR),
       },
       {
         type: 'list',
@@ -52,6 +49,11 @@ export default class FragmentGenerator extends CustomGenerator {
         when: !this.hasValue(FRAGMENT_COLLECTION_SLUG_VAR),
       },
     ]);
+
+    this.setDefaultValue(
+      FRAGMENT_TYPE_VAR,
+      this.getValue(USE_REACT_VAR) ? 'react' : 'component'
+    );
 
     this.setDefaultValue(
       FRAGMENT_SLUG_VAR,

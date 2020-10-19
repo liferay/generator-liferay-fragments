@@ -19,7 +19,7 @@ declare module 'yeoman-generator-types' {
     name: string;
     message: string;
     default?: string | boolean;
-    when?: boolean;
+    when?: ((answers: Record<string, any>) => boolean) | boolean;
     validate?: (val: string) => boolean | string;
     store?: boolean;
   }
@@ -33,10 +33,13 @@ declare module 'yeoman-generator-types' {
 }
 
 declare module 'yeoman-generator' {
+  // eslint-disable-next-line liferay/group-imports
+
+  // eslint-disable-next-line liferay/imports-first
   import {
+    IAnswerGroup,
     IArgumentOptions,
     IQuestion,
-    IAnswerGroup
   } from 'yeoman-generator-types';
 
   class Generator {
