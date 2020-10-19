@@ -30,7 +30,6 @@
     "@types/node": "8.10.49",
     "@types/request": "2.48.1",
     "@types/rimraf": "^3.0.0",
-    "@types/semver": "^7.1.0",
     "@types/tmp": "0.1.0",
     "@types/voca": "1.4.0",
     "@types/ws": "6.0.1",
@@ -72,7 +71,6 @@
     "ncp": "^2.0.0",
     "request": "2.88.0",
     "rimraf": "^3.0.2",
-    "semver": "^7.2.1",
     "voca": "1.4.0",
     "ws": "7.0.1",
     "yeoman-generator": "4.0.1"
