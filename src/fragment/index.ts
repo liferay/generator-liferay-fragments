@@ -1,11 +1,8 @@
 import path from 'path';
-import semver from 'semver';
 import voca from 'voca';
 
 import CollectionGenerator from '../collection';
 import {
-  DATA_LFR_SUPPORTED,
-  DATA_LFR_SUPPORTED_MIN_VERSION,
   FRAGMENT_COLLECTION_SLUG_MESSAGE,
   FRAGMENT_COLLECTION_SLUG_VAR,
   FRAGMENT_NAME_MESSAGE,
@@ -16,46 +13,21 @@ import {
   FRAGMENT_TYPE_MESSAGE,
   FRAGMENT_TYPE_OPTIONS,
   FRAGMENT_TYPE_VAR,
-  MIN_LIFERAY_VERSION_MESSAGE,
-  MIN_LIFERAY_VERSION_MESSAGE_ERROR_MESSAGE,
-  MIN_LIFERAY_VERSION_VAR,
   NEW_COLLECTION_VALUE,
+  USE_DATA_LFR_EDITABLES_VAR,
 } from '../utils/constants';
 import CustomGenerator from '../utils/custom-generator';
 import { getCollectionChoices } from '../utils/get-collection-choices';
 
 export default class FragmentGenerator extends CustomGenerator {
   async prompting(): Promise<void> {
-    const previousMinLiferayVersion = this.getValue(MIN_LIFERAY_VERSION_VAR);
-
     await this.ask({
-      type: 'input',
-      name: MIN_LIFERAY_VERSION_VAR,
-      message: MIN_LIFERAY_VERSION_MESSAGE,
-      validate: (version) =>
-        semver.valid(version)
-          ? true
-          : MIN_LIFERAY_VERSION_MESSAGE_ERROR_MESSAGE,
-      when: !this.hasValue(MIN_LIFERAY_VERSION_VAR),
+      type: 'confirm',
+      name: USE_DATA_LFR_EDITABLES_VAR,
+      message: 'Use new data-lfr editable syntax?',
+      default: true,
+      when: !this.hasValue(USE_DATA_LFR_EDITABLES_VAR),
     });
-
-    if (!previousMinLiferayVersion) {
-      this.config.set(
-        MIN_LIFERAY_VERSION_VAR,
-        `${this.getValue(MIN_LIFERAY_VERSION_VAR)}`
-      );
-    }
-
-    this.setDefaultValue(
-      DATA_LFR_SUPPORTED,
-
-      // @ts-ignore
-
-      semver.gte(
-        `${this.getValue(MIN_LIFERAY_VERSION_VAR)}`,
-        DATA_LFR_SUPPORTED_MIN_VERSION
-      )
-    );
 
     await this.ask([
       {
@@ -76,7 +48,7 @@ export default class FragmentGenerator extends CustomGenerator {
         default: this.getValue(FRAGMENT_TYPE_DEFAULT),
         when:
           !this.hasValue(FRAGMENT_TYPE_VAR) &&
-          !this.getValue(DATA_LFR_SUPPORTED),
+          !this.getValue(USE_DATA_LFR_EDITABLES_VAR),
       },
     ]);
 
@@ -106,13 +78,14 @@ export default class FragmentGenerator extends CustomGenerator {
         {
           [FRAGMENT_NAME_VAR]: this.getValue(FRAGMENT_NAME_VAR),
           [FRAGMENT_TYPE_VAR]: this.getValue(FRAGMENT_TYPE_VAR),
-          [MIN_LIFERAY_VERSION_VAR]: this.getValue(MIN_LIFERAY_VERSION_VAR),
+          [USE_DATA_LFR_EDITABLES_VAR]: this.getValue(
+            USE_DATA_LFR_EDITABLES_VAR
+          ),
         }
       );
     } else {
       this.throwRequiredError(FRAGMENT_COLLECTION_SLUG_VAR);
       this.throwRequiredError(FRAGMENT_SLUG_VAR);
-      this.throwRequiredError(MIN_LIFERAY_VERSION_VAR);
 
       const basePath = path.join(
         'src',

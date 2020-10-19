@@ -9,8 +9,7 @@ import {
   FRAGMENT_NAME_VAR,
   FRAGMENT_TYPE_DEFAULT,
   FRAGMENT_TYPE_VAR,
-  MIN_LIFERAY_VERSION_SAMPLE,
-  MIN_LIFERAY_VERSION_VAR,
+  USE_DATA_LFR_EDITABLES_VAR,
 } from '../utils/constants';
 import CustomGenerator from '../utils/custom-generator';
 
@@ -94,7 +93,7 @@ export default class AppGenerator extends CustomGenerator {
           [FRAGMENT_NAME_VAR]: 'Sample fragment',
           [FRAGMENT_TYPE_VAR]: FRAGMENT_TYPE_DEFAULT,
           [FRAGMENT_COLLECTION_SLUG_VAR]: 'sample-collection',
-          [MIN_LIFERAY_VERSION_VAR]: MIN_LIFERAY_VERSION_SAMPLE,
+          [USE_DATA_LFR_EDITABLES_VAR]: true,
         }
       );
     }
