@@ -56,6 +56,11 @@ export default class FragmentGenerator extends CustomGenerator {
     );
 
     this.setDefaultValue(
+      USE_DATA_LFR_EDITABLES_VAR,
+      this.getValue(FRAGMENT_TYPE_VAR) === 'react' ? '' : 'true'
+    );
+
+    this.setDefaultValue(
       FRAGMENT_SLUG_VAR,
       voca.slugify(this.getValue(FRAGMENT_NAME_VAR))
     );

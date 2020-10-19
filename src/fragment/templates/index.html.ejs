@@ -1,14 +1,11 @@
-<div class="<%= fragmentSlug %>">
-  <%_ typeof useDataLfrEditables _%>
-  <%_ if (useDataLfrEditables) { _%>
-  <h1
-    class="[#if configuration.textColor.color?has_content]text-${configuration.textColor.color}[/#if]"
-    data-lfr-editable-id="title"
-    data-lfr-editable-type="text"
-  >
+<%_ if (useDataLfrEditables) { _%><div class="<%= fragmentSlug %>">
+  <h1 data-lfr-editable-id="title" data-lfr-editable-type="text">
     <%= fragmentName %>
   </h1>
-  <%_ } else { _%>
-  <%= fragmentName %>
-  <%_ } _%>
-</div>
+</div><%_ } else if (fragmentType == 'component') { %><div class="<%= fragmentSlug %>">
+  <h1>
+    <lfr-editable id="title" type="text">
+      <%= fragmentName %>
+    </lfr-editable>
+  </h1>
+</div><%_ } %>
