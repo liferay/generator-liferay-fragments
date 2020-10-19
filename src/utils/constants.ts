@@ -10,11 +10,8 @@ export const DEPLOYMENT_DESCRIPTOR_GROUP_VAR = 'groupKey';
 export const FRAGMENT_COLLECTION_SLUG_MESSAGE = 'Choose a collection';
 export const FRAGMENT_COLLECTION_SLUG_VAR = 'fragmentCollectionSlug';
 export const FRAGMENT_COMPOSITION_NAME_VAR = 'fragmentCompositionName';
-export const FRAGMENT_NAME_MESSAGE = 'Fragment name (required)';
 export const FRAGMENT_NAME_VAR = 'fragmentName';
 export const FRAGMENT_SLUG_VAR = 'fragmentSlug';
-export const FRAGMENT_TYPE_DEFAULT = 'section';
-export const FRAGMENT_TYPE_MESSAGE = 'Fragment type';
 export const FRAGMENT_TYPE_VAR = 'fragmentType';
 export const IMPORT_WATCH_VAR = 'watch';
 export const USE_DATA_LFR_EDITABLES_VAR = 'useDataLfrEditables';
@@ -33,16 +30,8 @@ export const FRAGMENT_IMPORT_STATUS = {
   INVALID: 'invalid',
 };
 
-export const FRAGMENT_NAME_NON_EMPTY_ERROR_MESSAGE =
-  'Fragment name must not be empty';
-
 export const FRAGMENTS_PORTLET_ID =
   'com_liferay_fragment_web_portlet_FragmentPortlet';
-
-export const FRAGMENT_TYPE_OPTIONS = [
-  { name: 'Section', value: 'section' },
-  { name: 'Component', value: 'component' },
-];
 
 export const PAGE_TEMPLATE_IMPORT_STATUS = {
   IMPORTED: 'imported',
