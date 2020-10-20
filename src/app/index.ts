@@ -69,14 +69,6 @@ export default class AppGenerator extends CustomGenerator {
   }
 
   async end(): Promise<void> {
-    this.log('Running npm install...', { newLine: true });
-
-    if (process.env.NODE_ENV !== 'test') {
-      await execa.command('npm install', {
-        cwd: this.destinationRoot(),
-      });
-    }
-
     if (this.getValue(ADD_SAMPLE_CONTENT_VAR)) {
       this.log('Adding sample content...', { newLine: true });
 
@@ -129,9 +121,15 @@ export default class AppGenerator extends CustomGenerator {
       );
     }
 
-    setTimeout(() => {
-      this.log('Done!', { newLine: true, level: 'success' });
-      this.log("You're ready to create fragments.");
-    }, 1000);
+    this.log('Running npm install...', { newLine: true });
+
+    if (process.env.NODE_ENV !== 'test') {
+      await execa.command('npm install', {
+        cwd: this.destinationRoot(),
+      });
+    }
+
+    this.log('Done!', { newLine: true, level: 'success' });
+    this.log("You're ready to create fragments.");
   }
 }
