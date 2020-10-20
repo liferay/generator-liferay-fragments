@@ -104,7 +104,8 @@ npm run add-fragment
 In newer Liferay Portal releases a lot of incredible features have been added
 to the Toolkit and portal itself. Although this tool can manage any kind of
 fragment, not all versions of portal support the same set of features. This
-is a small summary of which features come with each release.
+is a small summary of which features come with each release (please check
+Liferay Docs if you need further information).
 
 ##### Liferay 7.2
 
