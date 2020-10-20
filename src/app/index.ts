@@ -71,6 +71,9 @@ export default class AppGenerator extends CustomGenerator {
   async end(): Promise<void> {
     if (this.getValue(ADD_SAMPLE_CONTENT_VAR)) {
       this.log('Adding sample content...', { newLine: true });
+      this.log(`Warning: some of these fragments are not compatible all
+portal versions, please check the generator documentation before using them:
+https://www.npmjs.com/package/generator-liferay-fragments#creating-new-fragments`);
 
       this.composeWith(
         {
