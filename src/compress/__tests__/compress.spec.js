@@ -4,52 +4,83 @@ const path = require('path');
 const tmp = require('tmp');
 
 const getTestFixtures = require('../../utils/get-test-fixtures');
+import { buildProjectContent } from '../../utils/project-content/build-project-content';
 const {
   default: getProjectContent,
 } = require('../../utils/project-content/get-project-content');
 const { default: compress } = require('../compress');
 
 describe('compress', () => {
-  getTestFixtures().forEach((fixturePath) => {
+  test.each(
+    getTestFixtures().map((fixturePath) => [
+      path.basename(fixturePath),
+      fixturePath,
+    ])
+  )('generates a zip for %p', async (_, fixturePath) => {
     const projectContent = getProjectContent(fixturePath);
+    const compressedProjectContent = await getCompressedProject(projectContent);
 
-    it(`generates a zip for ${path.basename(fixturePath)}`, async () => {
-      const zip = await compress(projectContent, {});
-      const tmpDir = tmp.dirSync({ unsafeCleanup: true });
-      const files = Object.entries(zip.files).filter(([, data]) => !data.dir);
+    removeProjectIgnoredProps(projectContent);
+    removeProjectIgnoredProps(compressedProjectContent);
 
-      for (const [key, data] of files) {
-        const filePath = path.resolve(tmpDir.name, key);
-        const directoryPath = path.dirname(filePath);
+    expect(compressedProjectContent).toEqual(projectContent);
+  });
 
-        if (!fs.existsSync(directoryPath)) {
-          mkdirp.sync(directoryPath, { recursive: true });
-        }
+  test.each(
+    getTestFixtures().map((fixturePath) => [
+      path.basename(fixturePath),
+      fixturePath,
+    ])
+  )(
+    'generates a zip for built project %p',
+    async (_, fixturePath) => {
+      const builtProjectContent = await buildProjectContent(
+        getProjectContent(fixturePath)
+      );
 
-        fs.writeFileSync(filePath, await data.async('nodebuffer'));
-      }
+      const compressedProjectContent = await getCompressedProject(
+        builtProjectContent
+      );
 
-      const compressedProjectContent = getProjectContent(tmpDir.name);
-      tmpDir.removeCallback();
+      removeProjectIgnoredProps(builtProjectContent);
+      removeProjectIgnoredProps(compressedProjectContent);
 
-      delete compressedProjectContent.basePath;
-      delete compressedProjectContent.unknownFiles;
-      delete projectContent.basePath;
-      delete projectContent.unknownFiles;
+      expect(compressedProjectContent).toEqual(builtProjectContent);
+    },
+    60000
+  );
+});
 
-      compressedProjectContent.collections.forEach((collection) => {
-        collection.fragments.forEach((fragment) => {
-          delete fragment.unknownFiles;
-        });
-      });
+async function getCompressedProject(projectContent) {
+  const zip = await compress(projectContent, {});
+  const tmpDir = tmp.dirSync({ unsafeCleanup: true });
 
-      projectContent.collections.forEach((collection) => {
-        collection.fragments.forEach((fragment) => {
-          delete fragment.unknownFiles;
-        });
-      });
+  const files = Object.entries(zip.files).filter(([, data]) => !data.dir);
 
-      expect(compressedProjectContent).toEqual(projectContent);
+  for (const [key, data] of files) {
+    const filePath = path.resolve(tmpDir.name, key);
+    const directoryPath = path.dirname(filePath);
+
+    if (!fs.existsSync(directoryPath)) {
+      mkdirp.sync(directoryPath, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, await data.async('nodebuffer'));
+  }
+
+  const compressedProjectContent = getProjectContent(tmpDir.name);
+  tmpDir.removeCallback();
+
+  return compressedProjectContent;
+}
+
+function removeProjectIgnoredProps(projectContent) {
+  delete projectContent.basePath;
+  delete projectContent.unknownFiles;
+
+  projectContent.collections.forEach((collection) => {
+    collection.fragments.forEach((fragment) => {
+      delete fragment.unknownFiles;
     });
   });
-});
+}
