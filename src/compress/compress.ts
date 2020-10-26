@@ -10,6 +10,7 @@ import {
   DEPLOYMENT_DESCRIPTOR_GROUP_VAR,
 } from '../utils/constants';
 import writeProjectContent from '../utils/project-content/write-project-content';
+import ReadableStream = NodeJS.ReadableStream;
 
 interface Options {
   addDeploymentDescriptor?: boolean;
@@ -24,31 +25,24 @@ export default async function compress(
   const tmpDir = tmp.dirSync({ unsafeCleanup: true });
   await writeProjectContent(tmpDir.name, projectContent);
 
-  return new Promise((resolve) => {
-    const zip = new JSZip();
+  const zip = new JSZip();
 
-    if (addDeploymentDescriptor) {
-      _addDeploymentDescriptor(zip, companyWebId, groupKey);
+  if (addDeploymentDescriptor) {
+    _addDeploymentDescriptor(zip, companyWebId, groupKey);
+  }
+
+  glob.sync(path.join(tmpDir.name, '**', '*')).forEach((filePath) => {
+    if (fs.statSync(filePath).isFile()) {
+      zip.file(
+        path.relative(tmpDir.name, filePath).replace(path.sep, path.posix.sep),
+        fs.readFileSync(filePath)
+      );
     }
-
-    try {
-      fs.mkdirSync(path.join(tmpDir.name, 'build'));
-    } catch (_) {}
-
-    glob.sync(path.join(tmpDir.name, '**', '*')).forEach((filePath) => {
-      if (fs.statSync(filePath).isFile()) {
-        zip.file(
-          path
-            .relative(tmpDir.name, filePath)
-            .replace(path.sep, path.posix.sep),
-          fs.createReadStream(filePath)
-        );
-      }
-    });
-
-    tmpDir.removeCallback();
-    resolve(zip);
   });
+
+  tmpDir.removeCallback();
+
+  return zip;
 }
 
 function _addDeploymentDescriptor(
