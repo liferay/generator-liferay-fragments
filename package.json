@@ -109,8 +109,9 @@
     "build": "npm run build:clean && npm run build:copy && npm run build:typescript",
     "commitlint-travis": "commitlint-travis",
     "lint": "eslint src/",
+    "pretest": "npm run build",
     "test": "jest",
-    "prepublish": "npm run lint && npm run test && npm run build"
+    "prepack": "npm run build"
   },
   "repository": "liferay/generator-liferay-fragments",
   "license": "MIT"
