@@ -41,26 +41,6 @@ jobs:
       - run: yarn --cache-folder=${{ env.yarn-cache-path }} install --frozen-lockfile
       - run: yarn --cache-folder=${{ env.yarn-cache-path }} run lint
 
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        node: [ 10 ]
-        os: [ ubuntu-latest ]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-      - name: Use or update Yarn cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.yarn-cache-path }}
-          key: ${{ matrix.os }}-${{ matrix.node }}-${{ env.yarn-cache-name }}-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn --cache-folder=${{ env.yarn-cache-path }} install --frozen-lockfile
-      - run: yarn --cache-folder=${{ env.yarn-cache-path }} run build
-
   test:
     runs-on: ${{ matrix.os }}
     strategy:

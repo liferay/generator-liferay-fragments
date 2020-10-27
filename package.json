@@ -105,8 +105,7 @@
     "build:typescript": "tsc --build tsconfig.json",
     "build": "yarn run build:clean && yarn run build:copy && yarn run build:typescript",
     "lint": "eslint src/",
-    "pretest": "npm run build",
-    "test": "jest",
+    "test": "yarn run build && jest",
     "prepack": "yarn run build"
   },
   "repository": "liferay/generator-liferay-fragments",
