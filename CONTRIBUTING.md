@@ -41,7 +41,8 @@ gracefully and so a nice error, but never break anything.
 2. Create a [pull request][5] and merge into master.
 3. Create [a new release][4]:
    - Create `vX.X.X` tag format (same for release title).
-   - Write the changelog in the release description.
+   - Write the changelog in the release description (an initial draft can be
+     generated with `npx conventional-changelog-cli -p angular -r 2`.
 4. Checkout created tag locally (`git fetch origin && git checkout vX.X.X`).
 5. `yarn publish` release to `npmjs.com`.
 
