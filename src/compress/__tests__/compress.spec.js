@@ -47,7 +47,7 @@ describe('compress', () => {
 
       expect(compressedProjectContent).toEqual(builtProjectContent);
     },
-    60000
+    300000
   );
 });
 
