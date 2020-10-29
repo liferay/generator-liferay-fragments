@@ -1,11 +1,12 @@
-import AdmZip from 'adm-zip';
 import fs from 'fs';
 import glob from 'glob';
+import JSZip from 'jszip';
 import ncp from 'ncp';
 import path from 'path';
 import rimraf from 'rimraf';
 
 import api from '../utils/api';
+import { extractZip } from '../utils/extract-zip';
 import getProjectContent from '../utils/project-content/get-project-content';
 import writeProjectContent from '../utils/project-content/write-project-content';
 import { createTemporaryDirectory } from '../utils/temporary';
@@ -32,7 +33,7 @@ export default async function exportProject(
   const tmpSrc = path.join(tmpDir.name, 'src');
 
   try {
-    new AdmZip(await api.exportZip(groupId)).extractAllTo(tmpDir.name);
+    await extractZip(new JSZip(await api.exportZip(groupId)), tmpDir.name);
     fs.mkdirSync(tmpSrc);
 
     // Move generated categories (fragments, page-templates...) to a
