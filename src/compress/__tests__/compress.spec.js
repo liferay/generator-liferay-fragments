@@ -1,8 +1,7 @@
-const fs = require('fs');
-const mkdirp = require('mkdirp');
 const path = require('path');
 const tmp = require('tmp');
 
+import { extractZip } from '../../utils/extract-zip';
 const getTestFixtures = require('../../utils/get-test-fixtures');
 import { buildProjectContent } from '../../utils/project-content/build-project-content';
 const {
@@ -55,18 +54,7 @@ async function getCompressedProject(projectContent) {
   const zip = await compress(projectContent, {});
   const tmpDir = tmp.dirSync({ unsafeCleanup: true });
 
-  const files = Object.entries(zip.files).filter(([, data]) => !data.dir);
-
-  for (const [key, data] of files) {
-    const filePath = path.resolve(tmpDir.name, key);
-    const directoryPath = path.dirname(filePath);
-
-    if (!fs.existsSync(directoryPath)) {
-      mkdirp.sync(directoryPath, { recursive: true });
-    }
-
-    fs.writeFileSync(filePath, await data.async('nodebuffer'));
-  }
+  await extractZip(zip, tmpDir.name);
 
   const compressedProjectContent = getProjectContent(tmpDir.name);
   tmpDir.removeCallback();
