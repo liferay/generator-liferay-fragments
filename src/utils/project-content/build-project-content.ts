@@ -20,8 +20,19 @@ export const buildProjectContent = async (
 
   let builtProjectContent = projectContent;
 
-  if (hasBundlerConfig && projectExports.length) {
-    await execa.command('npx @liferay/npm-bundler', {
+  const bundlerBinaryPath = path.resolve(
+    projectContent.basePath,
+    'node_modules',
+    '.bin',
+    'liferay-npm-bundler'
+  );
+
+  if (
+    hasBundlerConfig &&
+    fs.existsSync(bundlerBinaryPath) &&
+    projectExports.length
+  ) {
+    await execa.command(bundlerBinaryPath, {
       cwd: projectContent.basePath,
     });
 
