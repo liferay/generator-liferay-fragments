@@ -33,7 +33,7 @@ export default async function compress(
   glob.sync(path.join(tmpDir.name, '**', '*')).forEach((filePath) => {
     if (fs.statSync(filePath).isFile()) {
       zip.file(
-        path.relative(tmpDir.name, filePath).replace(path.sep, path.posix.sep),
+        path.relative(tmpDir.name, filePath).replace(/\\/g, '/'),
         fs.readFileSync(filePath)
       );
     }
