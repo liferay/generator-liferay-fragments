@@ -1,12 +1,11 @@
 import chokidar from 'chokidar';
 import express from 'express';
+import fetch from 'node-fetch';
 import path from 'path';
-import request from 'request';
 import ws from 'ws';
 
 import api from '../utils/api';
 import AuthGenerator from '../utils/auth-generator';
-import { buildProjectContent } from '../utils/project-content/build-project-content';
 import getProjectContent from '../utils/project-content/get-project-content';
 
 const DEV_SERVER_PORT = 8081;
@@ -211,7 +210,9 @@ export default class extends AuthGenerator {
       } else {
         const url = `${this.getHost()}${req.originalUrl}`;
 
-        request(url, (error, response, body) => res.send(body));
+        fetch(url).then((response) => {
+          res.send(response);
+        });
       }
     });
 

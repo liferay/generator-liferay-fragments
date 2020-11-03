@@ -1,10 +1,8 @@
-import FormData, { SubmitOptions } from 'form-data';
+import FormData from 'form-data';
 import fs from 'fs';
 import JSZip from 'jszip';
 import mime from 'mime-types';
-import request from 'request';
-import { parse as parseUrl } from 'url';
-import util from 'util';
+import fetch, { RequestInit, Response } from 'node-fetch';
 
 import {
   ICompany,
@@ -18,6 +16,10 @@ import {
 import { FRAGMENTS_PORTLET_ID, PORTLET_FILE_REPOSITORY } from './constants';
 import { createTemporaryFile } from './temporary';
 import writeZip from './write-zip';
+
+interface CustomOptions {
+  auth?: 'oauth' | 'basic';
+}
 
 const api = {
   _host: '',
@@ -51,45 +53,510 @@ const api = {
     }
   },
 
-  async request<T = Record<string, any> | string>(
-    method: 'GET' | 'POST',
-    url: string,
-    options: Record<string, any> = {}
-  ): Promise<T> {
-    if (process.env.NODE_ENV === 'test') {
-      throw new Error(
-        `Requests not available during testing (${method} ${url})`
-      );
+  getOAuthToken(
+    username: string,
+    password: string
+  ): Promise<IServerOauthToken> {
+    return this._request<IServerOauthToken>('/o/oauth2/token', {
+      method: 'POST',
+
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+
+      body: [
+        'grant_type=password',
+        'client_id=FragmentRenderer',
+        `username=${username}`,
+        `password=${password}`,
+      ].join('&'),
+    });
+  },
+
+  async checkAuthentication(): Promise<void> {
+    await this._request('/api/jsonws/user/get-current-user', {
+      method: 'POST',
+      auth: 'basic',
+    });
+
+    if (this._oauthToken.accessToken) {
+      await this._request('/api/jsonws/user/get-current-user', {
+        method: 'POST',
+        auth: 'oauth',
+      });
     }
+  },
 
-    const promiseRequest = util.promisify(request);
-    const opts = {
-      method,
-      url: `${this._host}${url}`,
-      ...options,
-    };
+  getCompanies(): Promise<ICompany[]> {
+    return this._request('/api/jsonws/company/get-companies', {
+      method: 'POST',
+      auth: 'basic',
+    });
+  },
 
-    return this.parseResponse<T>(
-      (await promiseRequest(opts, undefined)) as {
-        statusCode: number;
-        body: Record<string, any> | string;
+  getStagingGroups(companyId: string): Promise<ISiteGroup[]> {
+    return this._request(
+      `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`,
+      {
+        method: 'POST',
+        auth: 'basic',
       }
     );
   },
 
-  parseResponse<T = Record<string, any> | string>(response: {
-    statusCode: number;
-    body: Record<string, any> | string;
-  }): T {
-    let responseBody = response.body;
-
-    if (typeof responseBody === 'string') {
-      try {
-        responseBody = JSON.parse(responseBody);
-      } catch (_) {
-        // If responseBody is not an object
-        // we silently ignore
+  getSiteGroups(companyId: string): Promise<ISiteGroup[]> {
+    return this._request(
+      `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`,
+      {
+        method: 'POST',
+        auth: 'basic',
       }
+    );
+  },
+
+  getFragmentEntries(
+    groupId: string,
+    fragmentCollectionId: string,
+    name?: string
+  ): Promise<IServerFragment[]> {
+    const formData: IGetFragmentEntriesOptions = {
+      groupId,
+      fragmentCollectionId,
+      status: 0,
+      start: -1,
+      end: -1,
+    };
+
+    if (name) {
+      formData.name = name;
+    }
+
+    return this._postMultipartFormData(
+      '/api/jsonws/fragment.fragmententry/get-fragment-entries',
+      formData,
+      { auth: 'basic' }
+    );
+  },
+
+  getFragmentCompositions(
+    groupId: string,
+    fragmentCollectionId: string
+  ): Promise<IServerFragmentComposition[]> {
+    const formData = {
+      groupId,
+      fragmentCollectionId,
+      start: -1,
+      end: -1,
+    };
+
+    return this._postMultipartFormData<IServerFragmentComposition[]>(
+      '/api/jsonws/fragment.fragmentcomposition/get-fragment-compositions',
+      formData,
+      { auth: 'basic' }
+    ).catch(() => {
+      return [];
+    });
+  },
+
+  getFragmentCollections(
+    groupId: string,
+    name?: string
+  ): Promise<IServerCollection[]> {
+    const formData: {
+      groupId: string;
+      start: number;
+      end: number;
+      name?: string;
+    } = {
+      groupId,
+      start: -1,
+      end: -1,
+    };
+
+    if (name) {
+      formData.name = name;
+    }
+
+    return this._postMultipartFormData(
+      '/api/jsonws/fragment.fragmentcollection/get-fragment-collections',
+      formData,
+      { auth: 'basic' }
+    );
+  },
+
+  updateFragmentCollection(
+    fragmentCollectionId: string,
+    name: string,
+    description = ''
+  ): Promise<void> {
+    return this._postMultipartFormData(
+      '/api/jsonws/fragment.fragmentcollection/update-fragment-collection',
+      {
+        fragmentCollectionId,
+        description,
+        name,
+      },
+      {
+        auth: 'basic',
+      }
+    );
+  },
+
+  addFragmentCollection(
+    groupId: string,
+    fragmentCollectionKey: string,
+    name: string,
+    description = ''
+  ): Promise<void> {
+    return this._postMultipartFormData(
+      '/api/jsonws/fragment.fragmentcollection/add-fragment-collection',
+      {
+        groupId,
+        fragmentCollectionKey,
+        name,
+        description,
+      },
+      {
+        auth: 'basic',
+      }
+    );
+  },
+
+  updateFragmentEntry(
+    fragmentEntryId: string,
+    {
+      configuration,
+      css,
+      html,
+      js,
+      name,
+      previewFileEntryId = 0,
+      status,
+    }: {
+      configuration: string;
+      css: string;
+      html: string;
+      js: string;
+      name: string;
+      previewFileEntryId?: number;
+      status: number;
+    }
+  ): Promise<void> {
+    return this._postMultipartFormData(
+      '/api/jsonws/fragment.fragmententry/update-fragment-entry',
+      {
+        fragmentEntryId,
+        status,
+        name,
+        html,
+        css,
+        js,
+        configuration,
+        previewFileEntryId,
+      },
+      {
+        auth: 'basic',
+      }
+    );
+  },
+
+  async uploadThumbnail(
+    thumbnail: Buffer,
+    groupId: string,
+    fragmentEntryKey: string,
+    previewFileEntryId = '0'
+  ): Promise<number> {
+    const bytes = JSON.stringify([...thumbnail]);
+    const filename = `${groupId}_${fragmentEntryKey}_thumbnail`;
+
+    let fileEntry: number;
+
+    const repository = await this._postMultipartFormData<{
+      repositoryId: string;
+      dlFolderId: string;
+    }>(
+      '/api/jsonws/repository/get-repository',
+      {
+        groupId,
+        portletId: FRAGMENTS_PORTLET_ID,
+      },
+      {
+        auth: 'basic',
+      }
+    )
+      .then((response) => response)
+      .catch(async () => {
+        const classNameId = await this._postMultipartFormData<{
+          classNameId: string;
+        }>(
+          '/api/jsonws/classname/fetch-class-name',
+          {
+            value: PORTLET_FILE_REPOSITORY,
+          },
+          {
+            auth: 'basic',
+          }
+        ).then((response) => response.classNameId);
+
+        return this._postMultipartFormData<{
+          repositoryId: string;
+          dlFolderId: string;
+        }>(
+          '/api/jsonws/repository/add-repository',
+          {
+            groupId,
+            classNameId,
+            parentFolderId: 0,
+            name: FRAGMENTS_PORTLET_ID,
+            description: '',
+            portletId: FRAGMENTS_PORTLET_ID,
+            typeSettingsProperties: JSON.stringify({}),
+          },
+          {
+            auth: 'basic',
+          }
+        ).then((response) => response);
+      });
+
+    if (Number(previewFileEntryId) > 0) {
+      fileEntry = await this._postMultipartFormData<{ fileEntryId: number }>(
+        '/api/jsonws/dlapp/update-file-entry',
+        {
+          fileEntryId: previewFileEntryId,
+          sourceFileName: filename,
+          mimeType: mime.lookup(filename),
+          title: filename,
+          description: '',
+          changeLog: '',
+          dlVersionNumberIncrease: 'NONE',
+          bytes,
+        },
+        {
+          auth: 'basic',
+        }
+      ).then((response) => response.fileEntryId);
+    } else {
+      fileEntry = await this._postMultipartFormData<{ fileEntryId: number }>(
+        '/api/jsonws/dlapp/add-file-entry',
+        {
+          repositoryId: repository.repositoryId,
+          folderId: repository.dlFolderId,
+          sourceFileName: filename,
+          mimeType: mime.lookup(filename),
+          title: filename,
+          description: '',
+          changeLog: '',
+          bytes,
+        },
+        {
+          auth: 'basic',
+        }
+      ).then((response) => response.fileEntryId);
+    }
+
+    return fileEntry;
+  },
+
+  addFragmentEntry(
+    groupId: string,
+    fragmentCollectionId: string,
+    fragmentEntryKey: string,
+    {
+      configuration,
+      css,
+      html,
+      js,
+      name,
+      previewFileEntryId = 0,
+      status,
+      type,
+    }: {
+      configuration: string;
+      css: string;
+      html: string;
+      js: string;
+      name: string;
+      previewFileEntryId?: number;
+      status: number;
+      type: number;
+    }
+  ): Promise<IServerFragment> {
+    return this._postMultipartFormData(
+      '/api/jsonws/fragment.fragmententry/add-fragment-entry',
+      {
+        fragmentCollectionId,
+        fragmentEntryKey,
+        groupId,
+        status,
+        name,
+        type,
+        html,
+        css,
+        js,
+        configuration,
+        previewFileEntryId,
+      },
+      {
+        auth: 'basic',
+      }
+    );
+  },
+
+  async exportZip(groupId: string): Promise<Buffer> {
+    return this._rawRequest(
+      `/c/portal/layout_page_template/export_layout_page_template_entries?groupId=${groupId}`,
+      { auth: 'oauth' }
+    ).then((response) => response.buffer());
+  },
+
+  async importZip(zip: JSZip, groupId: string): Promise<Record<string, any>> {
+    const tmpZip = createTemporaryFile();
+
+    await writeZip(zip, tmpZip.name);
+
+    return this._postMultipartFormData<Record<string, any>>(
+      '/c/portal/fragment/import_fragment_entries',
+      {
+        file: fs.createReadStream(tmpZip.name),
+        groupId,
+      },
+      {
+        auth: 'oauth',
+      }
+    ).finally(() => {
+      tmpZip.removeCallback();
+    });
+  },
+
+  async renderCompositionPreview(
+    groupId: string,
+    definition: Record<string, any>
+  ): Promise<string> {
+    return this.renderPageDefinitionPreview(groupId, {
+      pageElement: definition,
+    });
+  },
+
+  async renderFragmentPreview(
+    groupId: string,
+    html: string,
+    css: string,
+    js: string,
+    configuration: string
+  ): Promise<string> {
+    return this._postMultipartFormData(
+      '/c/portal/fragment/render_fragment_entry',
+      {
+        groupId,
+        html,
+        css,
+        js,
+        configuration,
+      },
+      {
+        auth: 'oauth',
+      }
+    );
+  },
+
+  async renderPageDefinitionPreview(
+    groupId: string,
+    definition: Record<string, any>
+  ): Promise<string> {
+    return this._rawRequest(
+      `/o/headless-admin-content/v1.0/sites/${groupId}/page-definitions/preview`,
+      {
+        method: 'POST',
+        body: JSON.stringify(definition),
+        headers: {
+          auth: 'basic',
+          Accept: 'text/html',
+        },
+      }
+    ).then((response) => response.text());
+  },
+
+  async _rawRequest(
+    url: string,
+    options: RequestInit & CustomOptions
+  ): Promise<Response> {
+    if (process.env.NODE_ENV === 'test') {
+      throw new Error(`Requests not available during testing (${url})`);
+    }
+
+    // Refresh oauth token
+
+    if (
+      this._oauthToken &&
+      this._oauthToken.refreshToken &&
+      this._oauthToken.expirationDate < new Date()
+    ) {
+      this._oauthToken = {
+        accessToken: '',
+        refreshToken: '',
+        expirationDate: new Date('1991-1-1'),
+      };
+
+      try {
+        const oauthToken = await this._postMultipartFormData<IServerOauthToken>(
+          '/o/oauth2/token',
+          {
+            client_id: 'FragmentRenderer',
+            grant_type: 'refresh_token',
+            refresh_token: this._oauthToken.refreshToken,
+          }
+        );
+
+        this.init(this._host, this._basicAuthToken, oauthToken);
+      } catch (_) {}
+    }
+
+    // Execute request
+
+    const fetchOptions = { ...options };
+
+    if (fetchOptions.auth === 'basic') {
+      if (!this._basicAuthToken) {
+        throw new Error(
+          `${url} needs basic authentication, but its not available`
+        );
+      }
+
+      fetchOptions.headers = {
+        ...(fetchOptions.headers || {}),
+        Authorization: `Basic ${this._basicAuthToken}`,
+      };
+    } else if (fetchOptions.auth === 'oauth') {
+      if (!this._oauthToken || !this._oauthToken.accessToken) {
+        throw new Error(
+          `${url} needs OAuth authentication, but its not available`
+        );
+      }
+
+      fetchOptions.headers = {
+        ...(fetchOptions.headers || {}),
+        Authorization: `Bearer ${this._oauthToken.accessToken}`,
+      };
+    }
+
+    delete fetchOptions.auth;
+
+    return fetch(`${this._host}${url}`, fetchOptions);
+  },
+
+  async _request<T = Record<string, any> | string>(
+    url: string,
+    options: RequestInit & CustomOptions
+  ): Promise<T> {
+    const response = await this._rawRequest(url, options);
+
+    let responseBody;
+
+    try {
+      responseBody = await response.clone().json();
+    } catch (_) {
+      responseBody = await response.clone().text();
     }
 
     if (typeof responseBody === 'object') {
@@ -130,551 +597,34 @@ const api = {
       }
     }
 
-    if (response.statusCode >= 400) {
-      throw new Error(`${response.statusCode} ${response.body}`);
+    if (response.status >= 400) {
+      throw new Error(`${response.status} ${JSON.stringify(responseBody)}`);
     }
 
     return responseBody as T;
   },
 
-  get<T>(
-    url: string,
-    queryParameters: Record<string, string> = {},
-    options: Record<string, any> = {}
-  ): Promise<T> {
-    const queryString = Object.entries(queryParameters)
-      .map(([key, value]) => `${key}=${value}`)
-      .join('&');
-
-    return this.request('GET', `${url}?${queryString}`, options);
-  },
-
-  postForm<T>(
+  _postMultipartFormData<T>(
     url: string,
     form: Record<string, any>,
-    options?: Record<string, any>
+    options: RequestInit & CustomOptions = {}
   ): Promise<T> {
-    return this.request('POST', url, { form, ...options });
-  },
-
-  postFormData<T>(
-    url: string,
-    formData: Record<string, any>,
-    options: Record<string, any> = {}
-  ): Promise<T> {
-    return this.request('POST', url, { formData, ...options });
-  },
-
-  getOAuthToken(
-    username: string,
-    password: string
-  ): Promise<IServerOauthToken> {
-    return this.postForm('/o/oauth2/token', {
-      grant_type: 'password', // eslint-disable-line camelcase
-      client_id: 'FragmentRenderer', // eslint-disable-line camelcase
-      username,
-      password,
-    });
-  },
-
-  async refreshOAuthToken(): Promise<void> {
-    if (this._oauthToken.expirationDate < new Date()) {
-      try {
-        const oauthToken = await this.postForm<IServerOauthToken>(
-          '/o/oauth2/token',
-          {
-            client_id: 'FragmentRenderer', // eslint-disable-line camelcase
-            grant_type: 'refresh_token', // eslint-disable-line camelcase
-            refresh_token: this._oauthToken.refreshToken, // eslint-disable-line camelcase
-          }
-        );
-
-        this.init(this._host, this._basicAuthToken, oauthToken);
-      } catch (_) {
-        this._oauthToken = {
-          accessToken: '',
-          refreshToken: '',
-          expirationDate: new Date('1991-1-1'),
-        };
-      }
-    }
-  },
-
-  async checkAuthentication(): Promise<void> {
-    await this.postFormData(
-      '/api/jsonws/user/get-current-user',
-      {},
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-
-    if (this._oauthToken.accessToken) {
-      await this.postFormData(
-        '/api/jsonws/user/get-current-user',
-        {},
-        {
-          headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` },
-        }
-      );
-    }
-  },
-
-  getCompanies(): Promise<ICompany[]> {
-    return this.postFormData(
-      '/api/jsonws/company/get-companies',
-      {},
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-  },
-
-  getStagingGroups(companyId: string): Promise<ISiteGroup[]> {
-    return this.postFormData(
-      `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/false`,
-      {},
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-  },
-
-  getSiteGroups(companyId: string): Promise<ISiteGroup[]> {
-    return this.postFormData(
-      `/api/jsonws/group/get-groups/company-id/${companyId}/parent-group-id/0/site/true`,
-      {},
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-  },
-
-  getFragmentEntries(
-    groupId: string,
-    fragmentCollectionId: string,
-    name?: string
-  ): Promise<IServerFragment[]> {
-    const formData: IGetFragmentEntriesOptions = {
-      groupId,
-      fragmentCollectionId,
-      status: 0,
-      start: -1,
-      end: -1,
-    };
-
-    if (name) {
-      formData.name = name;
-    }
-
-    return this.postFormData(
-      '/api/jsonws/fragment.fragmententry/get-fragment-entries',
-      formData,
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-  },
-
-  getFragmentCompositions(
-    groupId: string,
-    fragmentCollectionId: string
-  ): Promise<IServerFragmentComposition[]> {
-    const formData = {
-      groupId,
-      fragmentCollectionId,
-      start: -1,
-      end: -1,
-    };
-
-    return this.postFormData<IServerFragmentComposition[]>(
-      '/api/jsonws/fragment.fragmentcomposition/get-fragment-compositions',
-      formData,
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    ).catch(() => {
-      return [];
-    });
-  },
-
-  getFragmentCollections(
-    groupId: string,
-    name?: string
-  ): Promise<IServerCollection[]> {
-    const formData: {
-      groupId: string;
-      start: number;
-      end: number;
-      name?: string;
-    } = {
-      groupId,
-      start: -1,
-      end: -1,
-    };
-
-    if (name) {
-      formData.name = name;
-    }
-
-    return this.postFormData(
-      '/api/jsonws/fragment.fragmentcollection/get-fragment-collections',
-      formData,
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-  },
-
-  updateFragmentCollection(
-    fragmentCollectionId: string,
-    name: string,
-    description = ''
-  ): Promise<void> {
-    return this.postFormData(
-      '/api/jsonws/fragment.fragmentcollection/update-fragment-collection',
-      {
-        fragmentCollectionId,
-        description,
-        name,
-      },
-      {
-        headers: {
-          Authorization: `Basic ${this._basicAuthToken}`,
-        },
-      }
-    );
-  },
-
-  addFragmentCollection(
-    groupId: string,
-    fragmentCollectionKey: string,
-    name: string,
-    description = ''
-  ): Promise<void> {
-    return this.postFormData(
-      '/api/jsonws/fragment.fragmentcollection/add-fragment-collection',
-      {
-        groupId,
-        fragmentCollectionKey,
-        name,
-        description,
-      },
-      {
-        headers: {
-          Authorization: `Basic ${this._basicAuthToken}`,
-        },
-      }
-    );
-  },
-
-  updateFragmentEntry(
-    fragmentEntryId: string,
-    {
-      configuration,
-      css,
-      html,
-      js,
-      name,
-      previewFileEntryId = 0,
-      status,
-    }: {
-      configuration: string;
-      css: string;
-      html: string;
-      js: string;
-      name: string;
-      previewFileEntryId?: number;
-      status: number;
-    }
-  ): Promise<void> {
-    return this.postFormData(
-      '/api/jsonws/fragment.fragmententry/update-fragment-entry',
-      {
-        fragmentEntryId,
-        status,
-        name,
-        html,
-        css,
-        js,
-        configuration,
-        previewFileEntryId,
-      },
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-  },
-
-  async uploadThumbnail(
-    thumbnail: Buffer,
-    groupId: string,
-    fragmentEntryKey: string,
-    previewFileEntryId = '0'
-  ): Promise<number> {
-    const bytes = JSON.stringify([...thumbnail]);
-    const filename = `${groupId}_${fragmentEntryKey}_thumbnail`;
-
-    let fileEntry: number;
-
-    const repository = await this.postFormData<{
-      repositoryId: string;
-      dlFolderId: string;
-    }>(
-      '/api/jsonws/repository/get-repository',
-      {
-        groupId,
-        portletId: FRAGMENTS_PORTLET_ID,
-      },
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    )
-      .then((response) => response)
-      .catch(async () => {
-        const classNameId = await this.postFormData<{ classNameId: string }>(
-          '/api/jsonws/classname/fetch-class-name',
-          {
-            value: PORTLET_FILE_REPOSITORY,
-          },
-          {
-            headers: { Authorization: `Basic ${this._basicAuthToken}` },
-          }
-        ).then((response) => response.classNameId);
-
-        return this.postFormData<{
-          repositoryId: string;
-          dlFolderId: string;
-        }>(
-          '/api/jsonws/repository/add-repository',
-          {
-            groupId,
-            classNameId,
-            parentFolderId: 0,
-            name: FRAGMENTS_PORTLET_ID,
-            description: '',
-            portletId: FRAGMENTS_PORTLET_ID,
-            typeSettingsProperties: JSON.stringify({}),
-          },
-          {
-            headers: { Authorization: `Basic ${this._basicAuthToken}` },
-          }
-        ).then((response) => response);
-      });
-
-    if (Number(previewFileEntryId) > 0) {
-      fileEntry = await this.postFormData<{ fileEntryId: number }>(
-        '/api/jsonws/dlapp/update-file-entry',
-        {
-          fileEntryId: previewFileEntryId,
-          sourceFileName: filename,
-          mimeType: mime.lookup(filename),
-          title: filename,
-          description: '',
-          changeLog: '',
-          dlVersionNumberIncrease: 'NONE',
-          bytes,
-        },
-        {
-          headers: { Authorization: `Basic ${this._basicAuthToken}` },
-        }
-      ).then((response) => response.fileEntryId);
-    } else {
-      fileEntry = await this.postFormData<{ fileEntryId: number }>(
-        '/api/jsonws/dlapp/add-file-entry',
-        {
-          repositoryId: repository.repositoryId,
-          folderId: repository.dlFolderId,
-          sourceFileName: filename,
-          mimeType: mime.lookup(filename),
-          title: filename,
-          description: '',
-          changeLog: '',
-          bytes,
-        },
-        {
-          headers: { Authorization: `Basic ${this._basicAuthToken}` },
-        }
-      ).then((response) => response.fileEntryId);
-    }
-
-    return fileEntry;
-  },
-
-  addFragmentEntry(
-    groupId: string,
-    fragmentCollectionId: string,
-    fragmentEntryKey: string,
-    {
-      configuration,
-      css,
-      html,
-      js,
-      name,
-      previewFileEntryId = 0,
-      status,
-      type,
-    }: {
-      configuration: string;
-      css: string;
-      html: string;
-      js: string;
-      name: string;
-      previewFileEntryId?: number;
-      status: number;
-      type: number;
-    }
-  ): Promise<IServerFragment> {
-    return this.postFormData(
-      '/api/jsonws/fragment.fragmententry/add-fragment-entry',
-      {
-        fragmentCollectionId,
-        fragmentEntryKey,
-        groupId,
-        status,
-        name,
-        type,
-        html,
-        css,
-        js,
-        configuration,
-        previewFileEntryId,
-      },
-      {
-        headers: { Authorization: `Basic ${this._basicAuthToken}` },
-      }
-    );
-  },
-
-  async exportZip(groupId: string): Promise<Buffer> {
-    await this.refreshOAuthToken();
-
-    return new Promise((resolve, reject) => {
-      request(
-        `${this._host}/c/portal/layout_page_template/export_layout_page_template_entries?groupId=${groupId}`,
-        {
-          headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` },
-          encoding: null,
-        },
-        (error, response, body) => {
-          if (error) {
-            reject(error);
-          }
-
-          resolve(body);
-        }
-      );
-    });
-  },
-
-  async importZip(zip: JSZip, groupId: string): Promise<Record<string, any>> {
-    await this.refreshOAuthToken();
-
     const formData = new FormData();
-    const tmpZip = createTemporaryFile();
 
-    await writeZip(zip, tmpZip.name);
+    Object.entries(form).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
 
-    formData.append('file', fs.createReadStream(tmpZip.name));
-    formData.append('groupId', groupId);
-
-    const params = parseUrl(
-      `${this._host}/c/portal/fragment/import_fragment_entries`
-    );
-
-    const options = {
-      host: params.hostname,
-      path: params.pathname,
-      port: params.port,
-      protocol: params.protocol,
-      headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` },
+    return this._request<T>(url, {
+      body: formData,
       method: 'POST',
-    };
+      ...options,
 
-    return new Promise((resolve, reject) => {
-      formData.submit(options as SubmitOptions, (error, response) => {
-        tmpZip.removeCallback();
-
-        if (error) {
-          reject(error);
-        } else if (
-          !response.statusCode ||
-          response.statusCode < 200 ||
-          response.statusCode >= 300
-        ) {
-          reject(new Error('statusCode=' + response.statusCode));
-        } else {
-          let body: Buffer[] = [];
-
-          response.on('data', (chunk: Buffer) => {
-            body.push(chunk);
-          });
-
-          response.on('end', () => {
-            try {
-              body = JSON.parse(Buffer.concat(body).toString());
-            } catch (e) {
-              reject(e);
-
-              return;
-            }
-
-            resolve((body as unknown) as Record<string, any>);
-          });
-        }
-      });
-    });
-  },
-
-  async renderCompositionPreview(
-    groupId: string,
-    definition: Record<string, any>
-  ): Promise<string> {
-    return this.renderPageDefinitionPreview(groupId, {
-      pageElement: definition,
-    });
-  },
-
-  async renderFragmentPreview(
-    groupId: string,
-    html: string,
-    css: string,
-    js: string,
-    configuration: string
-  ): Promise<string> {
-    await this.refreshOAuthToken();
-
-    return this.postFormData(
-      '/c/portal/fragment/render_fragment_entry',
-      {
-        groupId,
-        html,
-        css,
-        js,
-        configuration,
+      headers: {
+        ...formData.getHeaders(),
+        ...(options.headers || {}),
       },
-      {
-        headers: { Authorization: `Bearer ${this._oauthToken.accessToken}` },
-      }
-    );
-  },
-
-  async renderPageDefinitionPreview(
-    groupId: string,
-    definition: Record<string, any>
-  ): Promise<string> {
-    return this.request(
-      'POST',
-      `/o/headless-admin-content/v1.0/sites/${groupId}/page-definitions/preview`,
-      {
-        body: definition,
-        headers: {
-          Accept: 'text/html',
-          Authorization: `Basic ${this._basicAuthToken}`,
-        },
-        json: true,
-      }
-    );
+    });
   },
 };
 
