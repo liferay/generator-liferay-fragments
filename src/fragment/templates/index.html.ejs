@@ -1,11 +1,13 @@
-<%_ if (useDataLfrEditables) { _%><div class="<%= fragmentSlug %>">
+<div class="<%= fragmentSlug %>"><%_ if (useDataLfrEditables) { _%>
   <h1 data-lfr-editable-id="title" data-lfr-editable-type="text">
     <%= fragmentName %>
   </h1>
-</div><%_ } else if (fragmentType == 'component') { %><div class="<%= fragmentSlug %>">
+<%_ } else if (fragmentType == 'component') { %>
   <h1>
     <lfr-editable id="title" type="text">
       <%= fragmentName %>
     </lfr-editable>
   </h1>
-</div><%_ } %>
+<%_ } else { %>
+  Loading...
+<%_ } %></div>
