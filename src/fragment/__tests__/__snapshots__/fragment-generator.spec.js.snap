@@ -13,8 +13,7 @@ exports[`fragment-generator generates a new fragment 1`] = `
 `;
 
 exports[`fragment-generator generates a new fragment 2`] = `
-"<div class=\\"sample-fragment\\">
-  <h1 data-lfr-editable-id=\\"title\\" data-lfr-editable-type=\\"text\\">
+"<div class=\\"sample-fragment\\">  <h1 data-lfr-editable-id=\\"title\\" data-lfr-editable-type=\\"text\\">
     Sample Fragment
   </h1>
 </div>
@@ -47,8 +46,7 @@ exports[`fragment-generator generates new features if supported 1`] = `
 `;
 
 exports[`fragment-generator generates new features if supported 2`] = `
-"<div class=\\"sample-fragment\\">
-  <h1 data-lfr-editable-id=\\"title\\" data-lfr-editable-type=\\"text\\">
+"<div class=\\"sample-fragment\\">  <h1 data-lfr-editable-id=\\"title\\" data-lfr-editable-type=\\"text\\">
     Sample Fragment
   </h1>
 </div>
