@@ -23,7 +23,7 @@ export default class extends CustomGenerator {
       },
     ]);
 
-    if (this.hasValue(ADD_DEPLOYMENT_DESCRIPTOR_VAR)) {
+    if (this.getValue(ADD_DEPLOYMENT_DESCRIPTOR_VAR)) {
       await this.ask([
         {
           type: 'input',
