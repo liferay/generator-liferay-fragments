@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Liferay Issues
     url: https://issues.liferay.com/secure/CreateIssue.jspa
-    about: >
+    about: |
       Please use Liferay issues platform to report bugs.
       - Issue Type: Bug, Feature Request, ...
       - Project: "PUBLIC - Liferay Portal Community Edition"
