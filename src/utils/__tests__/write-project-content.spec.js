@@ -11,7 +11,7 @@ const {
 const { createTemporaryDirectory } = require('../temporary');
 
 describe('utils/write-project-content', () => {
-  const projectCollections = JSON.parse(
+  JSON.parse(
     fs.readFileSync(
       path.join(__dirname, 'assets', 'project-collection.json'),
       'utf-8'
