@@ -7,6 +7,7 @@ import {
   ICollection,
   IFragment,
   IFragmentComposition,
+  IPageTemplate,
   IProject,
 } from '../../../types';
 import { assertProjectContent, assertValidPath } from '../assert';
@@ -51,6 +52,17 @@ export default async function writeProjectContent(
       )
     )
   );
+
+  if (projectContent.pageTemplates) {
+    await Promise.all(
+      projectContent.pageTemplates.map((pageTemplate) =>
+        _writePageTemplate(
+          path.resolve(projectBasePath, 'src', pageTemplate.slug),
+          pageTemplate
+        )
+      )
+    );
+  }
 }
 
 const _updateFile = async (filePath: string, content: string | Buffer) => {
@@ -178,3 +190,22 @@ const _writeCollection = async (
     ...fragmentCompositions,
   ]);
 };
+
+const _writePageTemplate = async (
+  pageTemplateBasePath: string,
+  pageTemplate: IPageTemplate
+) => {
+  mkdirp.sync(pageTemplateBasePath);
+
+  await _updateFile(
+    path.resolve(pageTemplateBasePath, `${pageTemplate.metadata.type}.json`),
+    pageTemplate.metadata.pageTemplateData
+  );
+
+  await _updateFile(
+    path.resolve(pageTemplateBasePath, 'page-definition.json'),
+    pageTemplate.definitionData
+  );
+
+};
+
