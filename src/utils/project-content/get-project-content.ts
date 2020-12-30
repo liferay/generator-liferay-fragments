@@ -194,12 +194,26 @@ function _getCollectionFragmentCompositions(
 }
 
 function _getPageTemplates(basePath: string): IPageTemplate[] {
+  const displayPageTemplates = _getPageTemplatesByType(basePath, 'display-page-template');
+  const pageTemplates = _getPageTemplatesByType(basePath, 'page-template');
+  const masterPages = _getPageTemplatesByType(basePath, 'master-page');
+
+  return Array.of(
+     ...displayPageTemplates,
+     ...pageTemplates,
+     ...masterPages
+  );
+}
+
+function _getPageTemplatesByType(basePath: string, type: 'display-page-template' | 'page-template' | 'master-page'): IPageTemplate[] {
+  const pageTemplateFileName = `${type}.json`;
+
   return glob
-    .sync(path.join(basePath, 'src', '*', 'page-template.json'))
+    .sync(path.join(basePath, 'src', '*', pageTemplateFileName))
     .map((collectionJSON: string) => path.resolve(collectionJSON, '..'))
     .filter((directory) => {
       try {
-        _readJSONSync(path.resolve(directory, 'page-template.json'));
+        _readJSONSync(path.resolve(directory, pageTemplateFileName));
 
         return true;
       } catch (_) {
@@ -207,19 +221,20 @@ function _getPageTemplates(basePath: string): IPageTemplate[] {
       }
     })
     .map((directory: string) => {
-      const metadata = _readJSONSync<IPageTemplateMetadata>(
-        path.resolve(directory, 'page-template.json')
-      );
+      const pageTemplatePath = path.resolve(directory, pageTemplateFileName);
+      const metadata = _readJSONSync<IPageTemplateMetadata>(pageTemplatePath);
       const slug = path.basename(directory);
 
       return {
         slug,
         metadata: {
           name: metadata.name,
+          pageTemplateData: fs.readFileSync(pageTemplatePath, 'utf-8'),
           pageTemplateDefinitionPath: path.resolve(
             directory,
             'page-definition.json'
           ),
+          type,
         },
         definitionData: JSON.stringify(
           _readJSONSync(path.resolve(directory, 'page-definition.json'))
