@@ -89,8 +89,10 @@ export interface ICompany {
 }
 
 export interface IPageTemplateMetadata {
-  pageTemplateDefinitionPath: string;
   name: string;
+  pageTemplateData: string;
+  pageTemplateDefinitionPath: string;
+  type: 'display-page-template' | 'page-template' | 'master-page';
 }
 
 export interface IPageTemplate {
