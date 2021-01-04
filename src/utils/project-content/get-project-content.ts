@@ -12,6 +12,7 @@ import {
   IPageTemplate,
   IPageTemplateMetadata,
   IProject,
+  PageTemplateType,
 } from '../../../types';
 
 export default function getProjectContent(basePath: string): IProject {
@@ -194,18 +195,20 @@ function _getCollectionFragmentCompositions(
 }
 
 function _getPageTemplates(basePath: string): IPageTemplate[] {
-  const displayPageTemplates = _getPageTemplatesByType(basePath, 'display-page-template');
+  const displayPageTemplates = _getPageTemplatesByType(
+    basePath,
+    'display-page-template'
+  );
   const pageTemplates = _getPageTemplatesByType(basePath, 'page-template');
   const masterPages = _getPageTemplatesByType(basePath, 'master-page');
 
-  return Array.of(
-     ...displayPageTemplates,
-     ...pageTemplates,
-     ...masterPages
-  );
+  return Array.of(...displayPageTemplates, ...pageTemplates, ...masterPages);
 }
 
-function _getPageTemplatesByType(basePath: string, type: 'display-page-template' | 'page-template' | 'master-page'): IPageTemplate[] {
+function _getPageTemplatesByType(
+  basePath: string,
+  type: PageTemplateType
+): IPageTemplate[] {
   const pageTemplateFileName = `${type}.json`;
 
   return glob

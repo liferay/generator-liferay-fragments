@@ -88,11 +88,16 @@ export interface ICompany {
   companyId: string;
 }
 
+export type PageTemplateType =
+  | 'display-page-template'
+  | 'page-template'
+  | 'master-page';
+
 export interface IPageTemplateMetadata {
   name: string;
   pageTemplateData: string;
   pageTemplateDefinitionPath: string;
-  type: 'display-page-template' | 'page-template' | 'master-page';
+  type: PageTemplateType;
 }
 
 export interface IPageTemplate {
