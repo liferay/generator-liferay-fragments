@@ -202,7 +202,7 @@ function _getPageTemplates(basePath: string): IPageTemplate[] {
   const pageTemplates = _getPageTemplatesByType(basePath, 'page-template');
   const masterPages = _getPageTemplatesByType(basePath, 'master-page');
 
-  return Array.of(...displayPageTemplates, ...pageTemplates, ...masterPages);
+  return [...displayPageTemplates, ...pageTemplates, ...masterPages];
 }
 
 function _getPageTemplatesByType(
