@@ -11,13 +11,6 @@ const {
 const { createTemporaryDirectory } = require('../temporary');
 
 describe('utils/write-project-content', () => {
-  JSON.parse(
-    fs.readFileSync(
-      path.join(__dirname, 'assets', 'project-collection.json'),
-      'utf-8'
-    )
-  );
-
   getTestFixtures().forEach((projectPath) => {
     it(`writes ${projectPath} inside a given path`, async () => {
       const projectContent = getProjectContent(projectPath);
