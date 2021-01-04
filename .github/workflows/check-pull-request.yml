@@ -25,8 +25,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node: [ 10 ]
-        os: [ ubuntu-latest ]
+        node: [10]
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node }}

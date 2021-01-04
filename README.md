@@ -20,8 +20,8 @@ them in your browser immediately.
 
 ## Installation
 
-First, install *Yeoman* and *generator-liferay-fragments* using *yarn*
-(we assume you have pre-installed *node.js*).
+First, install _Yeoman_ and _generator-liferay-fragments_ using _yarn_
+(we assume you have pre-installed _node.js_).
 
 ```bash
 yarn global add yo generator-liferay-fragments
@@ -61,25 +61,25 @@ This is a sample directory structure with all the elements that can be managed
 with the Toolkit:
 
 - `collection-a/`
-    - `collection.json`
-    - `fragment-1/`
-        - `fragment.json`
-        - `configuration.json`
-        - `index.html`
-        - `styles.css`
-        - `main.js`
-    - `fragment-composition-1/`
-        - `fragment-composition.json`
-        - `definition.json`
+  - `collection.json`
+  - `fragment-1/`
+    - `fragment.json`
+    - `configuration.json`
+    - `index.html`
+    - `styles.css`
+    - `main.js`
+  - `fragment-composition-1/`
+    - `fragment-composition.json`
+    - `definition.json`
 - `master-page-a/`
-    - `master-page.json`
-    - `page-definition.json`
+  - `master-page.json`
+  - `page-definition.json`
 - `page-template-a/`
-    - `page-template.json`
-    - `page-definition.json`
+  - `page-template.json`
+  - `page-definition.json`
 - `display-page-template-a/`
-    - `display-page-template.json`
-    - `page-definition.json`
+  - `display-page-template.json`
+  - `page-definition.json`
 
 ### 📄 Creating New Fragments
 
