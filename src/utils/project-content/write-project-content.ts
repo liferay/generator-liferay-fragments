@@ -206,6 +206,4 @@ const _writePageTemplate = async (
     path.resolve(pageTemplateBasePath, 'page-definition.json'),
     pageTemplate.definitionData
   );
-
 };
-
