@@ -22,7 +22,7 @@ export default async function importProject(
       groupId
     );
 
-    if (response.error) {
+    if (typeof response === 'string' || response.error) {
       throw new Error('Zip import error');
     }
 

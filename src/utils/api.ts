@@ -410,7 +410,10 @@ const api = {
     ).then((response) => response.buffer());
   },
 
-  async importZip(zip: JSZip, groupId: string): Promise<Record<string, any>> {
+  async importZip(
+    zip: JSZip,
+    groupId: string
+  ): Promise<Record<string, any> | string> {
     const tmpZip = createTemporaryFile();
 
     await writeZip(zip, tmpZip.name);
@@ -418,7 +421,7 @@ const api = {
     return this._postMultipartFormData<Record<string, any>>(
       '/c/portal/fragment/import_fragment_entries',
       {
-        file: fs.createReadStream(tmpZip.name),
+        file: fs.readFileSync(tmpZip.name),
         groupId,
       },
       {
