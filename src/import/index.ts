@@ -78,13 +78,18 @@ export default class extends AuthGenerator {
         getProjectContent(this.destinationPath())
       );
 
-      this.log('Importing project...');
+      try {
+        this.log('Importing project...');
 
-      this._logImportResults(
-        await importProject(builtProjectContent, group.value)
-      );
+        this._logImportResults(
+          await importProject(builtProjectContent, group.value)
+        );
 
-      this.log('Project imported', { level: 'success' });
+        this.log('Project imported', { level: 'success' });
+      } catch (error) {
+        this.log('There was an error importing project', { level: 'error' });
+        console.log(error);
+      }
     }
   }
 
