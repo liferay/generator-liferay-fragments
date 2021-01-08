@@ -286,7 +286,11 @@ const api = {
       }
     )
       .then((response) => response)
-      .catch(async () => {
+      .catch(async (error) => {
+        if (error.message.includes('No JSON web service action')) {
+          return null;
+        }
+
         const classNameId = await this._postMultipartFormData<{
           classNameId: string;
         }>(
@@ -318,6 +322,10 @@ const api = {
           }
         ).then((response) => response);
       });
+
+    if (!repository) {
+      return -1;
+    }
 
     if (Number(previewFileEntryId) > 0) {
       fileEntry = await this._postMultipartFormData<{ fileEntryId: number }>(
