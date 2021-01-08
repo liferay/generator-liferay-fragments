@@ -146,7 +146,7 @@ async function _importFragment(
     fragment
   );
 
-  if (fragment.thumbnail) {
+  if (fragment.thumbnail?.length) {
     previewFileEntryId = await api.uploadThumbnail(
       fragment.thumbnail,
       groupId,
