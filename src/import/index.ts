@@ -89,7 +89,10 @@ export default class extends AuthGenerator {
   }
 
   private _logImportResults(importResults: undefined | ImportResult[][]) {
-    importResults?.[0]?.forEach((result) => {
+    const [fragmentResults = [], pageTemplateResults = []] =
+      importResults || [];
+
+    fragmentResults.forEach((result) => {
       switch (result.status) {
         case FRAGMENT_IMPORT_STATUS.IMPORTED: {
           this.log(`✔ Fragment ${result.name} imported`, { level: 'success' });
@@ -132,7 +135,7 @@ export default class extends AuthGenerator {
       }
     });
 
-    importResults?.[1]?.forEach((result) => {
+    pageTemplateResults.forEach((result) => {
       switch (result.status) {
         case PAGE_TEMPLATE_IMPORT_STATUS.IMPORTED: {
           this.log(`✔ Page template ${result.name} imported`, {
