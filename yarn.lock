@@ -3370,11 +3370,6 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-detect-conflict@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/detect-conflict/-/detect-conflict-1.0.1.tgz#088657a66a961c05019db7c4230883b1c6b4176e"
-  integrity sha1-CIZXpmqWHAUBnbfEIwiDsca0F24=
-
 detect-newline@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
@@ -9370,7 +9365,7 @@ yeoman-assert@3.1.1:
   resolved "https://registry.yarnpkg.com/yeoman-assert/-/yeoman-assert-3.1.1.tgz#9f6fa0ecba7dd007c40f579668cb5dda18c79343"
   integrity sha512-bCuLb/j/WzpvrJZCTdJJLFzm7KK8IYQJ3+dF9dYtNs2CUYyezFJDuULiZ2neM4eqjf45GN1KH/MzCTT3i90wUQ==
 
-yeoman-environment@^2.10.0, yeoman-environment@^2.3.4, yeoman-environment@^2.9.5:
+yeoman-environment@^2.10.0, yeoman-environment@^2.9.5:
   version "2.10.3"
   resolved "https://registry.yarnpkg.com/yeoman-environment/-/yeoman-environment-2.10.3.tgz#9d8f42b77317414434cc0e51fb006a4bdd54688e"
   integrity sha512-pLIhhU9z/G+kjOXmJ2bPFm3nejfbH+f1fjYRSOteEXDBrv1EoJE/e+kuHixSXfCYfTkxjYsvRaDX+1QykLCnpQ==
@@ -9395,38 +9390,7 @@ yeoman-environment@^2.10.0, yeoman-environment@^2.3.4, yeoman-environment@^2.9.5
     untildify "^3.0.3"
     yeoman-generator "^4.8.2"
 
-yeoman-generator@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/yeoman-generator/-/yeoman-generator-4.0.1.tgz#6454056e451ebdfe4ac69927343ae37086bbecb0"
-  integrity sha512-QFSHcJHfDwqNdcr5RPSCPLnRzVpPuDWb6By2Uz77YByqBqvR/r9QGBucCl58hs5QJl4NFgLFgIHZoNDCJP1byA==
-  dependencies:
-    async "^2.6.2"
-    chalk "^2.4.2"
-    cli-table "^0.3.1"
-    cross-spawn "^6.0.5"
-    dargs "^6.1.0"
-    dateformat "^3.0.3"
-    debug "^4.1.1"
-    detect-conflict "^1.0.0"
-    error "^7.0.2"
-    find-up "^3.0.0"
-    github-username "^3.0.0"
-    istextorbinary "^2.5.1"
-    lodash "^4.17.11"
-    make-dir "^3.0.0"
-    mem-fs-editor "^6.0.0"
-    minimist "^1.2.0"
-    pretty-bytes "^5.2.0"
-    read-chunk "^3.2.0"
-    read-pkg-up "^5.0.0"
-    rimraf "^2.6.3"
-    run-async "^2.0.0"
-    shelljs "^0.8.3"
-    text-table "^0.2.0"
-    through2 "^3.0.1"
-    yeoman-environment "^2.3.4"
-
-yeoman-generator@^4.10.0, yeoman-generator@^4.8.2:
+yeoman-generator@4.12.0, yeoman-generator@^4.10.0, yeoman-generator@^4.8.2:
   version "4.12.0"
   resolved "https://registry.yarnpkg.com/yeoman-generator/-/yeoman-generator-4.12.0.tgz#512e783a38b004c49265e71826a09ff7f1939f4b"
   integrity sha512-lozwklVQHwUXMM1o8BgxEB8F5BB7vkHW4pjAo1Zt5sJ7FOlWhd6DJ4ZxJ2OK0w+gNYkY/ocPMkUV7DTz/uqEEg==
