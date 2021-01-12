@@ -74,7 +74,7 @@ Object {
   },
 
   \\"devDependencies\\": {
-    \\"generator-liferay-fragments\\": \\"1.8.1\\"
+    \\"generator-liferay-fragments\\": \\"1.8.2\\"
   }
 }
 ",
@@ -189,7 +189,7 @@ Object {
   },
 
   \\"devDependencies\\": {
-    \\"generator-liferay-fragments\\": \\"1.8.1\\"
+    \\"generator-liferay-fragments\\": \\"1.8.2\\"
   }
 }
 ",
@@ -358,7 +358,7 @@ Object {
   },
 
   \\"devDependencies\\": {
-    \\"generator-liferay-fragments\\": \\"1.8.1\\"
+    \\"generator-liferay-fragments\\": \\"1.8.2\\"
   }
 }
 ",
