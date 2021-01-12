@@ -7,7 +7,10 @@ import {
   IServerFragment,
 } from '../../types';
 import api from '../utils/api';
-import { FRAGMENT_IMPORT_STATUS } from '../utils/constants';
+import {
+  FRAGMENT_IMPORT_STATUS,
+  INVALID_FILE_ENTRY_ID,
+} from '../utils/constants';
 
 const FRAGMENT_TYPES = { component: 1, react: 2, section: 0 };
 const DEFAULT_FRAGMENT_TYPE = FRAGMENT_TYPES.section;
@@ -138,7 +141,7 @@ async function _importFragment(
   const type = _getFragmentTypeId(fragment.metadata.type);
   const fragmentEntryKey = fragment.slug;
   const status = 0;
-  let previewFileEntryId = 0;
+  let previewFileEntryId = INVALID_FILE_ENTRY_ID;
 
   let existingFragment = await _getExistingFragment(
     groupId,

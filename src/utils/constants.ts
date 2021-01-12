@@ -41,3 +41,5 @@ export const PAGE_TEMPLATE_IMPORT_STATUS = {
 
 export const PORTLET_FILE_REPOSITORY =
   'com.liferay.portal.repository.portletrepository.PortletRepository';
+
+export const INVALID_FILE_ENTRY_ID = 0;
