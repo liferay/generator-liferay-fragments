@@ -13,7 +13,11 @@ import {
   IServerOauthToken,
   ISiteGroup,
 } from '../../types';
-import { FRAGMENTS_PORTLET_ID, PORTLET_FILE_REPOSITORY } from './constants';
+import {
+  FRAGMENTS_PORTLET_ID,
+  INVALID_FILE_ENTRY_ID,
+  PORTLET_FILE_REPOSITORY,
+} from './constants';
 import { createTemporaryFile } from './temporary';
 import writeZip from './write-zip';
 
@@ -231,7 +235,7 @@ const api = {
       html,
       js,
       name,
-      previewFileEntryId = 0,
+      previewFileEntryId = INVALID_FILE_ENTRY_ID,
       status,
     }: {
       configuration: string;
@@ -324,7 +328,7 @@ const api = {
       });
 
     if (!repository) {
-      return -1;
+      return INVALID_FILE_ENTRY_ID;
     }
 
     if (Number(previewFileEntryId) > 0) {
