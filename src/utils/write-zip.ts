@@ -1,11 +1,10 @@
 import fs from 'fs';
 import JSZip from 'jszip';
+import mkdirp from 'mkdirp';
 import path from 'path';
 
 export default function writeZip(zip: JSZip, filePath: string): Promise<void> {
-  fs.mkdirSync(filePath.substring(0, filePath.lastIndexOf(path.sep)), {
-    recursive: true,
-  });
+  mkdirp.sync(filePath.substring(0, filePath.lastIndexOf(path.sep)));
 
   return new Promise((resolve) =>
     zip

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 import path from 'path';
 import util from 'util';
 
@@ -27,7 +28,7 @@ export default async function writeProjectContent(
     'projectContent must be a valid project object'
   );
 
-  fs.mkdirSync(path.resolve(projectBasePath, 'src'), { recursive: true });
+  mkdirp.sync(path.resolve(projectBasePath, 'src'));
 
   await _updateJSON(
     path.resolve(projectBasePath, 'package.json'),
@@ -65,9 +66,7 @@ export default async function writeProjectContent(
 }
 
 const _updateFile = async (filePath: string, content: string | Buffer) => {
-  fs.mkdirSync(filePath.substring(0, filePath.lastIndexOf(path.sep)), {
-    recursive: true,
-  });
+  mkdirp.sync(filePath.substring(0, filePath.lastIndexOf(path.sep)));
   await writeFilePromise(filePath, content);
 };
 
@@ -87,7 +86,7 @@ const _writeFragment = async (
   collection: ICollection,
   fragment: IFragment
 ) => {
-  fs.mkdirSync(fragmentBasePath, { recursive: true });
+  mkdirp.sync(fragmentBasePath);
 
   await _updateJSON(
     path.resolve(fragmentBasePath, 'fragment.json'),
@@ -138,7 +137,7 @@ const _writeFragmentComposition = async (
   collection: ICollection,
   fragmentComposition: IFragmentComposition
 ) => {
-  fs.mkdirSync(fragmentBasePath, { recursive: true });
+  mkdirp.sync(fragmentBasePath);
 
   await _updateJSON(
     path.resolve(fragmentBasePath, 'fragment-composition.json'),
@@ -160,7 +159,7 @@ const _writeCollection = async (
   collectionBasePath: string,
   collection: ICollection
 ) => {
-  fs.mkdirSync(path.resolve(collectionBasePath), { recursive: true });
+  mkdirp.sync(path.resolve(collectionBasePath));
 
   await _updateJSON(
     path.resolve(collectionBasePath, 'collection.json'),
@@ -196,7 +195,7 @@ const _writePageTemplate = async (
   pageTemplateBasePath: string,
   pageTemplate: IPageTemplate
 ) => {
-  fs.mkdirSync(pageTemplateBasePath, { recursive: true });
+  mkdirp.sync(pageTemplateBasePath);
 
   await _updateFile(
     path.resolve(pageTemplateBasePath, `${pageTemplate.metadata.type}.json`),
