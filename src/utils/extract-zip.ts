@@ -1,6 +1,5 @@
 import fs from 'fs';
 import JSZip from 'jszip';
-import mkdirp from 'mkdirp';
 import path from 'path';
 
 export const extractZip = async (
@@ -8,7 +7,7 @@ export const extractZip = async (
   destinationPath: string
 ): Promise<void> => {
   if (!fs.existsSync(destinationPath)) {
-    mkdirp.sync(destinationPath);
+    fs.mkdirSync(destinationPath, { recursive: true });
   } else if (!fs.statSync(destinationPath).isDirectory()) {
     throw new Error(`${destinationPath} exists and is not a directory`);
   }
@@ -20,7 +19,7 @@ export const extractZip = async (
     const directoryPath = path.dirname(filePath);
 
     if (!fs.existsSync(directoryPath)) {
-      mkdirp.sync(directoryPath, { recursive: true });
+      fs.mkdirSync(directoryPath, { recursive: true });
     }
 
     fs.writeFileSync(filePath, await data.async('nodebuffer'));
