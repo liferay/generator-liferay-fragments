@@ -1,4 +1,5 @@
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 import os from 'os';
 import path from 'path';
 import rimraf from 'rimraf';
@@ -13,7 +14,7 @@ let nextTemporaryId = 0;
 
 export function createTemporaryDirectory(): Element {
   const name = getTemporaryName();
-  fs.mkdirSync(name, { recursive: true });
+  mkdirp.sync(name);
 
   return {
     name,

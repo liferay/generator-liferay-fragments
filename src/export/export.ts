@@ -1,6 +1,6 @@
-import fs from 'fs';
 import glob from 'glob';
 import JSZip from 'jszip';
+import mkdirp from 'mkdirp';
 import ncp from 'ncp';
 import path from 'path';
 import rimraf from 'rimraf';
@@ -34,7 +34,7 @@ export default async function exportProject(
 
   try {
     await extractZip(new JSZip(await api.exportZip(groupId)), tmpDir.name);
-    fs.mkdirSync(tmpSrc);
+    mkdirp.sync(tmpSrc);
 
     // Move generated categories (fragments, page-templates...) to a
     // single src directory
