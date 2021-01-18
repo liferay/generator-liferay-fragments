@@ -53,7 +53,7 @@ export default class extends AuthGenerator {
             queuedUpdate = false;
 
             updatePromise = new Promise<IProject>((resolve) => {
-              this.logMessage('Building project...');
+              this.logMessage('Building project...', { newLine: true });
 
               buildProjectContent(
                 getProjectContent(this.destinationPath())
@@ -67,13 +67,16 @@ export default class extends AuthGenerator {
                 }
               );
 
-              this.logMessage('Project imported', { level: 'success' });
+              this.logMessage('Project imported', {
+                level: 'success',
+                newLine: true,
+              });
             });
           }
         });
       });
     } else {
-      this.logMessage('Building project...');
+      this.logMessage('Building project...', { newLine: true });
       const builtProjectContent = await buildProjectContent(
         getProjectContent(this.destinationPath())
       );
@@ -85,10 +88,14 @@ export default class extends AuthGenerator {
           await importProject(builtProjectContent, group.value)
         );
 
-        this.logMessage('Project imported', { level: 'success' });
+        this.logMessage('Project imported', {
+          level: 'success',
+          newLine: true,
+        });
       } catch (error) {
         this.logMessage('There was an error importing project', {
           level: 'error',
+          newLine: true,
         });
         console.log(error);
       }
