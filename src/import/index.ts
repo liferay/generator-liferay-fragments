@@ -58,47 +58,39 @@ export default class extends AuthGenerator {
               buildProjectContent(
                 getProjectContent(this.destinationPath())
               ).then(resolve);
-            }).then((builtProjectContent) => {
-              this.logMessage('Importing project...');
-
-              importProject(builtProjectContent, group.value).then(
-                (importResults) => {
-                  this._logImportResults(importResults);
-                }
-              );
-
-              this.logMessage('Project imported', {
-                level: 'success',
-                newLine: true,
-              });
+            }).then(async (builtProjectContent) => {
+              await this._importProject(group.value, builtProjectContent);
             });
           }
         });
       });
     } else {
       this.logMessage('Building project...', { newLine: true });
-      const builtProjectContent = await buildProjectContent(
-        getProjectContent(this.destinationPath())
+      await this._importProject(
+        group.value,
+        await buildProjectContent(getProjectContent(this.destinationPath()))
       );
+    }
+  }
 
-      try {
-        this.logMessage('Importing project...');
+  private async _importProject(
+    group: string,
+    projectContent: IProject
+  ): Promise<void> {
+    try {
+      this.logMessage('Importing project...');
+      this._logImportResults(await importProject(projectContent, group));
 
-        this._logImportResults(
-          await importProject(builtProjectContent, group.value)
-        );
-
-        this.logMessage('Project imported', {
-          level: 'success',
-          newLine: true,
-        });
-      } catch (error) {
-        this.logMessage('There was an error importing project', {
-          level: 'error',
-          newLine: true,
-        });
-        console.log(error);
-      }
+      this.logMessage('Project imported', {
+        level: 'success',
+        newLine: true,
+      });
+    } catch (error) {
+      this.logMessage('There was an error importing project', {
+        level: 'error',
+        newLine: true,
+      });
+      console.log(error);
     }
   }
 
