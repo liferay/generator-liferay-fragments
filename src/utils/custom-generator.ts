@@ -142,7 +142,7 @@ export default class CustomGenerator extends Generator {
     this._defaultValues[key] = value;
   }
 
-  log(message: string, options: Options = {}): void {
+  logMessage(message: string, options: Options = {}): void {
     if (process.env.NODE_ENV !== 'test') {
       let _message = message;
 

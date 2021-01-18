@@ -18,7 +18,7 @@ const PROJECT_SLUG_VAR = 'projectSlug';
 
 export default class AppGenerator extends CustomGenerator {
   async prompting(): Promise<void> {
-    this.log(`
+    this.logMessage(`
     __    ____________________  _____  __
    / /   /  _/ ____/ ____/ __ \\/   \\ \\/ /
   / /    / // /_  / __/ / /_/ / /| |\\  /
@@ -54,7 +54,7 @@ export default class AppGenerator extends CustomGenerator {
   }
 
   writing(): void {
-    this.log('Creating directory', { newLine: true });
+    this.logMessage('Creating directory', { newLine: true });
 
     this.copyFiles(this.destinationRoot(), ['src/.gitkeep']);
 
@@ -70,8 +70,8 @@ export default class AppGenerator extends CustomGenerator {
 
   async end(): Promise<void> {
     if (this.getValue(ADD_SAMPLE_CONTENT_VAR)) {
-      this.log('Adding sample content...', { newLine: true });
-      this.log(`Warning: some of these fragments are not compatible all
+      this.logMessage('Adding sample content...', { newLine: true });
+      this.logMessage(`Warning: some of these fragments are not compatible all
 portal versions, please check the generator documentation before using them:
 https://www.npmjs.com/package/generator-liferay-fragments#creating-new-fragments`);
 
@@ -124,7 +124,7 @@ https://www.npmjs.com/package/generator-liferay-fragments#creating-new-fragments
       );
     }
 
-    this.log('Running yarn...', { newLine: true });
+    this.logMessage('Running yarn...', { newLine: true });
 
     if (process.env.NODE_ENV !== 'test') {
       await execa.command('yarn', {
@@ -132,7 +132,7 @@ https://www.npmjs.com/package/generator-liferay-fragments#creating-new-fragments
       });
     }
 
-    this.log('Done!', { newLine: true, level: 'success' });
-    this.log("You're ready to create fragments.");
+    this.logMessage('Done!', { newLine: true, level: 'success' });
+    this.logMessage("You're ready to create fragments.");
   }
 }

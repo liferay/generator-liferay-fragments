@@ -105,14 +105,14 @@ export default class AuthGenerator extends CustomGenerator {
       },
     ]);
 
-    this.log('Checking connection...', { newLine: true });
+    this.logMessage('Checking connection...', { newLine: true });
 
     try {
       await this._wrapApi();
       await AuthGenerator._checkConnection();
-      this.log('Connection successful\n', { level: 'success' });
+      this.logMessage('Connection successful\n', { level: 'success' });
     } catch (error) {
-      this.log(
+      this.logMessage(
         'Connection unsuccessful,\n' +
           'please check your host information.\n\n' +
           `${error.toString()}\n`,
