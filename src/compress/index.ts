@@ -50,12 +50,12 @@ export default class extends CustomGenerator {
       }
     }
 
-    this.log('Building project...');
+    this.logMessage('Building project...');
     const projectContent = await buildProjectContent(
       getProjectContent(this.destinationPath())
     );
 
-    this.log('Generating zip file...');
+    this.logMessage('Generating zip file...');
     await writeZip(
       await compress(projectContent, {
         [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: !!this.getValue(
@@ -71,12 +71,12 @@ export default class extends CustomGenerator {
       path.join(this.destinationPath(), 'build', 'liferay-fragments.zip')
     );
 
-    this.log('build/liferay-fragments.zip file created', {
+    this.logMessage('build/liferay-fragments.zip file created', {
       newLine: true,
       level: 'success',
     });
 
-    this.log('Import them to your liferay-portal to start using them', {
+    this.logMessage('Import them to your liferay-portal to start using them', {
       level: 'success',
     });
   }

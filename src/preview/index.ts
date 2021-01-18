@@ -17,26 +17,28 @@ export default class extends AuthGenerator {
   async asking(): Promise<void> {
     await super.asking();
 
-    this.log('Checking site compatibility...', { newLine: true });
+    this.logMessage('Checking site compatibility...', { newLine: true });
 
     if (await this._checkPreviewCompatibility()) {
-      this.log('Found compatible Liferay Server', { level: 'success' });
+      this.logMessage('Found compatible Liferay Server', { level: 'success' });
 
       this._runExpressServer();
       this._runSocketServer();
 
       const watchPromise = this._watchChanges();
 
-      this.log('\nDevelopment server connected to liferay');
-      this.log('Visit preview URL and start developing to your fragments');
+      this.logMessage('\nDevelopment server connected to liferay');
+      this.logMessage(
+        'Visit preview URL and start developing to your fragments'
+      );
 
-      this.log(`Liferay Server URL: ${this.getHost()}`);
-      this.log(`Group ID: ${this.getGroupId()}`);
-      this.log(`Preview URL: http://localhost:${DEV_SERVER_PORT}`);
+      this.logMessage(`Liferay Server URL: ${this.getHost()}`);
+      this.logMessage(`Group ID: ${this.getGroupId()}`);
+      this.logMessage(`Preview URL: http://localhost:${DEV_SERVER_PORT}`);
 
       await watchPromise;
     } else {
-      this.log(
+      this.logMessage(
         '\nYour Liferay Server cannot generate fragment previews.' +
           '\nUpdate it to a more recent version to use this feature.' +
           '\nCheck your OAuth2 plugin version too, it should be >= 2.0.0.' +
@@ -148,7 +150,7 @@ export default class extends AuthGenerator {
 
         if (fragment && type === 'fragment') {
           if (fragment.metadata.type === 'react') {
-            this.log(
+            this.logMessage(
               'React based fragments do not support preview command (yet)',
               { level: 'error' }
             );

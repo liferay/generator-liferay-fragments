@@ -43,23 +43,23 @@ export default class extends AuthGenerator {
             await updatePromise;
 
             console.clear();
-            this.log(`Watching changes in ${watchPath}`);
-            this.log('Press Ctrl+C to stop watching\n');
-            this.log('Host', { data: host });
-            this.log('User', { data: user });
-            this.log('Company', { data: company.name });
-            this.log('Group', { data: group.name });
+            this.logMessage(`Watching changes in ${watchPath}`);
+            this.logMessage('Press Ctrl+C to stop watching\n');
+            this.logMessage('Host', { data: host });
+            this.logMessage('User', { data: user });
+            this.logMessage('Company', { data: company.name });
+            this.logMessage('Group', { data: group.name });
 
             queuedUpdate = false;
 
             updatePromise = new Promise<IProject>((resolve) => {
-              this.log('Building project...');
+              this.logMessage('Building project...');
 
               buildProjectContent(
                 getProjectContent(this.destinationPath())
               ).then(resolve);
             }).then((builtProjectContent) => {
-              this.log('Importing project...');
+              this.logMessage('Importing project...');
 
               importProject(builtProjectContent, group.value).then(
                 (importResults) => {
@@ -67,27 +67,29 @@ export default class extends AuthGenerator {
                 }
               );
 
-              this.log('Project imported', { level: 'success' });
+              this.logMessage('Project imported', { level: 'success' });
             });
           }
         });
       });
     } else {
-      this.log('Building project...');
+      this.logMessage('Building project...');
       const builtProjectContent = await buildProjectContent(
         getProjectContent(this.destinationPath())
       );
 
       try {
-        this.log('Importing project...');
+        this.logMessage('Importing project...');
 
         this._logImportResults(
           await importProject(builtProjectContent, group.value)
         );
 
-        this.log('Project imported', { level: 'success' });
+        this.logMessage('Project imported', { level: 'success' });
       } catch (error) {
-        this.log('There was an error importing project', { level: 'error' });
+        this.logMessage('There was an error importing project', {
+          level: 'error',
+        });
         console.log(error);
       }
     }
@@ -100,20 +102,22 @@ export default class extends AuthGenerator {
     fragmentResults.forEach((result) => {
       switch (result.status) {
         case FRAGMENT_IMPORT_STATUS.IMPORTED: {
-          this.log(`✔ Fragment ${result.name} imported`, { level: 'success' });
+          this.logMessage(`✔ Fragment ${result.name} imported`, {
+            level: 'success',
+          });
 
           break;
         }
 
         case FRAGMENT_IMPORT_STATUS.IMPORTED_DRAFT: {
-          this.log(
+          this.logMessage(
             `↷ Fragment ${result.name} imported as draft due to the following errors`,
             {
               level: 'info',
             }
           );
 
-          this.log(`ERROR: ${result.errorMessage}`, {
+          this.logMessage(`ERROR: ${result.errorMessage}`, {
             level: 'error',
           });
 
@@ -121,14 +125,14 @@ export default class extends AuthGenerator {
         }
 
         case FRAGMENT_IMPORT_STATUS.INVALID: {
-          this.log(
+          this.logMessage(
             `Fragment ${result.name} not imported due to the following errors`,
             {
               level: 'error',
             }
           );
 
-          this.log(`ERROR: ${result.errorMessage}`, {
+          this.logMessage(`ERROR: ${result.errorMessage}`, {
             level: 'error',
           });
 
@@ -143,7 +147,7 @@ export default class extends AuthGenerator {
     pageTemplateResults.forEach((result) => {
       switch (result.status) {
         case PAGE_TEMPLATE_IMPORT_STATUS.IMPORTED: {
-          this.log(`✔ Page template ${result.name} imported`, {
+          this.logMessage(`✔ Page template ${result.name} imported`, {
             level: 'success',
           });
 
@@ -151,7 +155,7 @@ export default class extends AuthGenerator {
         }
 
         case PAGE_TEMPLATE_IMPORT_STATUS.IGNORED: {
-          this.log(`↷ Page template ${result.name} ignored`, {
+          this.logMessage(`↷ Page template ${result.name} ignored`, {
             level: 'info',
           });
 
@@ -159,14 +163,14 @@ export default class extends AuthGenerator {
         }
 
         case PAGE_TEMPLATE_IMPORT_STATUS.INVALID: {
-          this.log(
+          this.logMessage(
             `Page template ${result.name} not imported due to the following errors`,
             {
               level: 'error',
             }
           );
 
-          this.log(`ERROR: ${result.errorMessage}`, {
+          this.logMessage(`ERROR: ${result.errorMessage}`, {
             level: 'error',
           });
 
