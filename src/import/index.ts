@@ -60,6 +60,7 @@ export default class extends AuthGenerator {
               ).then(resolve);
             }).then(async (builtProjectContent) => {
               await this._importProject(group.value, builtProjectContent);
+              this.logMessage('Watching for file changes...');
             });
           }
         });
