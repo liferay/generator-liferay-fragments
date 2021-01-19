@@ -44,12 +44,6 @@ export interface IServerOauthToken {
   refresh_token: string;
 }
 
-export interface IOauthToken {
-  accessToken: string;
-  refreshToken: string;
-  expirationDate: Date;
-}
-
 export interface IFragmentMetadata {
   cssPath: string;
   htmlPath: string;
