@@ -36,14 +36,6 @@ export interface IFragmentComposition {
   definitionData: string;
 }
 
-export interface ICollectionRequest {
-  collection: ICollection;
-  existingCollection: IServerCollection | undefined;
-  promise: Promise<void> | undefined;
-  status: 'error' | 'pending' | 'success';
-  error: Error | undefined;
-}
-
 export interface IServerOauthToken {
   access_token: string;
   token_type: string;
