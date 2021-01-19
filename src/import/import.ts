@@ -38,6 +38,6 @@ export default async function importProject(
       ];
     }
   } catch (_) {
-    await importLegacy(projectContent, groupId);
+    return [await importLegacy(projectContent, groupId), []];
   }
 }
