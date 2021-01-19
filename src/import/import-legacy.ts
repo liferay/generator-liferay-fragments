@@ -1,6 +1,5 @@
 import {
   ICollection,
-  ICollectionRequest,
   IFragment,
   IProject,
   IServerCollection,
@@ -21,6 +20,14 @@ interface ImportResult {
   status: string;
 }
 
+interface ICollectionRequest {
+  collection: ICollection;
+  existingCollection: IServerCollection | undefined;
+  getPromise: () => Promise<void>;
+  status: 'error' | 'pending' | 'success';
+  error: Error | undefined;
+}
+
 type IFragmentRequestStatus =
   | 'pending'
   | 'added'
@@ -33,7 +40,7 @@ interface IFragmentRequest {
   collection: ICollection;
   fragment: IFragment;
   existingFragment: IServerFragment | undefined;
-  promise: Promise<ImportResult>;
+  getPromise: () => Promise<ImportResult>;
   status: IFragmentRequestStatus;
   error: Error | undefined;
 }
@@ -51,63 +58,72 @@ export default async function importLegacy(
       existingCollection: undefined,
       error: undefined,
       status: 'pending',
-      promise: undefined,
+      getPromise: () =>
+        _importCollection(groupId, collection)
+          .then((existingCollection) => {
+            collectionRequest.existingCollection = existingCollection;
+            collectionRequest.status = 'success';
+          })
+          .catch((error) => {
+            collectionRequest.error = error;
+            collectionRequest.status = 'error';
+          }),
     };
-
-    collectionRequest.promise = _importCollection(groupId, collection)
-      .then((existingCollection) => {
-        collectionRequest.existingCollection = existingCollection;
-        collectionRequest.status = 'success';
-      })
-      .catch((error) => {
-        collectionRequest.error = error;
-        collectionRequest.status = 'error';
-      });
 
     return collectionRequest;
   });
 
-  await Promise.all(
-    collectionRequests.map((collectionRequest) => collectionRequest.promise)
+  await _resolveInOrder(
+    collectionRequests.map((collectionRequest) => collectionRequest.getPromise)
   );
 
   const fragmentRequests = collectionRequests
     .map((collectionRequest) =>
       collectionRequest.collection.fragments.map((fragment) => {
-        const fragmentRequest: IFragmentRequest = {
+        const isCollectionReady =
+          collectionRequest.status === 'success' &&
+          collectionRequest.existingCollection;
+
+        return {
           collection: collectionRequest.collection,
           fragment,
           existingFragment: undefined,
-          promise: Promise.resolve({
-            status: FRAGMENT_IMPORT_STATUS.INVALID,
-            name: fragment.metadata.name,
-            errorMessage: '',
-          }),
+          getPromise: () =>
+            isCollectionReady
+              ? _importFragment(
+                  groupId,
+                  collectionRequest.existingCollection as IServerCollection,
+                  fragment
+                )
+              : Promise.resolve({
+                  status: FRAGMENT_IMPORT_STATUS.INVALID,
+                  name: fragment.metadata.name,
+                  errorMessage: '',
+                }),
           error: undefined,
-          status: 'pending',
-        };
-
-        if (
-          collectionRequest.status === 'success' &&
-          collectionRequest.existingCollection
-        ) {
-          fragmentRequest.promise = _importFragment(
-            groupId,
-            collectionRequest.existingCollection,
-            fragment
-          );
-        } else {
-          fragmentRequest.status = 'ignored';
-        }
-
-        return fragmentRequest;
+          status: isCollectionReady ? 'pending' : 'ignored',
+        } as IFragmentRequest;
       })
     )
     .reduce((a, b) => [...a, ...b], []);
 
-  return await Promise.all(
-    fragmentRequests.map((fragmentRequest) => fragmentRequest.promise)
+  return _resolveInOrder(
+    fragmentRequests.map((fragmentRequest) => fragmentRequest.getPromise)
   );
+}
+
+async function _resolveInOrder<T>(fns: Array<() => Promise<T>>): Promise<T[]> {
+  if (!fns.length) {
+    return [];
+  }
+
+  const [nextFn, ...rest] = fns;
+
+  try {
+    return [await nextFn(), ...(await _resolveInOrder(rest))];
+  } catch (error) {
+    return [];
+  }
 }
 
 async function _importCollection(
