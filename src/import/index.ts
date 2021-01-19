@@ -98,6 +98,10 @@ export default class extends AuthGenerator {
     const [fragmentResults = [], pageTemplateResults = []] =
       importResults || [];
 
+    if (fragmentResults.length) {
+      this.logMessage('');
+    }
+
     fragmentResults.forEach((result) => {
       switch (result.status) {
         case FRAGMENT_IMPORT_STATUS.IMPORTED: {
@@ -142,6 +146,10 @@ export default class extends AuthGenerator {
           break;
       }
     });
+
+    if (pageTemplateResults.length) {
+      this.logMessage('');
+    }
 
     pageTemplateResults.forEach((result) => {
       switch (result.status) {
