@@ -162,6 +162,7 @@ async function _importFragment(
   const fragmentEntryKey = fragment.slug;
   const status = 0;
   let previewFileEntryId = INVALID_FILE_ENTRY_ID;
+  let errorMessage;
 
   let existingFragment = await _getExistingFragment(
     groupId,
@@ -170,12 +171,16 @@ async function _importFragment(
   );
 
   if (fragment.thumbnail?.length) {
-    previewFileEntryId = await api.uploadThumbnail(
-      fragment.thumbnail,
-      groupId,
-      fragmentEntryKey,
-      existingFragment ? existingFragment.previewFileEntryId : '0'
-    );
+    try {
+      previewFileEntryId = await api.uploadThumbnail(
+        fragment.thumbnail,
+        groupId,
+        fragmentEntryKey,
+        existingFragment ? existingFragment.previewFileEntryId : '0'
+      );
+    } catch (error) {
+      errorMessage = error.toString();
+    }
   }
 
   if (existingFragment && _fragmentHasChanges(existingFragment, fragment)) {
@@ -190,7 +195,7 @@ async function _importFragment(
     });
 
     return {
-      errorMessage: '',
+      errorMessage,
       name: fragment.metadata.name,
       status: FRAGMENT_IMPORT_STATUS.IMPORTED,
     };
@@ -198,7 +203,7 @@ async function _importFragment(
 
   if (existingFragment) {
     return {
-      errorMessage: '',
+      errorMessage,
       name: fragment.metadata.name,
       status: FRAGMENT_IMPORT_STATUS.IMPORTED,
     };
@@ -221,7 +226,7 @@ async function _importFragment(
   )) as IServerFragment | undefined;
 
   return {
-    errorMessage: '',
+    errorMessage,
     name: fragment.metadata.name,
     status: FRAGMENT_IMPORT_STATUS.IMPORTED,
   };
