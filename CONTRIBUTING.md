@@ -13,11 +13,17 @@ In order to test your changes without having them published on master, you
 can use `yarn link` feature:
 
 1. Ensure you have uninstalled existing `generator-liferay-fragments`
-   from global Yarn dependencies.
+   from global Yarn and NPM dependencies.
 2. `cd yourToolkitProjectDirectory`.
 3. `yarn link` (this only has to be runned once, run `yarn unlink` to undo).
 4. Now you can use _Yeoman_ and _Yarn_ commands normally, it will use your
    local toolkit project.
+
+> Sometimes, when using multiple NodeJS environments (ex. nvm), Yeoman
+> might resolve a different version of the Toolkit that is installed globaly.
+> To be sure about which generator is being executed, you can pass
+> `--show-debug-info` flag to any command, and it will output the generator
+> information and received arguments.
 
 ## Release Cycle
 
