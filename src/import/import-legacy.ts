@@ -94,7 +94,11 @@ export default async function importLegacy(
                   groupId,
                   collectionRequest.existingCollection as IServerCollection,
                   fragment
-                )
+                ).catch((error) => ({
+                  status: FRAGMENT_IMPORT_STATUS.INVALID,
+                  name: fragment.metadata.name,
+                  errorMessage: error.toString(),
+                }))
               : Promise.resolve({
                   status: FRAGMENT_IMPORT_STATUS.INVALID,
                   name: fragment.metadata.name,
