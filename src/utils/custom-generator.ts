@@ -44,6 +44,27 @@ export default class CustomGenerator extends Generator {
     if (!this.options) {
       this.options = {};
     }
+
+    if (process.argv.includes('--show-debug-info')) {
+      this.logMessage(
+        `generator-liferay-fragments@${
+          JSON.parse(
+            fs.readFileSync(
+              path.resolve(__dirname, '../../package.json'),
+              'utf-8'
+            )
+          ).version
+        }`,
+        {
+          level: 'success',
+        }
+      );
+      this.logMessage('Namespace', { data: options.namespace });
+      this.logMessage('Generator', { data: options.resolved });
+      this.logMessage('Arguments');
+      process.argv.forEach((arg) => this.logMessage('', { data: ` ${arg}` }));
+      this.logMessage('');
+    }
   }
 
   // @ts-ignore
