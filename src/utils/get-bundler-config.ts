@@ -22,7 +22,7 @@ export const getBundlerConfig = (): Record<string, any> => {
         {}
       ),
       imports: {
-        'frontend-js-react-web': {
+        __REACT_PROVIDER__: {
           react: '*',
         },
       },
