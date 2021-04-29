@@ -1,5 +1,7 @@
 [![Yarn Publish Version][5]][6]
 
+> This project is currently managed by [Liferay Echo Team][8]
+
 # Liferay Fragments Toolkit
 
 This is a Toolkit for developing fragments for Liferay DXP. It allows
@@ -216,3 +218,4 @@ yarn run compress
 [5]: https://badge.fury.io/js/generator-liferay-fragments.svg?style=flat
 [6]: https://www.npmjs.com/package/generator-liferay-fragments
 [7]: https://web.liferay.com/es/marketplace/-/mp/application/109572023
+[8]: https://github.com/liferay-echo
