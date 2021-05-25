@@ -566,13 +566,11 @@ const api = {
   ): Promise<T> {
     const response = await this._rawRequest(url, options);
 
-    let responseBody;
+    let responseBody: string | Record<string, any> = await response.text();
 
     try {
-      responseBody = await response.clone().json();
-    } catch (_) {
-      responseBody = await response.clone().text();
-    }
+      responseBody = JSON.parse(responseBody);
+    } catch (_) {}
 
     if (typeof responseBody === 'object') {
       if (responseBody.error && responseBody.error.type) {
