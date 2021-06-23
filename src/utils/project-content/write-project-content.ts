@@ -166,6 +166,23 @@ const _writeCollection = async (
     collection.metadata
   );
 
+  if (collection.resources.length) {
+    mkdirp.sync(path.resolve(collectionBasePath, 'resources'));
+
+    for (const resource of collection.resources) {
+      const dirname = path.normalize(path.dirname(resource.filePath));
+
+      mkdirp.sync(path.resolve(collectionBasePath, 'resources', dirname));
+
+      await _updateFile(
+        path.normalize(
+          path.resolve(collectionBasePath, 'resources', resource.filePath)
+        ),
+        resource.content
+      );
+    }
+  }
+
   let fragmentCompositions: Promise<void>[] = [];
 
   if (collection.fragmentCompositions) {
