@@ -16,7 +16,7 @@ export const getProjectExports = (projectContent: IProject): Export[] =>
           slug: fragment.slug,
           path: `.${path.sep}${path.join(
             collection.slug,
-            fragment.slug,
+            fragment.directoryPath,
             fragment.metadata.jsPath
           )}`,
         }))

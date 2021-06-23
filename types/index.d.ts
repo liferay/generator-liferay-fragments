@@ -61,6 +61,7 @@ export interface IFragmentMetadata {
 }
 
 export interface IFragment {
+  directoryPath: string;
   slug: string;
   metadata: IFragmentMetadata;
   css: string;

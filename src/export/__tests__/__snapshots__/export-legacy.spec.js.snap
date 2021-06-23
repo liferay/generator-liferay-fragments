@@ -9,6 +9,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-a-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -37,6 +38,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-b-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -70,6 +72,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-a-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -98,6 +101,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-b-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -131,6 +135,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-a-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -159,6 +164,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-b-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -192,6 +198,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-a-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -220,6 +227,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-b-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -253,6 +261,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-a-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {
@@ -281,6 +290,7 @@ Array [
       Object {
         "configuration": "{\\"fieldSets\\": []}",
         "css": ".fragment {}",
+        "directoryPath": "fragments/1234-collection-b-fragment-a",
         "html": "<fragment-a></fragment-a>",
         "js": "console.log(\\"fragment\\")",
         "metadata": Object {

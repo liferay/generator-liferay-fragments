@@ -102,7 +102,7 @@ function _getProjectCollections(basePath: string): ICollection[] {
 
 function _getCollectionFragments(collectionDirectory: string): IFragment[] {
   return glob
-    .sync(path.join(collectionDirectory, '*', 'fragment.json'))
+    .sync(path.join(collectionDirectory, '**', '*', 'fragment.json'))
     .map((fragmentJSON) => path.resolve(fragmentJSON, '..'))
     .filter((directory) => {
       try {
@@ -156,6 +156,7 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
         );
 
       return {
+        directoryPath: path.relative(collectionDirectory, directory),
         slug: path.basename(directory),
         metadata,
 
