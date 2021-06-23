@@ -23,6 +23,12 @@ export interface ICollection {
   metadata: ICollectionMetadata;
   fragmentCompositions?: IFragmentComposition[];
   fragments: IFragment[];
+  resources: IResource[];
+}
+
+export interface IResource {
+  filePath: string;
+  content: Buffer;
 }
 
 export interface IFragmentCompositionMetadata {

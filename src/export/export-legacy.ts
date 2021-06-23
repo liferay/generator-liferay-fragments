@@ -28,6 +28,7 @@ async function _exportCollection(
   return {
     slug: collection.fragmentCollectionKey,
     fragmentCollectionId: collection.fragmentCollectionId,
+    resources: [],
 
     metadata: {
       name: collection.name,
