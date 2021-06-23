@@ -12,6 +12,7 @@ import {
   IPageTemplate,
   IPageTemplateMetadata,
   IProject,
+  IResource,
   PageTemplateType,
 } from '../../../types';
 
@@ -77,12 +78,24 @@ function _getProjectCollections(basePath: string): ICollection[] {
       const fragments = _getCollectionFragments(directory);
       const slug = path.basename(directory);
 
+      const resources: IResource[] = glob
+        .sync(path.join(directory, 'resources', '**', '*'))
+        .filter((absolutePath) => fs.statSync(absolutePath).isFile())
+        .map((absolutePath) => ({
+          filePath: path.relative(
+            path.join(directory, 'resources'),
+            absolutePath
+          ),
+          content: fs.readFileSync(absolutePath),
+        }));
+
       return {
         slug,
         fragmentCollectionId: slug,
         metadata,
         fragmentCompositions,
         fragments,
+        resources,
       };
     });
 }
