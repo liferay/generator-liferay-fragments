@@ -18,9 +18,11 @@ import {
 export default function getProjectContent(basePath: string): IProject {
   const excludedFiles = [
     'default-liferay-npm-bundler.config.js',
-    'package.json',
     'node_modules',
+    'package.json',
     'src',
+    'yarn.lock',
+    'yarn-error.log',
     '*.md',
     '.editorconfig',
     '.gitignore',
