@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { ICollection, IServerCollection } from '../../types';
 import api from '../utils/api';
 
@@ -45,6 +47,7 @@ async function _exportCollection(
     })),
 
     fragments: fragments.map((fragment) => ({
+      directoryPath: path.join('fragments', fragment.fragmentEntryKey),
       slug: fragment.fragmentEntryKey,
       metadata: {
         type: fragment.type,

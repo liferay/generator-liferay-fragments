@@ -82,10 +82,15 @@ const _updateJSON = async (path: string, content: any) => {
 };
 
 const _writeFragment = async (
-  fragmentBasePath: string,
+  collectionBasePath: string,
   collection: ICollection,
   fragment: IFragment
 ) => {
+  const fragmentBasePath = path.join(
+    collectionBasePath,
+    fragment.directoryPath
+  );
+
   mkdirp.sync(fragmentBasePath);
 
   await _updateJSON(
@@ -198,11 +203,7 @@ const _writeCollection = async (
 
   await Promise.all([
     ...collection.fragments.map((fragment) =>
-      _writeFragment(
-        path.resolve(collectionBasePath, fragment.slug),
-        collection,
-        fragment
-      )
+      _writeFragment(collectionBasePath, collection, fragment)
     ),
     ...fragmentCompositions,
   ]);
