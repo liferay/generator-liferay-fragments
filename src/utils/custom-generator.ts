@@ -76,7 +76,7 @@ export default class CustomGenerator extends Generator {
     },
     options: Record<string, any>
   ): void {
-    super.composeWith((generator as unknown) as string, options);
+    super.composeWith(generator as unknown as string, options);
   }
 
   async ask(question: IQuestion | IQuestion[]): Promise<IAnswerGroup> {

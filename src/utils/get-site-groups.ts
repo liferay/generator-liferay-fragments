@@ -12,10 +12,10 @@ export default async function getSiteGroups(
 
 const isStagingGroup = (group: ISiteGroup) => group.liveGroupId !== '0';
 
-const matchGroupId = (
-  siteGroupId: string
-): ((group: ISiteGroup) => boolean) => (group) =>
-  siteGroupId === group.liveGroupId;
+const matchGroupId =
+  (siteGroupId: string): ((group: ISiteGroup) => boolean) =>
+  (group) =>
+    siteGroupId === group.liveGroupId;
 
 const mergeStagingGroups = (
   siteGroups: ISiteGroup[],
