@@ -95,9 +95,8 @@ export default class extends AuthGenerator {
     }
   }
 
-  private _logImportResults(importResults: undefined | ImportResult[][]) {
-    const [fragmentResults = [], pageTemplateResults = []] =
-      importResults || [];
+  private _logImportResults(importResults: ImportResult[][]) {
+    const [fragmentResults = [], pageTemplateResults = []] = importResults;
 
     if (fragmentResults.length) {
       this.logMessage('');
