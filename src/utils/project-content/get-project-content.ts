@@ -72,9 +72,8 @@ function _getProjectCollections(basePath: string): ICollection[] {
       const metadata = _readJSONSync<ICollectionMetadata>(
         path.resolve(directory, 'collection.json')
       );
-      const fragmentCompositions = _getCollectionFragmentCompositions(
-        directory
-      );
+      const fragmentCompositions =
+        _getCollectionFragmentCompositions(directory);
       const fragments = _getCollectionFragments(directory);
       const slug = path.basename(directory);
 

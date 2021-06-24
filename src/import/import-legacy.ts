@@ -246,7 +246,8 @@ function _fragmentHasChanges(
 }
 
 function _getFragmentTypeId(type: keyof typeof FRAGMENT_TYPES) {
-  let typeId: typeof FRAGMENT_TYPES[keyof typeof FRAGMENT_TYPES] = DEFAULT_FRAGMENT_TYPE;
+  let typeId: typeof FRAGMENT_TYPES[keyof typeof FRAGMENT_TYPES] =
+    DEFAULT_FRAGMENT_TYPE;
 
   if (type in FRAGMENT_TYPES) {
     typeId = FRAGMENT_TYPES[type];
