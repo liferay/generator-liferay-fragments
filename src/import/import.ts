@@ -13,7 +13,7 @@ export interface ImportResult {
 export default async function importProject(
   projectContent: IProject,
   groupId: string
-): Promise<undefined | [ImportResult[], ImportResult[]]> {
+): Promise<ImportResult[][]> {
   try {
     const response = await api.importZip(
       await compress(projectContent, {
@@ -22,21 +22,20 @@ export default async function importProject(
       groupId
     );
 
-    if (typeof response === 'string' || response.error) {
-      throw new Error('Zip import error');
+    if (typeof response === 'string') {
+      throw new Error(response);
+    } else if (response.error) {
+      throw new Error(response.error);
     }
 
-    if (
-      (response.fragmentEntriesImportResult &&
-        response.fragmentEntriesImportResult.length > 0) ||
-      (response.pageTemplatesImportResult &&
-        response.pageTemplatesImportResult.length > 0)
-    ) {
-      return [
-        response.fragmentEntriesImportResult || [],
-        response.pageTemplatesImportResult || [],
-      ];
-    }
+    return [
+      Array.isArray(response.fragmentEntriesImportResult)
+        ? response.fragmentEntriesImportResult
+        : [],
+      Array.isArray(response.pageTemplatesImportResult)
+        ? response.pageTemplatesImportResult
+        : [],
+    ];
   } catch (_) {
     return [await importLegacy(projectContent, groupId), []];
   }
