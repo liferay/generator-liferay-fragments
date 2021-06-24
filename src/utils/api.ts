@@ -433,7 +433,7 @@ const api = {
     return this._postMultipartFormData<Record<string, any>>(
       '/c/portal/fragment/import_fragment_entries',
       {
-        file: fs.readFileSync(tmpZip.name),
+        file: fs.createReadStream(tmpZip.name),
         groupId,
       },
       {
