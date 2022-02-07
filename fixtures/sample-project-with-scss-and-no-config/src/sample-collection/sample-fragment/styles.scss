@@ -1,0 +1,7 @@
+$color: inherit;
+
+div {
+  &.sample-fragment {
+    color: $color;
+  }
+}
