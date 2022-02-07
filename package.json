@@ -23,7 +23,7 @@
     "@types/jest": "^26.0.20",
     "@types/mime-types": "^2.1.0",
     "@types/ncp": "^2.0.0",
-    "@types/node": "^10.0.0",
+    "@types/node": "^16.0.0",
     "@types/rimraf": "^3.0.0",
     "@types/voca": "^1.4.0",
     "@types/ws": "^7.0.1",
@@ -42,7 +42,7 @@
     "yeoman-test": "^2.7.0"
   },
   "engines": {
-    "node": ">= 10.0.0",
+    "node": "^16.0.0",
     "yarn": "^1.22.5"
   },
   "dependencies": {
