@@ -56,6 +56,7 @@ export interface IFragmentMetadata {
   jsPath: string;
   configurationPath?: string;
   thumbnailPath?: string;
+  sass?: { loadPaths?: string[] };
   name: string;
   type: 'component' | 'react' | 'section';
 }

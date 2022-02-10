@@ -3,5 +3,8 @@
   "configurationPath": "configuration.json",
   "htmlPath": "index.html",
   "jsPath": "main.js",
+  "sass": {
+    "loadPaths": ["./external/scss/dependencies"]
+  },
   "name": "Sample fragment with SCSS"
 }
