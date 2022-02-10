@@ -83,6 +83,8 @@ async function applySASS(projectContent: IProject): Promise<IProject> {
           '.css'
         );
 
+        delete fragment.metadata.sass;
+
         fragment.unknownFiles = fragment.unknownFiles.filter((unknownFile) => {
           const filePath = unknownFile.filePath.toLowerCase();
 
