@@ -16,10 +16,16 @@ const nodeModulesBinPath = path.normalize(
 export const buildProjectContent = async (
   projectContent: IProject
 ): Promise<IProject> => {
-  return await applySASS(await applyNPMBundler(projectContent));
+  return await applySASS(
+    projectContent.basePath,
+    await applyNPMBundler(projectContent)
+  );
 };
 
-async function applySASS(projectContent: IProject): Promise<IProject> {
+async function applySASS(
+  originalBasePath: string,
+  projectContent: IProject
+): Promise<IProject> {
   const tmpDir = createTemporaryDirectory();
   await writeProjectContent(tmpDir.name, projectContent);
   const builtProjectContent = getProjectContent(tmpDir.name);
@@ -37,6 +43,11 @@ async function applySASS(projectContent: IProject): Promise<IProject> {
           fragment.slug
         );
 
+        const originalAbsoluteFragmentPath = absoluteFragmentPath.replace(
+          builtProjectContent.basePath,
+          originalBasePath
+        );
+
         const absoluteCSSPath = path.resolve(
           absoluteFragmentPath,
           fragment.metadata.cssPath
@@ -49,13 +60,18 @@ async function applySASS(projectContent: IProject): Promise<IProject> {
 
         const loadPaths: string[] = [];
 
-        for (const loadPath of fragment.metadata.sass?.loadPaths || []) {
-          const absolutePath = path.isAbsolute(loadPath)
-            ? loadPath
-            : path.resolve(absoluteFragmentPath, loadPath);
-
+        const maybeAddPath = (absolutePath: string) => {
           if (fs.existsSync(absolutePath)) {
             loadPaths.push(absolutePath);
+          }
+        };
+
+        for (const loadPath of fragment.metadata.sass?.loadPaths || []) {
+          if (path.isAbsolute(loadPath)) {
+            maybeAddPath(loadPath);
+          } else {
+            maybeAddPath(path.resolve(absoluteFragmentPath, loadPath));
+            maybeAddPath(path.resolve(originalAbsoluteFragmentPath, loadPath));
           }
         }
 
