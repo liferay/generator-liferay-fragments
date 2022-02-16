@@ -64,6 +64,7 @@ async function applySASS(projectContent: IProject): Promise<IProject> {
           [
             absoluteCSSPath,
             absoluteCSSDestinationPath,
+            '--no-source-map',
             `--load-path=${path.dirname(absoluteCSSPath)}`,
             ...loadPaths.map((sassLoadPath) => `--load-path=${sassLoadPath}`),
           ],
