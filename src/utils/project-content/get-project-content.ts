@@ -177,7 +177,7 @@ function _getCollectionFragmentCompositions(
   collectionDirectory: string
 ): IFragmentComposition[] {
   return glob
-    .sync(path.join(collectionDirectory, '*', 'fragment-composition.json'))
+    .sync(path.join(collectionDirectory, '**', '*', 'fragment-composition.json'))
     .map((compositionJSON: string) => path.resolve(compositionJSON, '..'))
     .filter((directory: string) => {
       try {
