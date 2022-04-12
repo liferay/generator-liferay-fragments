@@ -33,7 +33,9 @@ export interface IResource {
 
 export interface IFragmentCompositionMetadata {
   fragmentCompositionDefinitionPath: string;
+  thumbnailPath?: string;
   name: string;
+  description?: string;
 }
 
 export interface IFragmentComposition {
