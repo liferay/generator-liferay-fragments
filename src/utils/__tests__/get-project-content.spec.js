@@ -80,6 +80,10 @@ describe('utils/get-project-content', () => {
             })
           );
         }
+
+        expect(
+          collection.fragmentCompositions.length + collection.fragments.length
+        ).toBeGreaterThanOrEqual(1);
       }
     }
   );
