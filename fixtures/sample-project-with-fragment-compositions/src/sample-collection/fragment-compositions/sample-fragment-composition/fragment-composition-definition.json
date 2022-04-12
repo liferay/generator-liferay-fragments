@@ -1,0 +1,32 @@
+{
+  "definition": {
+    "layout": {
+      "borderWidth": 0,
+      "htmlTag": "Div",
+      "marginBottom": 0,
+      "marginLeft": 0,
+      "marginRight": 0,
+      "marginTop": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "paddingRight": 0,
+      "paddingTop": 0,
+      "widthType": "Fluid"
+    }
+  },
+  "pageElements": [
+    {
+      "definition": {
+        "fragment": {
+          "key": "BASIC_COMPONENT-heading"
+        },
+        "fragmentConfig": {
+          "headingLevel": "h1"
+        },
+        "fragmentFields": []
+      },
+      "type": "Fragment"
+    }
+  ],
+  "type": "Section"
+}
