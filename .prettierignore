@@ -1,4 +1,7 @@
-fixtures
+generators
+coverage
+build
+# fixtures
 LICENSE
 README.md
 .editorconfig

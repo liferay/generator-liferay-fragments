@@ -99,7 +99,7 @@
     "build:copy": "copyfiles --up 1 --all --exclude \"**/__tests__/**/*\" --exclude \"**/*.ts\" \"src/**/*\" generators",
     "build:typescript": "tsc --build tsconfig.json",
     "build": "yarn run build:clean && yarn run build:copy && yarn run build:typescript",
-    "lint": "eslint src/ && prettier --ignore-unknown --list-different --ignore-path .gitignore .",
+    "lint": "eslint src/ && prettier --ignore-unknown --list-different .",
     "test": "yarn run build && jest",
     "prepack": "yarn run build"
   },
