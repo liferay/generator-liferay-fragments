@@ -149,14 +149,12 @@ const _writeFragmentComposition = async (
     fragmentComposition.metadata
   );
 
-  const definition = JSON.parse(fragmentComposition.definitionData);
-
   await _updateFile(
     path.resolve(
       fragmentBasePath,
       fragmentComposition.metadata.fragmentCompositionDefinitionPath
     ),
-    JSON.stringify(definition, null, 2)
+    fragmentComposition.definitionData
   );
 };
 
