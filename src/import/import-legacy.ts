@@ -162,7 +162,7 @@ async function _importFragment(
   const fragmentEntryKey = fragment.slug;
   const status = 0;
   let previewFileEntryId = INVALID_FILE_ENTRY_ID;
-  let errorMessage;
+  let errorMessage = '';
 
   let existingFragment = await _getExistingFragment(
     groupId,
@@ -179,7 +179,7 @@ async function _importFragment(
         existingFragment ? existingFragment.previewFileEntryId : '0'
       );
     } catch (error) {
-      errorMessage = error.toString();
+      errorMessage = error instanceof Error ? error.toString() : `${error}`;
     }
   }
 

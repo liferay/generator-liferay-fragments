@@ -115,7 +115,7 @@ export default class AuthGenerator extends CustomGenerator {
       this.logMessage(
         'Connection unsuccessful,\n' +
           'please check your host information.\n\n' +
-          `${error.toString()}\n`,
+          `${error instanceof Error ? error.toString() : error}\n`,
         { level: 'error' }
       );
 
