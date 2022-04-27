@@ -36,7 +36,13 @@ export default class extends AuthGenerator {
       this.logMessage(`Group ID: ${this.getGroupId()}`);
       this.logMessage(`Preview URL: http://localhost:${DEV_SERVER_PORT}`);
 
-      await watchPromise;
+      try {
+        await watchPromise;
+      } catch (error) {
+        if (error instanceof Error) {
+          this.logMessage(error.toString(), { level: 'error' });
+        }
+      }
     } else {
       this.logMessage(
         '\nYour Liferay Server cannot generate fragment previews.' +
@@ -131,24 +137,23 @@ export default class extends AuthGenerator {
       pageTemplateId = request.query.pageTemplate?.toString() ?? '';
 
       const projectContent = getProjectContent(this.destinationPath());
-      const type = request.query.type;
 
       const collection = projectContent.collections.find(
         (collection) => collection.slug === collectionId
       );
 
+      let preview = '';
+
       if (collection) {
-        const fragment =
-          type === 'fragment' &&
-          collection.fragments.find((fragment) => fragment.slug === fragmentId);
+        const fragment = collection.fragments.find(
+          (fragment) => fragment.slug === fragmentId
+        );
 
-        const fragmentComposition =
-          type !== 'fragment' &&
-          collection.fragmentCompositions?.find(
-            (composition) => composition.slug === fragmentId
-          );
+        const fragmentComposition = collection.fragmentCompositions?.find(
+          (composition) => composition.slug === fragmentId
+        );
 
-        if (fragment && type === 'fragment') {
+        if (fragment) {
           if (fragment.metadata.type === 'react') {
             this.logMessage(
               'React based fragments do not support preview command (yet)',
@@ -156,36 +161,48 @@ export default class extends AuthGenerator {
             );
           }
 
-          this._getFragmentPreview(
-            fragment.css,
-            fragment.html,
-            fragment.js,
-            fragment.configuration
-          ).then((preview) => {
-            response.send(this._replaceLinks(preview));
-          });
-        } else if (fragmentComposition && type === 'composition') {
-          this._getCompositionPreview(
-            JSON.parse(fragmentComposition.definitionData)
-          ).then((preview) => {
-            response.send(this._replaceLinks(preview));
-          });
+          try {
+            preview = await this._getFragmentPreview(
+              fragment.css,
+              fragment.html,
+              fragment.js,
+              fragment.configuration
+            );
+          } catch (error) {
+            if (error instanceof Error) {
+              this.logMessage(error.toString(), { level: 'error' });
+            }
+          }
+        } else if (fragmentComposition) {
+          try {
+            preview = await this._getCompositionPreview(
+              JSON.parse(fragmentComposition.definitionData)
+            );
+          } catch (error) {
+            if (error instanceof Error) {
+              this.logMessage(error.toString(), { level: 'error' });
+            }
+          }
         }
-      } else if (pageTemplateId && type === 'page-template') {
+      } else if (pageTemplateId) {
         const pageTemplate = projectContent.pageTemplates?.find(
           (pageTemplate) => pageTemplate.slug === pageTemplateId
         );
 
         if (pageTemplate) {
-          this._getPageTemplatePreview(
-            JSON.parse(pageTemplate.definitionData)
-          ).then((preview) => {
-            response.send(this._replaceLinks(preview as string));
-          });
+          try {
+            preview = await this._getPageTemplatePreview(
+              JSON.parse(pageTemplate.definitionData)
+            );
+          } catch (error) {
+            if (error instanceof Error) {
+              this.logMessage(error.toString(), { level: 'error' });
+            }
+          }
         }
-      } else {
-        response.send('');
       }
+
+      response.send(this._replaceLinks(preview));
     });
 
     app.get('/preview-constants.js', (request, response) => {
