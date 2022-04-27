@@ -37,6 +37,11 @@ iframe {
   flex-grow: 1;
 }
 
-.hide {
+fieldset {
+  border: none;
+  padding: 0;
+}
+
+fieldset[disabled] {
   display: none;
 }

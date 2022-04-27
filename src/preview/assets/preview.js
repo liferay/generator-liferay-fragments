@@ -1,192 +1,136 @@
 // @ts-nocheck
 /* global SOCKET_SERVER_PORT */
 
-/** @type {HTMLSelectElement} */
-const collectionSelect = document.getElementById('collection');
-
-/** @type {HTMLSelectElement} */
-const fragmentSelect = document.getElementById('fragment');
-
-/** @type {HTMLSelectElement} */
-const pageTemplateSelect = document.getElementById('pageTemplate');
-
-/** @type {HTMLSelectElement} */
-const previewTypeSelect = document.getElementById('previewType');
-
-/** @type {HTMLElement} */
-const fragmentsPreview = document.getElementById('fragmentsPreview');
-
-/** @type {HTMLElement} */
-const pageTemplatesPreview = document.getElementById('pageTemplatesPreview');
-
-/** @type {HTMLIFrameElement} */
+const form = document.getElementById('form');
 const preview = document.getElementById('preview');
-
 const socket = new WebSocket(`ws://${location.hostname}:${SOCKET_SERVER_PORT}`);
 
+let currentCollection = '';
 let projectContent = {};
+let initialized = false;
 
-/**
- * @param {HTMLSelectElement} selectElement Select element
- */
-function syncSelectFieldURL(selectElement) {
-  const url = new URL(location.href);
-  url.searchParams.set(selectElement.id, selectElement.value);
-  history.pushState(null, null, url.href);
+function isDisabled(element) {
+  return element
+    ? element.disabled || isDisabled(element.parentElement)
+    : false;
 }
 
-collectionSelect.addEventListener('change', () => {
-  const collectionId = collectionSelect.value;
+function updateOptions(list, select) {
+  const previousValue = select.value;
+  select.innerHTML = '';
 
-  if (collectionId) {
-    syncSelectFieldURL(collectionSelect);
-
-    const collection = projectContent.collections.find(
-      (collection) => collection.slug === collectionId
-    );
-
-    renderSelect(
-      fragmentSelect,
-      collection.fragments
-        .map((fragment) => ({
-          value: fragment.slug,
-          label: fragment.metadata.name,
-          type: 'fragment',
-        }))
-        .concat(
-          collection.fragmentCompositions.map((composition) => ({
-            value: composition.slug,
-            label: composition.metadata.name,
-            type: 'composition',
-          }))
-        )
-    );
+  for (const item of list) {
+    const option = document.createElement('option');
+    option.value = item.slug;
+    option.innerHTML = item.metadata.name;
+    select.appendChild(option);
   }
-});
 
-fragmentSelect.addEventListener('change', () => {
-  if (fragmentSelect.value) {
-    syncSelectFieldURL(fragmentSelect);
-
-    const type = fragmentSelect.selectedOptions[0].dataset.type;
-
-    preview.src = `/fragment-preview?collection=${collectionSelect.value}&fragment=${fragmentSelect.value}&type=${type}`;
+  if (list.some((item) => item.slug === previousValue)) {
+    select.value = previousValue;
   }
-});
+}
 
-pageTemplateSelect.addEventListener('change', () => {
-  if (pageTemplateSelect.value) {
-    syncSelectFieldURL(pageTemplateSelect);
+function updateCurrentCollection() {
+  currentCollection = form.elements.collection.value;
 
-    const type = 'page-template';
-
-    preview.src = `/fragment-preview?pageTemplate=${pageTemplateSelect.value}&type=${type}`;
-  }
-});
-
-previewTypeSelect.addEventListener('change', () => {
-  const changeEvent = new Event('change');
-  const url = new URL(location.href);
-
-  url.searchParams.forEach((_, key) => {
-    url.searchParams.delete(key);
-  });
-
-  url.searchParams.set(previewTypeSelect.id, previewTypeSelect.value);
-
-  history.pushState(null, null, url.href);
-
-  if (previewTypeSelect.value === 'page-template') {
-    fragmentsPreview.className = 'hide';
-    pageTemplatesPreview.className = '';
-
-    renderSelect(
-      pageTemplateSelect,
-      projectContent.pageTemplates.map((pageTemplate) => ({
-        value: pageTemplate.slug,
-        label: pageTemplate.metadata.name,
-      }))
-    );
-
-    pageTemplateSelect.dispatchEvent(changeEvent);
-  } else {
-    fragmentsPreview.className = '';
-    pageTemplatesPreview.className = 'hide';
-
-    renderSelect(fragmentSelect, []);
-
-    renderSelect(
-      collectionSelect,
-      projectContent.collections.map((collection) => ({
-        value: collection.slug,
-        label: collection.metadata.name,
-      }))
-    );
-
-    collectionSelect.dispatchEvent(changeEvent);
-  }
-});
-
-function renderSelect(selectElement, options) {
-  const selectedOption = new URL(location.href).searchParams.get(
-    selectElement.id
+  const collection = projectContent.collections.find(
+    (collection) => collection.slug === currentCollection
   );
 
-  selectElement.innerHTML = '';
-
-  options.forEach((option) => {
-    const optionElement = document.createElement('option');
-
-    optionElement.value = option.value;
-    optionElement.innerHTML = option.label;
-    optionElement.setAttribute('data-type', option.type);
-
-    selectElement.appendChild(optionElement);
-  });
-
-  if (options.length) {
-    selectElement.removeAttribute('disabled');
-  } else {
-    selectElement.setAttribute('disabled', 'disabled');
+  if (!collection) {
+    return;
   }
 
-  if (selectedOption) {
-    selectElement.value = selectedOption;
-  } else if (options.length === 1) {
-    selectElement.value = options[0].value;
-  }
-
-  const changeEvent = new Event('change');
-  selectElement.dispatchEvent(changeEvent);
+  updateOptions(
+    [...collection.fragments, ...collection.fragmentCompositions],
+    form.elements.fragment
+  );
 }
 
-socket.addEventListener('message', (event) => {
+function handleFormChange() {
+  const fieldsetId = form.elements.fieldsetId.value;
+
+  for (const fieldset of form.querySelectorAll('fieldset')) {
+    if (fieldset.id === fieldsetId) {
+      fieldset.disabled = false;
+    } else {
+      fieldset.disabled = true;
+    }
+  }
+
+  if (form.elements.collection.value !== currentCollection) {
+    updateCurrentCollection();
+  }
+
+  const url = new URL(location.href);
+
+  for (const element of form.elements) {
+    if (element.name) {
+      if (element.value && !isDisabled(element)) {
+        if (url.searchParams.get(element.name) !== element.value) {
+          url.searchParams.set(element.name, element.value);
+          history.pushState(null, null, url.href);
+        }
+      } else if (url.searchParams.has(element.name)) {
+        url.searchParams.delete(element.name);
+        history.pushState(null, null, url.href);
+      }
+    }
+  }
+
+  if (
+    fieldsetId === 'fragmentsPreview' &&
+    form.elements.collection.value &&
+    form.elements.fragment.value
+  ) {
+    const collectionSlug = form.elements.collection.value;
+    const fragmentSlug = form.elements.fragment.value;
+
+    preview.src = `/fragment-preview?collection=${collectionSlug}&fragment=${fragmentSlug}`;
+  } else if (
+    fieldsetId === 'pageTemplatesPreview' &&
+    form.elements.pageTemplate.value
+  ) {
+    const pageTemplateSlug = form.elements.pageTemplate.value;
+    preview.src = `/fragment-preview?pageTemplate=${pageTemplateSlug}`;
+  } else {
+    preview.src = '/fragment-preview';
+  }
+}
+
+function handleMessage(event) {
   projectContent = JSON.parse(event.data);
 
-  preview.src = '/fragment-preview';
+  updateOptions(projectContent.collections, form.elements.collection);
+  updateOptions(projectContent.pageTemplates, form.elements.pageTemplate);
 
-  renderSelect(previewTypeSelect, [
-    { value: 'fragment', label: 'Fragments' },
-    { value: 'page-template', label: 'Page Templates' },
-  ]);
+  if (!initialized) {
+    initialized = true;
+    preview.src = '/fragment-preview';
 
-  if (previewTypeSelect.value === 'fragment') {
-    renderSelect(fragmentSelect, []);
+    const url = new URL(window.location.href);
 
-    renderSelect(
-      collectionSelect,
-      projectContent.collections.map((collection) => ({
-        value: collection.slug,
-        label: collection.metadata.name,
-      }))
-    );
-  } else {
-    renderSelect(
-      pageTemplateSelect,
-      projectContent.pageTemplates.map((pageTemplate) => ({
-        value: pageTemplate.slug,
-        label: pageTemplate.metadata.name,
-      }))
-    );
+    form.elements.fieldsetId.value =
+      url.searchParams.get('fieldsetId') || form.elements.fieldsetId.value;
+
+    form.elements.pageTemplate.value =
+      url.searchParams.get('pageTemplate') || form.elements.pageTemplate.value;
+
+    form.elements.collection.value =
+      url.searchParams.get('collection') || form.elements.collection.value;
+
+    updateCurrentCollection();
+
+    form.elements.fragment.value =
+      url.searchParams.get('fragment') || form.elements.fragment.value;
+
+    handleFormChange();
+  } else if (preview.src) {
+    // eslint-disable-next-line no-self-assign
+    preview.src = preview.src;
   }
-});
+}
+
+socket.addEventListener('message', handleMessage);
+form.addEventListener('change', handleFormChange);

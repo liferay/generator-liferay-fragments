@@ -8,32 +8,33 @@
     <link rel="stylesheet" href="/preview.css" />
   </head>
   <body>
-    <form>
-      <div>
-        <label for="previewType">
-          Preview type:
-          <select id="previewType"></select>
-        </label>
-      </div>
+    <form id="form">
+      <label>
+        Preview type:
+        <select name="fieldsetId">
+          <option value="fragmentsPreview">Fragments</option>
+          <option value="pageTemplatesPreview">Page Templates</option>
+        </select>
+      </label>
 
-      <div class="hide" id="fragmentsPreview">
-        <label for="collection">
+      <fieldset disabled id="fragmentsPreview">
+        <label>
           Collection:
-          <select id="collection"></select>
+          <select name="collection"></select>
         </label>
 
-        <label for="fragment">
+        <label>
           Fragment:
-          <select disabled id="fragment"></select>
+          <select name="fragment"></select>
         </label>
-      </div>
+      </fieldset>
 
-      <div class="hide" id="pageTemplatesPreview">
-        <label for="pageTemplate">
+      <fieldset disabled id="pageTemplatesPreview">
+        <label>
           Page Template:
-          <select disabled id="pageTemplate"></select>
+          <select name="pageTemplate"></select>
         </label>
-      </div>
+      </fieldset>
     </form>
 
     <iframe id="preview" src="/fragment-preview"></iframe>
