@@ -1,18 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`fragment-generator generates a new fragment 1`] = `
+exports[`fragment-generator generates a "component" fragment 1`] = `
+"{
+  \\"fieldSets\\": [
+    {
+      \\"fields\\": [
+        {
+          \\"dataType\\": \\"object\\",
+          \\"label\\": \\"text-color\\",
+          \\"name\\": \\"textColor\\",
+          \\"type\\": \\"colorPalette\\"
+        }
+      ]
+    }
+]
+}
+"
+`;
+
+exports[`fragment-generator generates a "component" fragment 2`] = `
 "{
   \\"cssPath\\": \\"styles.css\\",
   \\"configurationPath\\": \\"configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
   \\"jsPath\\": \\"main.js\\",
   \\"name\\": \\"Sample Fragment\\",
-  \\"type\\": \\"section\\"
+  \\"type\\": \\"component\\"
 }
 "
 `;
 
-exports[`fragment-generator generates a new fragment 2`] = `
+exports[`fragment-generator generates a "component" fragment 3`] = `
 "<div class=\\"sample-fragment\\">  <h1 data-lfr-editable-id=\\"title\\" data-lfr-editable-type=\\"text\\">
     Sample Fragment
   </h1>
@@ -20,12 +38,18 @@ exports[`fragment-generator generates a new fragment 2`] = `
 "
 `;
 
-exports[`fragment-generator generates a new fragment 3`] = `
-"
+exports[`fragment-generator generates a "component" fragment 4`] = `
+".sample-fragment {
+  color: inherit;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+}
 "
 `;
 
-exports[`fragment-generator generates a new fragment 4`] = `
+exports[`fragment-generator generates a "component" fragment 5`] = `
 "console.group('Sample Fragment');
 console.log('fragmentElement', fragmentElement);
 console.log('configuration', configuration);
@@ -33,35 +57,141 @@ console.groupEnd();
 "
 `;
 
-exports[`fragment-generator generates new features if supported 1`] = `
+exports[`fragment-generator generates a "input" fragment 1`] = `
+"{
+  \\"fieldSets\\": []
+}
+"
+`;
+
+exports[`fragment-generator generates a "input" fragment 2`] = `
 "{
   \\"cssPath\\": \\"styles.css\\",
   \\"configurationPath\\": \\"configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
   \\"jsPath\\": \\"main.js\\",
   \\"name\\": \\"Sample Fragment\\",
-  \\"type\\": \\"section\\"
+  \\"type\\": \\"input\\",
+  \\"typeOptions\\": {
+    \\"fieldTypes\\": [
+      \\"boolean\\",
+      \\"date\\",
+      \\"number\\",
+      \\"select\\",
+      \\"text\\"
+    ]
+  }
 }
 "
 `;
 
-exports[`fragment-generator generates new features if supported 2`] = `
-"<div class=\\"sample-fragment\\">  <h1 data-lfr-editable-id=\\"title\\" data-lfr-editable-type=\\"text\\">
-    Sample Fragment
-  </h1>
+exports[`fragment-generator generates a "input" fragment 3`] = `
+"<div class=\\"sample-fragment\\">
+  <div class=\\"form-group mb-0\\">
+    <label
+      class=\\"[#if !input.showLabel || !input.label?has_content]sr-only[/#if]\\"
+      for=\\"\${fragmentEntryLinkNamespace}-text-input\\"
+    >
+      \${input.label}\${input.required?then('*', '')}
+    </label>
+
+    <input
+      aria-describedby=\\"\${fragmentEntryLinkNamespace}-text-input-help-text\\"
+      class=\\"form-control\\"
+      id=\\"\${fragmentEntryLinkNamespace}-text-input\\"
+      maxlength=\\"280\\"
+      name=\\"\${input.name}\\"
+      placeholder=\\"\${configuration.placeholder}\\"
+      [#if input.required]required[/#if] type=\\"text\\"
+    />
+
+    [#if input.showHelpText && input.helpText?has_content]
+      <p
+        class=\\"mb-0 mt-1 text-secondary\\"
+        id=\\"\${fragmentEntryLinkNamespace}-text-input-help-text\\"
+      >
+        \${input.helpText}
+      </p>
+    [/#if]
+  </div>
 </div>
 "
 `;
 
-exports[`fragment-generator generates new features if supported 3`] = `
-"
+exports[`fragment-generator generates a "input" fragment 4`] = `
+".sample-fragment {
+  color: inherit;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+}
 "
 `;
 
-exports[`fragment-generator generates new features if supported 4`] = `
+exports[`fragment-generator generates a "input" fragment 5`] = `
 "console.group('Sample Fragment');
 console.log('fragmentElement', fragmentElement);
 console.log('configuration', configuration);
 console.groupEnd();
+"
+`;
+
+exports[`fragment-generator generates a "react" fragment 1`] = `
+"{
+  \\"fieldSets\\": [
+    {
+      \\"fields\\": [
+        {
+          \\"dataType\\": \\"object\\",
+          \\"label\\": \\"text-color\\",
+          \\"name\\": \\"textColor\\",
+          \\"type\\": \\"colorPalette\\"
+        }
+      ]
+    }
+]
+}
+"
+`;
+
+exports[`fragment-generator generates a "react" fragment 2`] = `
+"{
+  \\"cssPath\\": \\"styles.css\\",
+  \\"configurationPath\\": \\"configuration.json\\",
+  \\"htmlPath\\": \\"index.html\\",
+  \\"jsPath\\": \\"main.js\\",
+  \\"name\\": \\"Sample Fragment\\",
+  \\"type\\": \\"react\\"
+}
+"
+`;
+
+exports[`fragment-generator generates a "react" fragment 3`] = `
+"<div class=\\"sample-fragment\\">
+  Loading...
+</div>
+"
+`;
+
+exports[`fragment-generator generates a "react" fragment 4`] = `
+".sample-fragment {
+  color: inherit;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+}
+"
+`;
+
+exports[`fragment-generator generates a "react" fragment 5`] = `
+"import React from 'react';
+
+export default function (props) {
+  console.log(\\"props\\", props);
+
+  return <h1>Hello world</h1>;
+}
 "
 `;
