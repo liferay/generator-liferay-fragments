@@ -1,4 +1,4 @@
-<div class="<%= fragmentSlug %>"><%_ if (useDataLfrEditables) { _%>
+<div class="<%= fragmentSlug %>"><%_ if (fragmentType == 'component' && useDataLfrEditables) { _%>
   <h1 data-lfr-editable-id="title" data-lfr-editable-type="text">
     <%= fragmentName %>
   </h1>
@@ -8,6 +8,34 @@
       <%= fragmentName %>
     </lfr-editable>
   </h1>
-<%_ } else { %>
+<%_ } else if (fragmentType == 'input') { %>
+  <div class="form-group mb-0">
+    <label
+      class="[#if !input.showLabel || !input.label?has_content]sr-only[/#if]"
+      for="${fragmentEntryLinkNamespace}-text-input"
+    >
+      ${input.label}${input.required?then('*', '')}
+    </label>
+
+    <input
+      aria-describedby="${fragmentEntryLinkNamespace}-text-input-help-text"
+      class="form-control"
+      id="${fragmentEntryLinkNamespace}-text-input"
+      maxlength="280"
+      name="${input.name}"
+      placeholder="${configuration.placeholder}"
+      [#if input.required]required[/#if] type="text"
+    />
+
+    [#if input.showHelpText && input.helpText?has_content]
+      <p
+        class="mb-0 mt-1 text-secondary"
+        id="${fragmentEntryLinkNamespace}-text-input-help-text"
+      >
+        ${input.helpText}
+      </p>
+    [/#if]
+  </div>
+<%_ } else if (fragmentType == 'react') { %>
   Loading...
 <%_ } %></div>
