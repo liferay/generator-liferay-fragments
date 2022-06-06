@@ -14,8 +14,6 @@ import {
 import CustomGenerator from '../utils/custom-generator';
 import { getCollectionChoices } from '../utils/get-collection-choices';
 
-const USE_REACT_VAR = 'useReact';
-
 export default class FragmentGenerator extends CustomGenerator {
   async prompting(): Promise<void> {
     await this.ask([
@@ -27,10 +25,27 @@ export default class FragmentGenerator extends CustomGenerator {
         when: !this.hasValue(FRAGMENT_NAME_VAR),
       },
       {
-        type: 'confirm',
-        name: USE_REACT_VAR,
-        message: 'Use React (or other JS framework)?',
-        default: true,
+        type: 'list',
+        name: FRAGMENT_TYPE_VAR,
+        message: 'Choose fragment type',
+        default: 'component',
+        choices: [
+          {
+            name: 'Component (regular fragment)',
+            value: 'component',
+            short: '(component)',
+          },
+          {
+            name: 'Input (to be used inside form containers)',
+            value: 'input',
+            short: '(input)',
+          },
+          {
+            name: 'React (or other JS framework)',
+            value: 'react',
+            short: '(react)',
+          },
+        ],
         when: !this.hasValue(FRAGMENT_TYPE_VAR),
       },
       {
@@ -38,8 +53,9 @@ export default class FragmentGenerator extends CustomGenerator {
         name: USE_DATA_LFR_EDITABLES_VAR,
         message: 'Use new data-lfr editable syntax?',
         default: true,
-        when: ({ [USE_REACT_VAR]: useReact }) =>
-          !useReact && !this.hasValue(USE_DATA_LFR_EDITABLES_VAR),
+        when: ({ [FRAGMENT_TYPE_VAR]: fragmentType }) =>
+          (fragmentType === 'component' || !fragmentType) &&
+          !this.hasValue(USE_DATA_LFR_EDITABLES_VAR),
       },
       {
         type: 'list',
@@ -50,14 +66,11 @@ export default class FragmentGenerator extends CustomGenerator {
       },
     ]);
 
-    this.setDefaultValue(
-      FRAGMENT_TYPE_VAR,
-      this.getValue(USE_REACT_VAR) ? 'react' : 'component'
-    );
+    this.setDefaultValue(FRAGMENT_TYPE_VAR, 'component');
 
     this.setDefaultValue(
       USE_DATA_LFR_EDITABLES_VAR,
-      this.getValue(FRAGMENT_TYPE_VAR) === 'react' ? '' : 'true'
+      this.getValue(FRAGMENT_TYPE_VAR) === 'component' ? 'true' : ''
     );
 
     this.setDefaultValue(
