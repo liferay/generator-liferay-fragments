@@ -40,7 +40,7 @@ async function applySASS(
           builtProjectContent.basePath,
           'src',
           collection.slug,
-          fragment.slug
+          fragment.directoryPath
         );
 
         const originalAbsoluteFragmentPath = absoluteFragmentPath.replace(
