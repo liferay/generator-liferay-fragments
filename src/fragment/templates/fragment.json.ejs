@@ -4,5 +4,14 @@
   "htmlPath": "index.html",
   "jsPath": "main.js",
   "name": "<%= fragmentName %>",
-  "type": "<%= fragmentType %>"
+  "type": "<%= fragmentType %>"<%_ if (fragmentType == 'input') { %>,
+  "typeOptions": {
+    "fieldTypes": [
+      "boolean",
+      "date",
+      "number",
+      "select",
+      "text"
+    ]
+  }<%_ } %>
 }
