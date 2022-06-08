@@ -1,5 +1,18 @@
 {
-  "fieldSets": [<%_ if (fragmentType != 'input') { %>
+  "fieldSets": [<%_ if (fragmentType == 'input') { %>
+    {
+      "fields": [
+        {
+          "dataType": "string",
+          "defaultValue": "",
+          "label": "placeholder",
+          "localizable": true,
+          "name": "placeholder",
+          "type": "text"
+        }
+      ]
+    }
+  <%_ } else { %>
     {
       "fields": [
         {
