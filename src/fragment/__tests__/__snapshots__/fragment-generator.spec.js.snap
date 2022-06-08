@@ -59,7 +59,20 @@ console.groupEnd();
 
 exports[`fragment-generator generates a "input" fragment 1`] = `
 "{
-  \\"fieldSets\\": []
+  \\"fieldSets\\": [
+    {
+      \\"fields\\": [
+        {
+          \\"dataType\\": \\"string\\",
+          \\"defaultValue\\": \\"\\",
+          \\"label\\": \\"placeholder\\",
+          \\"localizable\\": true,
+          \\"name\\": \\"placeholder\\",
+          \\"type\\": \\"text\\"
+        }
+      ]
+    }
+]
 }
 "
 `;
