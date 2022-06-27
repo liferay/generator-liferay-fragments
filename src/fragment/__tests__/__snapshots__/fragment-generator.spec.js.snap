@@ -20,10 +20,10 @@ exports[`fragment-generator generates a "component" fragment 1`] = `
 
 exports[`fragment-generator generates a "component" fragment 2`] = `
 "{
-  \\"cssPath\\": \\"styles.css\\",
+  \\"cssPath\\": \\"index.css\\",
   \\"configurationPath\\": \\"configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
-  \\"jsPath\\": \\"main.js\\",
+  \\"jsPath\\": \\"index.js\\",
   \\"name\\": \\"Sample Fragment\\",
   \\"type\\": \\"component\\"
 }
@@ -79,10 +79,10 @@ exports[`fragment-generator generates a "input" fragment 1`] = `
 
 exports[`fragment-generator generates a "input" fragment 2`] = `
 "{
-  \\"cssPath\\": \\"styles.css\\",
+  \\"cssPath\\": \\"index.css\\",
   \\"configurationPath\\": \\"configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
-  \\"jsPath\\": \\"main.js\\",
+  \\"jsPath\\": \\"index.js\\",
   \\"name\\": \\"Sample Fragment\\",
   \\"type\\": \\"input\\",
   \\"typeOptions\\": {
@@ -170,10 +170,10 @@ exports[`fragment-generator generates a "react" fragment 1`] = `
 
 exports[`fragment-generator generates a "react" fragment 2`] = `
 "{
-  \\"cssPath\\": \\"styles.css\\",
+  \\"cssPath\\": \\"index.css\\",
   \\"configurationPath\\": \\"configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
-  \\"jsPath\\": \\"main.js\\",
+  \\"jsPath\\": \\"index.js\\",
   \\"name\\": \\"Sample Fragment\\",
   \\"type\\": \\"react\\"
 }
