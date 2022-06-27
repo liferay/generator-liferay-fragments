@@ -2,7 +2,7 @@
   "cssPath": "styles.css",
   "configurationPath": "configuration.json",
   "htmlPath": "index.html",
-  "jsPath": "main.js",
+  "jsPath": "index.js",
   "name": "Sample fragment with React",
   "type": "react"
 }
