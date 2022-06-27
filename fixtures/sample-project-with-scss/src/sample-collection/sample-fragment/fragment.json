@@ -1,5 +1,5 @@
 {
-  "cssPath": "styles.scss",
+  "cssPath": "index.scss",
   "configurationPath": "configuration.json",
   "htmlPath": "index.html",
   "jsPath": "index.js",
