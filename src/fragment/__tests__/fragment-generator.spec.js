@@ -57,8 +57,8 @@ describe('fragment-generator', () => {
               'configuration.json',
               'fragment.json',
               'index.html',
-              'styles.css',
-              'main.js',
+              'index.css',
+              'index.js',
             ]
           );
         })

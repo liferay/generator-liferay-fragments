@@ -70,7 +70,7 @@ describe('app-generator', () => {
 
         expectFiles(
           path.join(contentPath, 'src', 'sample-collection', 'sample-fragment'),
-          ['fragment.json', 'index.html', 'styles.css', 'main.js']
+          ['fragment.json', 'index.html', 'index.css', 'index.js']
         );
       }));
 });
