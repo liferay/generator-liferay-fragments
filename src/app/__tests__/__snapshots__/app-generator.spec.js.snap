@@ -245,10 +245,10 @@ Object {
 exports[`app-generator allows adding sample content 9`] = `
 Object {
   "content": "{
-  \\"cssPath\\": \\"styles.css\\",
+  \\"cssPath\\": \\"index.css\\",
   \\"configurationPath\\": \\"configuration.json\\",
   \\"htmlPath\\": \\"index.html\\",
-  \\"jsPath\\": \\"main.js\\",
+  \\"jsPath\\": \\"index.js\\",
   \\"name\\": \\"Sample fragment\\",
   \\"type\\": \\"component\\"
 }
@@ -281,7 +281,7 @@ Object {
     'Helvetica Neue', sans-serif;
 }
 ",
-  "filePath": "styles.css",
+  "filePath": "index.css",
 }
 `;
 
@@ -292,7 +292,7 @@ console.log('fragmentElement', fragmentElement);
 console.log('configuration', configuration);
 console.groupEnd();
 ",
-  "filePath": "main.js",
+  "filePath": "index.js",
 }
 `;
 
