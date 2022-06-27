@@ -107,7 +107,7 @@ export default class FragmentGenerator extends CustomGenerator {
       this.copyTemplates(basePath, [
         'index.html',
         'index.js',
-        'styles.css',
+        'index.css',
         'fragment.json',
         'configuration.json',
       ]);
