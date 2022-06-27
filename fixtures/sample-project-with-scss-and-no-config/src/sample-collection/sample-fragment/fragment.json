@@ -2,6 +2,6 @@
   "cssPath": "styles.scss",
   "configurationPath": "configuration.json",
   "htmlPath": "index.html",
-  "jsPath": "main.js",
+  "jsPath": "index.js",
   "name": "Sample fragment with SCSS and no config"
 }

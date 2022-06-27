@@ -2,7 +2,7 @@
   "cssPath": "styles.scss",
   "configurationPath": "configuration.json",
   "htmlPath": "index.html",
-  "jsPath": "main.js",
+  "jsPath": "index.js",
   "sass": {
     "loadPaths": ["./external/scss/dependencies"]
   },
