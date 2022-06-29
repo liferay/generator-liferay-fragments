@@ -16,14 +16,15 @@ can use `yarn link` feature:
    from global Yarn and NPM dependencies.
 2. `cd yourToolkitProjectDirectory`.
 3. `yarn link` (this only has to be runned once, run `yarn unlink` to undo).
-4. Create a new fragments project by typing `yo ./yourToolkitProjectDirectory/generators/app` where you want to create it.
-5. `cd yourFragmentsProjectDirectory`
-6. `yarn link generator-liferay-fragments`
-7. Now you can use _Yeoman_ and _Yarn_ commands normally, it will use your
+4. `yarn build` (to generate files needed to create the project in next step).
+5. Create a new fragments project by typing `yo ./yourToolkitProjectDirectory/generators/app` where you want to create it.
+6. `cd yourFragmentsProjectDirectory`
+7. `yarn link generator-liferay-fragments`
+8. Now you can use _Yeoman_ and _Yarn_ commands normally, it will use your
    local toolkit project.
 
 > In order to test your changes, you have to compile your typescript code with
-> `yarn run build`. You can also do `yarn run build --watch` so it listens any
+> `yarn build`. You can also do `yarn build --watch` so it listens any
 > change and compiles each time you change something your code.
 
 > Sometimes, when using multiple NodeJS environments (ex. nvm), Yeoman
