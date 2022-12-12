@@ -460,13 +460,17 @@ const api = {
     js: string,
     configuration: string
   ): Promise<string> {
+    const htmlBuffer = new Buffer(html);
+    const cssBuffer = new Buffer(css);
+    const jsBuffer = new Buffer(js);
+
     return this._postMultipartFormData(
       '/c/portal/fragment/render_fragment_entry',
       {
         groupId,
-        html,
-        css,
-        js,
+        html: htmlBuffer.toString('base64'),
+        css: cssBuffer.toString('base64'),
+        js: jsBuffer.toString('base64'),
         configuration,
       },
       {
