@@ -27,11 +27,21 @@ can use `yarn link` feature:
 > `yarn build`. You can also do `yarn build --watch` so it listens any
 > change and compiles each time you change something your code.
 
-> Sometimes, when using multiple NodeJS environments (ex. nvm), Yeoman
-> might resolve a different version of the Toolkit that is installed globaly.
-> To be sure about which generator is being executed, you can pass
-> `--show-debug-info` flag to any command, and it will output the generator
-> information and received arguments.
+### Common problems
+
+Sometimes, when using multiple NodeJS environments (ex. nvm), Yeoman
+might resolve a different version of the Toolkit that is installed globaly.
+To be sure about which generator is being executed, you can pass
+`--show-debug-info` flag to any command, and it will output the generator
+information and received arguments.
+
+If you are still having unexpected issues, double check that you are using the
+correct version of Yeoman. You can check global dependencies using
+`npm list -g -d 0` or `yarn global list`, and uninstall them with
+`npm uninstall -g yo` and `yarn global remove yo`. Also you can find which
+Yeoman binary is being used with `which yo` and following the corresponding
+symlinks. To prevent issues with the global Yeoman dependency, ensure you
+always know where it has been installed.
 
 ## Release Cycle
 
