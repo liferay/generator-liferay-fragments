@@ -1,8 +1,10 @@
-import FormData from 'form-data';
+import { FormDataEncoder } from 'form-data-encoder';
+import { File, FormData } from 'formdata-node';
 import fs from 'fs';
 import JSZip from 'jszip';
 import mime from 'mime-types';
 import fetch, { RequestInit, Response } from 'node-fetch';
+import { Readable } from 'stream';
 
 import {
   ICompany,
@@ -415,11 +417,11 @@ const api = {
     );
   },
 
-  async exportZip(groupId: string): Promise<Buffer> {
+  async exportZip(groupId: string): Promise<ArrayBuffer> {
     return this._rawRequest(
       `/c/portal/layout_page_template/export_layout_page_template_entries?groupId=${groupId}`,
       { auth: 'oauth' }
-    ).then((response) => response.buffer());
+    ).then((response) => response.arrayBuffer());
   },
 
   async importZip(
@@ -460,17 +462,17 @@ const api = {
     js: string,
     configuration: string
   ): Promise<string> {
-    const htmlBuffer = new Buffer(html);
-    const cssBuffer = new Buffer(css);
-    const jsBuffer = new Buffer(js);
+    const htmlFile = new File([html], 'html');
+    const cssFile = new File([css], 'css');
+    const jsFile = new File([js], 'js');
 
     return this._postMultipartFormData(
       '/c/portal/fragment/render_fragment_entry',
       {
         groupId,
-        html: htmlBuffer.toString('base64'),
-        css: cssBuffer.toString('base64'),
-        js: jsBuffer.toString('base64'),
+        html: htmlFile,
+        css: cssFile,
+        js: jsFile,
         configuration,
       },
       {
@@ -535,7 +537,7 @@ const api = {
 
     const fetchOptions = { ...options };
 
-    if (fetchOptions.auth === 'basic') {
+    if (options.auth === 'basic') {
       if (!this._basicAuthToken) {
         throw new Error(
           `${url} needs basic authentication, but its not available`
@@ -543,10 +545,10 @@ const api = {
       }
 
       fetchOptions.headers = {
-        ...(fetchOptions.headers || {}),
+        ...(options.headers || {}),
         Authorization: `Basic ${this._basicAuthToken}`,
       };
-    } else if (fetchOptions.auth === 'oauth') {
+    } else if (options.auth === 'oauth') {
       if (!this._oauthToken || !this._oauthToken.accessToken) {
         throw new Error(
           `${url} needs OAuth authentication, but its not available`
@@ -554,14 +556,14 @@ const api = {
       }
 
       fetchOptions.headers = {
-        ...(fetchOptions.headers || {}),
+        ...(options.headers || {}),
         Authorization: `Bearer ${this._oauthToken.accessToken}`,
       };
     }
 
     delete fetchOptions.auth;
 
-    return fetch(`${this._host}${url}`, fetchOptions);
+    return fetch(`${this._host}${url}`, fetchOptions as RequestInit);
   },
 
   async _request<T = Record<string, any> | string>(
@@ -632,13 +634,15 @@ const api = {
       formData.append(key, value);
     });
 
+    const encoder = new FormDataEncoder(formData);
+
     return this._request<T>(url, {
-      body: formData,
+      body: Readable.from(encoder),
       method: 'POST',
       ...options,
 
       headers: {
-        ...formData.getHeaders(),
+        ...encoder.headers,
         ...(options.headers || {}),
       },
     });
