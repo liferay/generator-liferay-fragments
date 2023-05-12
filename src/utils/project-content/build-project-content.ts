@@ -9,10 +9,6 @@ import getProjectContent from './get-project-content';
 import { getProjectExports } from './get-project-exports';
 import writeProjectContent from './write-project-content';
 
-const nodeModulesBinPath = path.normalize(
-  path.resolve(__dirname, '../../../node_modules/.bin')
-);
-
 export const buildProjectContent = async (
   projectContent: IProject
 ): Promise<IProject> => {
@@ -29,7 +25,10 @@ async function applySASS(
   const tmpDir = createTemporaryDirectory();
   await writeProjectContent(tmpDir.name, projectContent);
   const builtProjectContent = getProjectContent(tmpDir.name);
-  const sassBinaryPath = path.resolve(nodeModulesBinPath, 'sass');
+
+  const sassBinaryPath = require
+    .resolve('sass')
+    .replace('sass.default.dart.js', 'sass.js');
 
   for (const collection of builtProjectContent.collections) {
     for (const fragment of collection.fragments) {
@@ -125,10 +124,12 @@ async function applyNPMBundler(projectContent: IProject): Promise<IProject> {
 
   let builtProjectContent = projectContent;
 
-  const bundlerBinaryPath = path.resolve(
-    nodeModulesBinPath,
-    'liferay-npm-bundler'
-  );
+  const bundlerBinaryPath = require
+    .resolve('@liferay/npm-bundler')
+    .replace(
+      path.join('lib', 'index.js'),
+      path.join('bin', 'liferay-npm-bundler.js')
+    );
 
   if (
     hasBundlerConfig &&
