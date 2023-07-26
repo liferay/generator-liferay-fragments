@@ -61,6 +61,8 @@ export interface IFragmentMetadata {
   sass?: { loadPaths?: string[] };
   name: string;
   type: 'component' | 'react' | 'section';
+  cacheable: boolean;
+  typeOptions: Record<string, any>;
 }
 
 export interface IFragment {

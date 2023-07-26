@@ -16,6 +16,11 @@ import {
   PageTemplateType,
 } from '../../../types';
 
+const DEFAULT_FRAGMENT_METADATA: Partial<IFragmentMetadata> = {
+  cacheable: false,
+  typeOptions: {},
+};
+
 export default function getProjectContent(basePath: string): IProject {
   const excludedFiles = [
     'default-liferay-npm-bundler.config.js',
@@ -113,9 +118,12 @@ function _getCollectionFragments(collectionDirectory: string): IFragment[] {
       }
     })
     .map((directory) => {
-      const metadata = _readJSONSync<IFragmentMetadata>(
-        path.resolve(directory, 'fragment.json')
-      );
+      const metadata = {
+        ...DEFAULT_FRAGMENT_METADATA,
+        ..._readJSONSync<IFragmentMetadata>(
+          path.resolve(directory, 'fragment.json')
+        ),
+      };
 
       const readFile = (
         filePath: string | undefined,

@@ -15,12 +15,16 @@ export default async function importProject(
   groupId: string
 ): Promise<ImportResult[][]> {
   try {
+    console.log(projectContent.collections[0].fragments);
+
     const response = await api.importZip(
       await compress(projectContent, {
         [ADD_DEPLOYMENT_DESCRIPTOR_VAR]: false,
       }),
       groupId
     );
+
+    console.log('regular import', response);
 
     if (typeof response === 'string') {
       throw new Error(response);
@@ -37,6 +41,8 @@ export default async function importProject(
         : [],
     ];
   } catch (_) {
+    console.log('legacy import', _);
+
     return [await importLegacy(projectContent, groupId), []];
   }
 }

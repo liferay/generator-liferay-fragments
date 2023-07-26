@@ -56,6 +56,8 @@ async function _exportCollection(
         htmlPath: 'index.html',
         jsPath: 'main.js',
         configurationPath: 'configuration.json',
+        cacheable: false,
+        typeOptions: {},
       },
       css: fragment.css,
       html: fragment.html,
