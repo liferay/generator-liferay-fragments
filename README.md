@@ -1,6 +1,7 @@
 [![Yarn Publish Version][1]][2]
 
-> This project is currently managed by [Liferay Echo Team][3]
+> [!WARNING]
+> Fragment Toolkit has been deprecated. Please follow the documentation link bellow to read the deprecation guide. Also feel free to contact [Liferay Echo Team][3] if you need extra help.
 
 # Liferay Fragments Toolkit
 
